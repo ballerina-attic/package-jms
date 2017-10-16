@@ -30,7 +30,7 @@
     <artifactId>ballerina-jms-parent</artifactId>
     <packaging>pom</packaging>
     <version>0.93.1-SNAPSHOT</version>
-    <name>Ballerina - JMS</name>
+    <name>Ballerina - JMS Parent</name>
 
     <repositories>
         <repository>
