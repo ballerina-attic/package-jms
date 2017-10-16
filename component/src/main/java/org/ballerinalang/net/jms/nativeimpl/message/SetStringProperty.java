@@ -42,7 +42,7 @@ import javax.jms.Message;
         packageName = "ballerina.net.jms.jmsmessage",
         functionName = "setStringProperty",
         args = {@Argument(name = "jmsmessage", type = TypeKind.STRUCT, structType = "JMSMessage",
-                          structPackage = "ballerina.net.http"),
+                          structPackage = "ballerina.net.jms"),
                 @Argument(name = "key", type = TypeKind.STRING),
                 @Argument(name = "value", type = TypeKind.STRING)},
         isPublic = true
