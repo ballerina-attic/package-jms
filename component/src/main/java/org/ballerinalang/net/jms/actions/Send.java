@@ -33,7 +33,6 @@ import org.ballerinalang.natives.annotations.Attribute;
 import org.ballerinalang.natives.annotations.BallerinaAction;
 import org.ballerinalang.natives.annotations.BallerinaAnnotation;
 import org.ballerinalang.natives.annotations.ReturnType;
-import org.ballerinalang.natives.connectors.BalConnectorCallback;
 import org.ballerinalang.net.jms.JMSTransactionContext;
 import org.ballerinalang.net.jms.JMSUtils;
 import org.ballerinalang.net.jms.actions.utils.Constants;
@@ -62,28 +61,47 @@ import static org.ballerinalang.net.jms.Constants.EMPTY_CONNECTOR_ID;
 /**
  * {@code Post} is the send action implementation of the JMS Connector.
  */
-@BallerinaAction(
-        packageName = "ballerina.net.jms",
-        actionName = "send",
-        connectorName = Constants.CONNECTOR_NAME,
-        args = { @Argument(name = "jmsClientConnector", type = TypeKind.CONNECTOR),
-                 @Argument(name = "destinationName", type = TypeKind.STRING),
-                 @Argument(name = "msgType", type = TypeKind.STRING),
-                 @Argument(name = "m", type = TypeKind.MESSAGE)},
-        returnType = {@ReturnType(type = TypeKind.BOOLEAN)},
-        connectorArgs = {
-                @Argument(name = "properties", type = TypeKind.MAP)
-        })
-@BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
-        value = "SEND action implementation of the JMS Connector") })
-@BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "connector",
-        value = "Connector") })
-@BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "destinationName",
-        value = "Destination Name") })
-@BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "msgType",
-        value = "Message Type") })
-@BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "message",
-        value = "Message") })
+@BallerinaAction(packageName = "ballerina.net.jms",
+                 actionName = "send",
+                 connectorName = Constants.CONNECTOR_NAME,
+                 args = {
+                         @Argument(name = "jmsClientConnector",
+                                   type = TypeKind.CONNECTOR), @Argument(name = "destinationName",
+                                                                         type = TypeKind.STRING),
+                         @Argument(name = "msgType",
+                                   type = TypeKind.STRING), @Argument(name = "m",
+                                                                      type = TypeKind.MESSAGE)
+                 },
+                 returnType = { @ReturnType(type = TypeKind.BOOLEAN) },
+                 connectorArgs = {
+                         @Argument(name = "properties",
+                                   type = TypeKind.MAP)
+                 })
+@BallerinaAnnotation(annotationName = "Description",
+                     attributes = {
+                             @Attribute(name = "value",
+                                        value = "SEND action implementation of the JMS Connector")
+                     })
+@BallerinaAnnotation(annotationName = "Param",
+                     attributes = {
+                             @Attribute(name = "connector",
+                                        value = "Connector")
+                     })
+@BallerinaAnnotation(annotationName = "Param",
+                     attributes = {
+                             @Attribute(name = "destinationName",
+                                        value = "Destination Name")
+                     })
+@BallerinaAnnotation(annotationName = "Param",
+                     attributes = {
+                             @Attribute(name = "msgType",
+                                        value = "Message Type")
+                     })
+@BallerinaAnnotation(annotationName = "Param",
+                     attributes = {
+                             @Attribute(name = "message",
+                                        value = "Message")
+                     })
 public class Send extends AbstractJMSAction {
     private static final Logger log = LoggerFactory.getLogger(Send.class);
 
@@ -125,8 +143,7 @@ public class Send extends AbstractJMSAction {
         }
 
         try {
-            JMSClientConnector jmsClientConnector = new JMSConnectorFactoryImpl()
-                    .createClientConnector(propertyMap);
+            JMSClientConnector jmsClientConnector = new JMSConnectorFactoryImpl().createClientConnector(propertyMap);
             if (log.isDebugEnabled()) {
                 log.debug("Sending JMS Message to " + propertyMap.get(JMSConstants.PARAM_DESTINATION_NAME));
             }
@@ -183,9 +200,9 @@ public class Send extends AbstractJMSAction {
         }
     }
 
-    @Override
-    public void validate(BalConnectorCallback connectorCallback) {
-        //Not needed for jms.
-    }
+    //    @Override
+    //    public void validate(BalConnectorCallback connectorCallback) {
+    //        //Not needed for jms.
+    //    }
 
 }
