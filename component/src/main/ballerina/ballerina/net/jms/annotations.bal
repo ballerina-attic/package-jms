@@ -12,5 +12,7 @@ public annotation configuration attach service<> {
     string configFilePath;
     string connectionFactoryNature;
     string concurrentConsumers;
+    string connectionUsername;
+    string connectionPassword;
     string[] properties;
 }

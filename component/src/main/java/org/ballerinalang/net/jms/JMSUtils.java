@@ -64,6 +64,8 @@ public class JMSUtils {
         addStringParamIfPresent(Constants.ALIAS_ACK_MODE, jmsConfig, configParams);
         addStringParamIfPresent(Constants.CONFIG_FILE_PATH, jmsConfig, configParams);
         addStringParamIfPresent(JMSConstants.CONCURRENT_CONSUMERS, jmsConfig, configParams);
+        addStringParamIfPresent(JMSConstants.CONNECTION_USERNAME, jmsConfig, configParams);
+        addStringParamIfPresent(JMSConstants.CONNECTION_PASSWORD, jmsConfig, configParams);
 
         processPropertiesArray(jmsConfig, configParams);
         preProcessIfWso2MB(configParams);
