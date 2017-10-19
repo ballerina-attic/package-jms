@@ -22,10 +22,10 @@ import org.ballerinalang.model.values.BInteger;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.natives.AbstractNativeFunction;
-import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.Attribute;
 import org.ballerinalang.natives.annotations.BallerinaAnnotation;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
+import org.ballerinalang.natives.annotations.Receiver;
 import org.ballerinalang.natives.annotations.ReturnType;
 import org.ballerinalang.net.jms.JMSUtils;
 import org.slf4j.Logger;
@@ -38,10 +38,10 @@ import javax.jms.Message;
  * Get Priority header from the JMS Message.
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms.jmsmessage",
+        packageName = "ballerina.net.jms",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+                             structPackage = "ballerina.net.jms"),
         functionName = "getPriority",
-        args = {@Argument(name = "msg", type = TypeKind.STRUCT, structType = "JMSMessage",
-                          structPackage = "ballerina.net.jms")},
         returnType = {@ReturnType(type = TypeKind.INT)},
         isPublic = true
 )

@@ -26,6 +26,7 @@ import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.Attribute;
 import org.ballerinalang.natives.annotations.BallerinaAnnotation;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
+import org.ballerinalang.natives.annotations.Receiver;
 import org.ballerinalang.natives.annotations.ReturnType;
 import org.ballerinalang.net.jms.JMSUtils;
 import org.slf4j.Logger;
@@ -38,11 +39,11 @@ import javax.jms.Message;
  * Get String Property from the JMS Message.
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms.jmsmessage",
+        packageName = "ballerina.net.jms",
         functionName = "getStringProperty",
-        args = {@Argument(name = "msg", type = TypeKind.STRUCT, structType = "JMSMessage",
-                          structPackage = "ballerina.net.jms"),
-                @Argument(name = "propertyName", type = TypeKind.STRING)},
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+                             structPackage = "ballerina.net.jms"),
+        args = {@Argument(name = "propertyName", type = TypeKind.STRING)},
         returnType = {@ReturnType(type = TypeKind.STRING)},
         isPublic = true
 )
