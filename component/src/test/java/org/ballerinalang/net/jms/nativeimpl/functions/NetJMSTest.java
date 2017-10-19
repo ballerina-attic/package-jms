@@ -16,19 +16,19 @@
 * under the License.
 */
 
-package org.ballerinalang.nativeimpl.functions;
+package org.ballerinalang.net.jms.nativeimpl.functions;
 
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.connector.api.ConnectorFutureListener;
 import org.ballerinalang.connector.impl.BServerConnectorFuture;
 import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BValue;
-import org.ballerinalang.nativeimpl.util.BTestUtils;
-import org.ballerinalang.nativeimpl.util.CompileResult;
-import org.ballerinalang.nativeimpl.util.TestAcknowledgementCallback;
-import org.ballerinalang.nativeimpl.util.TestTransactionCallback;
 import org.ballerinalang.net.jms.JMSConnectorFutureListener;
 import org.ballerinalang.net.jms.actions.utils.Constants;
+import org.ballerinalang.net.jms.nativeimpl.util.BTestUtils;
+import org.ballerinalang.net.jms.nativeimpl.util.CompileResult;
+import org.ballerinalang.net.jms.nativeimpl.util.TestAcknowledgementCallback;
+import org.ballerinalang.net.jms.nativeimpl.util.TestTransactionCallback;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

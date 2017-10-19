@@ -22,20 +22,27 @@ under the License.
 <suite name="ballerina-natives-test-suite">
 
     <listeners>
-        <listener class-name="org.ballerinalang.nativeimpl.util.TestNGListener" />
+        <listener class-name="org.ballerinalang.net.jms.nativeimpl.util.TestNGListener" />
     </listeners>
 
     <!-- Native Function Related Test Cases. -->
     <test name="ballerina-native-functions-unit-tests" parallel="false">
         <packages>
-            <package name="org.ballerinalang.nativeimpl.functions"/>
+            <package name="org.ballerinalang.net.jms.nativeimpl.functions"/>
         </packages>
     </test>
 
-    <!--<test name="ballerina-jms-message-native-functions-test-cases" parallel="false">-->
-        <!--<packages>-->
-            <!--<package name="org.ballerinalang.nativeimpl.message"/>-->
-        <!--</packages>-->
+    <test name="ballerina-jms-message-native-functions-test-cases" parallel="false">
+        <packages>
+            <package name="org.ballerinalang.net.jms.nativeimpl.message"/>
+        </packages>
+    </test>
+
+        <!--<test name="ballerina-jms-message-native-functions-test-cases" parallel="false">-->
+        <!--<classes>-->
+            <!--<class name="org.ballerinalang.net.jms.nativeimpl.message.SetPropertyFunctionsTestCase"/>-->
+            <!--<class name="org.ballerinalang.net.jms.nativeimpl.message.GetPropertyFunctionsTestCase"/>-->
+        <!--</classes>-->
     <!--</test>-->
 
 </suite>

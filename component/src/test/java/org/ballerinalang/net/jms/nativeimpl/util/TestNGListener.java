@@ -17,7 +17,7 @@
  *
  */
 
-package org.ballerinalang.nativeimpl.util;
+package org.ballerinalang.net.jms.nativeimpl.util;
 
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;

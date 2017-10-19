@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.ballerinalang.nativeimpl.util;
+package org.ballerinalang.net.jms.nativeimpl.util;
 
 import org.wso2.carbon.transport.jms.callback.JMSCallback;
 
