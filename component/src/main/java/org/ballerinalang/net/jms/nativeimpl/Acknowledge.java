@@ -28,6 +28,7 @@ import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.Attribute;
 import org.ballerinalang.natives.annotations.BallerinaAnnotation;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
+import org.ballerinalang.natives.annotations.Receiver;
 import org.ballerinalang.net.jms.actions.utils.Constants;
 import org.ballerinalang.util.exceptions.BallerinaException;
 import org.slf4j.Logger;
@@ -41,8 +42,9 @@ import javax.jms.Session;
 @BallerinaFunction(
         packageName = "ballerina.net.jms",
         functionName = "acknowledge",
-        args = {@Argument(name = "m", type = TypeKind.MESSAGE),
-                @Argument(name = "deliveryStatus", type = TypeKind.STRING)},
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+                             structPackage = "ballerina.net.jms"),
+        args = {@Argument(name = "deliveryStatus", type = TypeKind.STRING)},
         isPublic = true
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",

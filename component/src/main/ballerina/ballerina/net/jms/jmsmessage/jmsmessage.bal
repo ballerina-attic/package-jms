@@ -3,11 +3,6 @@ package ballerina.net.jms.jmsmessage;
 import ballerina.doc;
 import ballerina.net.jms;
 
-@doc:Description { value:"Sets a JMS transport string property from the message"}
-@doc:Param { value:"msg: A request message" }
-@doc:Param { value:"key: The string property name" }
-@doc:Param { value:"value: The string property value" }
-public native function setStringProperty (jms:JMSMessage msg, string key, string value);
 
 @doc:Description { value:"Gets a JMS transport string property from the message"}
 @doc:Param { value:"msg: A request message" }

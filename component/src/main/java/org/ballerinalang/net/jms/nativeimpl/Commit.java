@@ -23,10 +23,10 @@ import org.ballerinalang.connector.api.ConnectorFuture;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.natives.AbstractNativeFunction;
-import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.Attribute;
 import org.ballerinalang.natives.annotations.BallerinaAnnotation;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
+import org.ballerinalang.natives.annotations.Receiver;
 import org.ballerinalang.net.jms.actions.utils.Constants;
 import org.ballerinalang.util.exceptions.BallerinaException;
 import org.slf4j.Logger;
@@ -37,8 +37,12 @@ import javax.jms.Session;
 /**
  * To commit the jms transacted sessions.
  */
-@BallerinaFunction(packageName = "ballerina.net.jms", functionName = "commit", args = {
-        @Argument(name = "m", type = TypeKind.MESSAGE) }, isPublic = true)
+@BallerinaFunction(
+        packageName = "ballerina.net.jms", functionName = "commit",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+                             structPackage = "ballerina.net.jms"),
+        isPublic = true
+)
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
         value = "Session commit action implementation for jms connector when using jms session transaction mode") })
 @BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "message",

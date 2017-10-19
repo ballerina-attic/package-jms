@@ -26,10 +26,16 @@ under the License.
     </listeners>
 
     <!-- Native Function Related Test Cases. -->
-    <test name="ballerina-native-functions-unit-tests" preserve-order="true" parallel="false">
+    <test name="ballerina-native-functions-unit-tests" parallel="false">
         <packages>
             <package name="org.ballerinalang.nativeimpl.functions"/>
         </packages>
     </test>
+
+    <!--<test name="ballerina-jms-message-native-functions-test-cases" parallel="false">-->
+        <!--<packages>-->
+            <!--<package name="org.ballerinalang.nativeimpl.message"/>-->
+        <!--</packages>-->
+    <!--</test>-->
 
 </suite>

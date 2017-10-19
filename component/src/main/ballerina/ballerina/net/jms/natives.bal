@@ -8,15 +8,15 @@ public struct JMSMessage {
 @doc:Description { value:"Message acknowledgement action implementation for jms connector when using jms client acknowledgement mode"}
 @doc:Param { value:"message: message" }
 @doc:Param { value:"deliveryStatus: Specify whether message delivery is SUCCESS or ERROR" }
-public native function acknowledge (JMSMessage m, string deliveryStatus);
+public native function <JMSMessage msg> acknowledge (string deliveryStatus);
 
 @doc:Description { value:"Session rollback action implementation for jms connector when using jms session transaction mode"}
 @doc:Param { value:"message: message" }
-public native function rollback (JMSMessage m);
+public native function <JMSMessage msg> rollback ();
 
 @doc:Description { value:"Session commit action implementation for jms connector when using jms session transaction mode"}
 @doc:Param { value:"message: message" }
-public native function commit (JMSMessage m);
+public native function <JMSMessage msg> commit ();
 
 @doc:Description { value:"JMS client connector to send messages to the JMS provider."}
 @doc:Param { value:"connection and optional properties for the connector"}
@@ -89,3 +89,8 @@ const string JMS_STREAM_MESSGAE = "StreamMessage";
 
 @doc:Description { value:"JMS Message type ObjectMessage"}
 const string JMS_OBJECT_MESSGAE = "ObjectMessage";
+
+@doc:Description { value:"Sets a JMS transport string property from the message"}
+@doc:Param { value:"key: The string property name" }
+@doc:Param { value:"value: The string property value" }
+public native function <JMSMessage msg> setStringProperty (string key, string value);
