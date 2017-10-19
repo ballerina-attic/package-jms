@@ -48,8 +48,6 @@ import javax.jms.TextMessage;
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
         value = "Get text content of the message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "message",
-        value = "The JMS message") })
 @BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "string",
         value = "The text message content") })
 public class GetTextMessageContent extends AbstractNativeFunction {

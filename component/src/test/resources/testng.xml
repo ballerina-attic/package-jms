@@ -37,12 +37,4 @@ under the License.
             <package name="org.ballerinalang.net.jms.nativeimpl.message"/>
         </packages>
     </test>
-
-        <!--<test name="ballerina-jms-message-native-functions-test-cases" parallel="false">-->
-        <!--<classes>-->
-            <!--<class name="org.ballerinalang.net.jms.nativeimpl.message.SetPropertyFunctionsTestCase"/>-->
-            <!--<class name="org.ballerinalang.net.jms.nativeimpl.message.GetPropertyFunctionsTestCase"/>-->
-        <!--</classes>-->
-    <!--</test>-->
-
 </suite>

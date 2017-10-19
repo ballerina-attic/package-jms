@@ -36,31 +36,35 @@ public class MockJMSMessage implements Message {
     private Map<String, Float> floatPropertyMap = new HashMap<>();
 
     //Headers
-    String jmsMessageID;
-    long jmsTimestamp;
-    String jmsCorrelationID;
-
+    private String jmsMessageID;
+    private long jmsTimestamp;
+    private String jmsCorrelationID;
+    private int jmsDeliveryMode;
+    private int jmsPriority;
+    private boolean jmsRedelivered;
+    private long jmsExpiration;
+    private String jmsType;
 
 
 
     @Override
     public String getJMSMessageID() throws JMSException {
-        return null;
+        return this.jmsMessageID;
     }
 
     @Override
     public void setJMSMessageID(String id) throws JMSException {
-
+        this.jmsMessageID = id;
     }
 
     @Override
     public long getJMSTimestamp() throws JMSException {
-        return 0;
+        return this.jmsTimestamp;
     }
 
     @Override
     public void setJMSTimestamp(long timestamp) throws JMSException {
-
+        this.jmsTimestamp = timestamp;
     }
 
     @Override
@@ -75,12 +79,12 @@ public class MockJMSMessage implements Message {
 
     @Override
     public String getJMSCorrelationID() throws JMSException {
-        return null;
+        return this.jmsCorrelationID;
     }
 
     @Override
     public void setJMSCorrelationID(String correlationID) throws JMSException {
-
+        this.jmsCorrelationID = correlationID;
     }
 
     @Override
@@ -105,42 +109,42 @@ public class MockJMSMessage implements Message {
 
     @Override
     public int getJMSDeliveryMode() throws JMSException {
-        return 0;
+        return this.jmsDeliveryMode;
     }
 
     @Override
     public void setJMSDeliveryMode(int deliveryMode) throws JMSException {
-
+        this.jmsDeliveryMode = deliveryMode;
     }
 
     @Override
     public boolean getJMSRedelivered() throws JMSException {
-        return false;
+        return this.jmsRedelivered;
     }
 
     @Override
     public void setJMSRedelivered(boolean redelivered) throws JMSException {
-
+        this.jmsRedelivered = redelivered;
     }
 
     @Override
     public String getJMSType() throws JMSException {
-        return null;
+        return this.jmsType;
     }
 
     @Override
     public void setJMSType(String type) throws JMSException {
-
+        this.jmsType = type;
     }
 
     @Override
     public long getJMSExpiration() throws JMSException {
-        return 0;
+        return this.jmsExpiration;
     }
 
     @Override
     public void setJMSExpiration(long expiration) throws JMSException {
-
+        this.jmsExpiration = expiration;
     }
 
     @Override
@@ -150,17 +154,16 @@ public class MockJMSMessage implements Message {
 
     @Override
     public void setJMSDeliveryTime(long deliveryTime) throws JMSException {
-
     }
 
     @Override
     public int getJMSPriority() throws JMSException {
-        return 0;
+        return this.jmsPriority;
     }
 
     @Override
     public void setJMSPriority(int priority) throws JMSException {
-
+        this.jmsPriority = priority;
     }
 
     @Override

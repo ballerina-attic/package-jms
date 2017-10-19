@@ -136,7 +136,7 @@ public native function <JMSMessage msg> setTextMessageContent (string content);
 
 @doc:Description { value:"Gets text content of the JMS message"}
 @doc:Return { value:"string: Text Message Content" }
-public native function <JMSMessage msg> getTextMessageContent () (string value);
+public native function <JMSMessage msg> getTextMessageContent () (string);
 
 @doc:Description { value:"Get JMS transport header MessageID from the message"}
 @doc:Return { value:"string: The header value" }
@@ -192,3 +192,6 @@ public native function <JMSMessage msg> getType() (string);
 
 @doc:Description { value:"Clear JMS properties of the message"}
 public native function <JMSMessage msg> clearProperties();
+
+@doc:Description { value:"Clear body JMS of the message"}
+public native function <JMSMessage msg> clearBody();
