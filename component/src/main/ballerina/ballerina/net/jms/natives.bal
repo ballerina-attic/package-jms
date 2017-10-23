@@ -27,7 +27,7 @@ public connector ClientConnector (map properties) {
     @doc:Description {value:"SEND action implementation of the JMS Connector"}
     @doc:Param {value:"destinationName: Destination Name"}
     @doc:Param {value:"message: Message"}
-    native action send (string destinationName, JMSMessage m) (boolean);
+    native action send (string destinationName, JMSMessage m);
 
 }
 
