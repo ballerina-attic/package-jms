@@ -42,18 +42,18 @@ public class JMSListenerImpl implements JMSListener {
     }
 
     @Override
-    public void onMessage(Message carbonMessage, JMSCallback jmsCallback) {
+    public void onMessage(Message jmsMessage, JMSCallback jmsCallback) {
         if (jmsCallback != null) {
             Map<String, Object> properties = new HashMap<>();
             properties.put(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE, jmsCallback.getAcknowledgementMode());
 
             ConnectorFuture future = Executor
-                    .submit(resource, properties, JMSDispatcher.getSignatureParameters(resource, carbonMessage));
+                    .submit(resource, properties, JMSDispatcher.getSignatureParameters(resource, jmsMessage));
 
             ConnectorFutureListener futureListener = new JMSConnectorFutureListener(jmsCallback);
             future.setConnectorFutureListener(futureListener);
         } else {
-            Executor.submit(resource, null, JMSDispatcher.getSignatureParameters(resource, carbonMessage));
+            Executor.submit(resource, null, JMSDispatcher.getSignatureParameters(resource, jmsMessage));
         }
     }
 
