@@ -21,12 +21,10 @@ import org.ballerinalang.bre.BallerinaTransactionManager;
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.connector.api.ConnectorFuture;
 import org.ballerinalang.model.types.TypeKind;
-import org.ballerinalang.model.values.BBoolean;
 import org.ballerinalang.model.values.BConnector;
 import org.ballerinalang.model.values.BMap;
 import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BStruct;
-import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.nativeimpl.actions.ClientConnectorFuture;
 import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.Attribute;
@@ -116,10 +114,6 @@ public class Send extends AbstractJMSAction {
         Message jmsMessage = (Message) messageStruct.getNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE);
 
         validateParams(bConnector);
-
-        // Set return value to the current frame
-        BValue valueRef = new BBoolean(true);
-        context.getControlStackNew().currentFrame.returnValues[0] = valueRef;
 
         // Get the map of properties.
         BMap<String, BString> properties = (BMap<String, BString>) bConnector.getRefField(0);
