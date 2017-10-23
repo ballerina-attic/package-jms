@@ -50,7 +50,7 @@ public class NetJMSTest {
     public void testAcknowledge() {
         Context ctx = new Context(result.getProgFile());
 
-        TestAcknowledgementCallback jmsCallback = new TestAcknowledgementCallback(null, null);
+        TestAcknowledgementCallback jmsCallback = new TestAcknowledgementCallback(null);
         BServerConnectorFuture connectorFuture = new BServerConnectorFuture();
         ConnectorFutureListener futureListener = new JMSConnectorFutureListener(jmsCallback);
         connectorFuture.setConnectorFutureListener(futureListener);
@@ -68,7 +68,7 @@ public class NetJMSTest {
     public void testAcknowledgeReset() {
         Context ctx = new Context(result.getProgFile());
 
-        TestAcknowledgementCallback jmsCallback = new TestAcknowledgementCallback(null, null);
+        TestAcknowledgementCallback jmsCallback = new TestAcknowledgementCallback(null);
         BServerConnectorFuture connectorFuture = new BServerConnectorFuture();
         ConnectorFutureListener futureListener = new JMSConnectorFutureListener(jmsCallback);
         connectorFuture.setConnectorFutureListener(futureListener);
@@ -86,7 +86,7 @@ public class NetJMSTest {
     public void testTransactionCommit() {
         Context ctx = new Context(result.getProgFile());
 
-        TestTransactionCallback jmsCallback = new TestTransactionCallback(null, null);
+        TestTransactionCallback jmsCallback = new TestTransactionCallback(null);
         BServerConnectorFuture connectorFuture = new BServerConnectorFuture();
         ConnectorFutureListener futureListener = new JMSConnectorFutureListener(jmsCallback);
         connectorFuture.setConnectorFutureListener(futureListener);
@@ -104,7 +104,7 @@ public class NetJMSTest {
     public void testTransactionRollback() {
         Context ctx = new Context(result.getProgFile());
 
-        TestTransactionCallback jmsCallback = new TestTransactionCallback(null, null);
+        TestTransactionCallback jmsCallback = new TestTransactionCallback(null);
         BServerConnectorFuture connectorFuture = new BServerConnectorFuture();
         ConnectorFutureListener futureListener = new JMSConnectorFutureListener(jmsCallback);
         connectorFuture.setConnectorFutureListener(futureListener);

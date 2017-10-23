@@ -31,8 +31,8 @@ public class TestTransactionCallback extends JMSCallback {
 
     private boolean rollbacked = false;
 
-    public TestTransactionCallback(Session session, Object caller) {
-        super(session, caller);
+    public TestTransactionCallback(Session session) {
+        super(session);
     }
 
 

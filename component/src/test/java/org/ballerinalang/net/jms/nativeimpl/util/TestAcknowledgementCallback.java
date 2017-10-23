@@ -31,8 +31,8 @@ public class TestAcknowledgementCallback extends JMSCallback {
 
     private boolean reseted = false;
 
-    public TestAcknowledgementCallback(Session session, Object caller) {
-        super(session, caller);
+    public TestAcknowledgementCallback(Session session) {
+        super(session);
     }
 
     @Override

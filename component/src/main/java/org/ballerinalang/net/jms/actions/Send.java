@@ -193,10 +193,4 @@ public class Send extends AbstractJMSAction {
                     "error in enlisting distributed transaction resources: " + e.getCause().getMessage(), e);
         }
     }
-
-    //    @Override
-    //    public void validate(BalConnectorCallback connectorCallback) {
-    //        //Not needed for jms.
-    //    }
-
 }
