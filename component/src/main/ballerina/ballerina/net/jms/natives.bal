@@ -36,37 +36,37 @@ public connector ClientConnector (map properties) {
 public native function createTextMessage (ClientConnector clientConnector) (JMSMessage);
 
 @doc:Description { value:"Value for persistent JMS message delivery mode"}
-const int PERSISTENT_DELIVERY_MODE = 2;
+public const int PERSISTENT_DELIVERY_MODE = 2;
 
 @doc:Description { value:"Value for non persistent JMS message delivery mode"}
-const int NON_PERSISTENT_DELIVERY_MODE = 1;
+public const int NON_PERSISTENT_DELIVERY_MODE = 1;
 
 @doc:Description { value:"Value to use when acknowledge jms messages for success"}
-const string DELIVERY_SUCCESS = "Success";
+public const string DELIVERY_SUCCESS = "Success";
 
 @doc:Description { value:"Value to use when acknowledge jms messages for errors"}
-const string DELIVERY_ERROR = "Error";
+public const string DELIVERY_ERROR = "Error";
 
 @doc:Description { value:"Value for auto acknowledgement mode (default)"}
-const string AUTO_ACKNOWLEDGE = "AUTO_ACKNOWLEDGE";
+public const string AUTO_ACKNOWLEDGE = "AUTO_ACKNOWLEDGE";
 
 @doc:Description { value:"Value for client acknowledge mode"}
-const string CLIENT_ACKNOWLEDGE = "CLIENT_ACKNOWLEDGE";
+public const string CLIENT_ACKNOWLEDGE = "CLIENT_ACKNOWLEDGE";
 
 @doc:Description { value:"Value for dups ok acknowledgement mode"}
-const string DUPS_OK_ACKNOWLEDGE = "DUPS_OK_ACKNOWLEDGE";
+public const string DUPS_OK_ACKNOWLEDGE = "DUPS_OK_ACKNOWLEDGE";
 
 @doc:Description { value:"Value for Session transacted mode"}
-const string SESSION_TRANSACTED = "SESSION_TRANSACTED";
+public const string SESSION_TRANSACTED = "SESSION_TRANSACTED";
 
 @doc:Description { value:"Value for XA transcted mode"}
-const string XA_TRANSACTED = "XA_TRANSACTED";
+public const string XA_TRANSACTED = "XA_TRANSACTED";
 
 @doc:Description { value:"Value for JMS Queue type"}
-const string TYPE_QUEUE = "queue";
+public const string TYPE_QUEUE = "queue";
 
 @doc:Description { value:"Value for JMS Topic type"}
-const string TYPE_TOPIC = "topic";
+public const string TYPE_TOPIC = "topic";
 
 @doc:Description { value:"Sets a JMS transport string property from the message"}
 @doc:Param { value:"key: The string property name" }
