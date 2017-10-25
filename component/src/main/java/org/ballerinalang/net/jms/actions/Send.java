@@ -132,8 +132,9 @@ public class Send extends AbstractJMSAction {
 
         boolean isTransacted = Boolean.FALSE;
         if (propertyMap.get(JMSConstants.PARAM_ACK_MODE) != null) {
-            isTransacted = (JMSConstants.SESSION_TRANSACTED_MODE.equals(propertyMap.get(JMSConstants.PARAM_ACK_MODE)))
-                    && context.isInTransaction();
+            isTransacted = (JMSConstants.SESSION_TRANSACTED_MODE.equals(propertyMap.get(JMSConstants.PARAM_ACK_MODE))
+                    || JMSConstants.XA_TRANSACTED_MODE.equals(propertyMap.get(JMSConstants.PARAM_ACK_MODE))) && context
+                    .isInTransaction();
         }
 
         try {
@@ -152,7 +153,8 @@ public class Send extends AbstractJMSAction {
                 // transaction block)
                 if (txContext == null) {
                     sessionWrapper = jmsClientConnector.acquireSession();
-                    txContext = new JMSTransactionContext(sessionWrapper, jmsClientConnector, false);
+                    txContext = new JMSTransactionContext(sessionWrapper, jmsClientConnector,
+                            (sessionWrapper instanceof XASessionWrapper));
                     ballerinaTxManager.registerTransactionContext(connectorKey, txContext);
 
                     //Handle XA initialization
