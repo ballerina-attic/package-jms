@@ -36,7 +36,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 
 /**
- * Set a string property to the JMS message
+ * Set a string property to the JMS message.
  */
 
 @BallerinaFunction(

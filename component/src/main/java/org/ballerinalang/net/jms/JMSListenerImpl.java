@@ -31,7 +31,7 @@ import java.util.Map;
 import javax.jms.Message;
 
 /**
- * JMS Connector listener for Ballerina
+ * JMS Connector listener for Ballerina.
  */
 public class JMSListenerImpl implements JMSListener {
 

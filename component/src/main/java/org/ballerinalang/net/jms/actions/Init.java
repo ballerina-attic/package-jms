@@ -58,16 +58,6 @@ public class Init extends AbstractJMSAction {
 
     @Override
     public ConnectorFuture execute(Context context) {
-        //        if (BallerinaConnectorManager.getInstance().
-        //                getClientConnector(Constants.PROTOCOL_JMS) == null) {
-        //            CarbonMessageProcessor carbonMessageProcessor = BallerinaConnectorManager.getInstance()
-        //                    .getMessageProcessor();
-        //            ServiceLoader<ClientConnector> clientConnectorLoader = ServiceLoader.load(ClientConnector.class);
-        //            clientConnectorLoader.forEach((clientConnector) -> {
-        //                clientConnector.setMessageProcessor(carbonMessageProcessor);
-        //                BallerinaConnectorManager.getInstance().registerClientConnector(clientConnector);
-        //            });
-        //        }
         ClientConnectorFuture future = new ClientConnectorFuture();
         future.notifySuccess();
         return future;

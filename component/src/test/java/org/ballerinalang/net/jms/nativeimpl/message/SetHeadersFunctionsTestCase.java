@@ -34,7 +34,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 
 /**
- * Test cases for jms:JMSMessage Set headers native functions.
+ * Test cases for jms message Set headers native functions.
  */
 public class SetHeadersFunctionsTestCase {
     private CompileResult result;

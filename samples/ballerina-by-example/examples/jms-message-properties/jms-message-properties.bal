@@ -1,4 +1,3 @@
-import ballerina.net.jms.jmsmessage;
 import ballerina.lang.system;
 import ballerina.net.jms;
 
@@ -15,14 +14,14 @@ service<jms> jmsService {
         jms:ClientConnector jmsEP;
 
         // Read all the supported headers from the message.
-        string correlationId = jmsmessage:getCorrelationID(m);
-        int timestamp = jmsmessage:getTimestamp(m);
-        string messageType = jmsmessage:getType(m);
-        string messageId = jmsmessage:getMessageID(m);
-        boolean redelivered = jmsmessage:getRedelivered(m);
-        int expirationTime = jmsmessage:getExpiration(m);
-        int priority = jmsmessage:getPriority(m);
-        int deliveryMode = jmsmessage:getDeliveryMode(m);
+        string correlationId = m.getCorrelationID(m);
+        int timestamp = m.getTimestamp(m);
+        string messageType = m.getType(m);
+        string messageId = m.getMessageID(m);
+        boolean redelivered = m.getRedelivered(m);
+        int expirationTime = m.getExpiration(m);
+        int priority = m.getPriority(m);
+        int deliveryMode = m.getDeliveryMode(m);
 
         // Print the header values.
         system:println("correlationId : " + correlationId);
@@ -44,11 +43,11 @@ service<jms> jmsService {
         jmsEP = create jms:ClientConnector(properties);
         jms:JMSMessage responseMessage = jms:createTextMessage(jmsEP);
 
-        jmsmessage:setCorrelationID(responseMessage, "response-001");
-        jmsmessage:setPriority(responseMessage, 8);
-        jmsmessage:setDeliveryMode(responseMessage, 1);
-        jmsmessage:setTextMessageContent(responseMessage, "{\"WSO2\":\"Ballerina\"}");
-        jmsmessage:setType(responseMessage, "application/json");
+        responseMessage.setCorrelationID(responseMessage, "response-001");
+        responseMessage.setPriority(responseMessage, 8);
+        responseMessage.setDeliveryMode(responseMessage, 1);
+        responseMessage.setTextMessageContent(responseMessage, "{\"WSO2\":\"Ballerina\"}");
+        responseMessage.setType(responseMessage, "application/json");
 
         jmsEP.send("MySecondQueue", responseMessage);
     }

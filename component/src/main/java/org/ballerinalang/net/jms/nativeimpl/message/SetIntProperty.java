@@ -36,7 +36,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 
 /**
- * Set a integer property to the JMS message
+ * Set a integer property to the JMS message.
  */
 
 @BallerinaFunction(

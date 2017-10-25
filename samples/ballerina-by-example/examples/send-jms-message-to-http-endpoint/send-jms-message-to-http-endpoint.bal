@@ -1,8 +1,5 @@
-import ballerina.net.jms.jmsmessage;
 import ballerina.net.jms;
 import ballerina.net.http;
-import ballerina.net.http.request;
-import ballerina.net.http.response;
 import ballerina.lang.system;
 
 @jms:configuration {
@@ -22,10 +19,10 @@ service<jms> jmsService {
         http:Request req = {};
 
         // Retrieve the string payload using native function and set as a json payload.
-        request:setStringPayload(req, jmsmessage:getTextMessageContent(m));
+        req.setStringPayload(req, m.getTextMessageContent());
 
         http:Response resp = httpConnector.post("/my-webapp/echo", req);
         system:println("POST response: ");
-        system:println(response:getJsonPayload(resp));
+        system:println(resp.getJsonPayload());
     }
 }

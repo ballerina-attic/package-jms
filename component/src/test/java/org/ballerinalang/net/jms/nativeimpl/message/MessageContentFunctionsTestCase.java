@@ -33,7 +33,7 @@ import javax.jms.JMSException;
 import javax.jms.TextMessage;
 
 /**
- * Test cases for ballerina.net.jmsmessage Message content related native functions.
+ * Test cases for jms message content related native functions.
  */
 public class MessageContentFunctionsTestCase {
     private final String textContent = "Hello WSO2!";

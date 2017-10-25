@@ -36,7 +36,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 
 /**
- * Test cases for ballerina.net.jmsmessage Get property native functions.
+ * Test cases for jms message Get property native functions.
  */
 public class GetPropertyFunctionsTestCase {
     private CompileResult result;

@@ -47,10 +47,10 @@ public class JMSUtils {
     }
 
     /**
-     * Creates the JMS connector friendly properties Map. Converting properties as required
+     * Creates the JMS connector friendly properties Map. Converting properties as required.
      *
      * @param jmsConfig {@link Annotation}
-     * @return Map of String key value properties
+     * @return Map of String key value properties.
      */
     public static Map<String, String> preProcessJmsConfig(Annotation jmsConfig) {
         Map<String, String> configParams = new HashMap<>();
@@ -136,8 +136,8 @@ public class JMSUtils {
     /**
      * Process the provided properties in the {@link BMap} and convert it to jms connector friendly Map.
      *
-     * @param properties {@link BMap} of properties
-     * @return properties map for JMS connector
+     * @param properties {@link BMap} of properties.
+     * @return properties map for JMS connector.
      */
     public static Map<String, String> preProcessJmsConfig(BMap<String, BString> properties) {
         Map<String, String> configParams = new HashMap<>();

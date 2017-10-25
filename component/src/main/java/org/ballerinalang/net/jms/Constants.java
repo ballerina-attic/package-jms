@@ -81,7 +81,7 @@ public class Constants {
     public static final String MB_CF_NAME_PREFIX = "connectionfactory.";
 
     /**
-     * Alias for caching
+     * Alias for caching.
      */
     public static final String ALIAS_CLIENT_CACHING = "clientCaching";
 
