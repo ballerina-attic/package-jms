@@ -2,8 +2,9 @@ import ballerina.lang.system;
 import ballerina.net.jms;
 
 @jms:configuration {
-    initialContextFactory:"org.apache.activemq.jndi.ActiveMQInitialContextFactory",
-    providerUrl:"tcp://localhost:61616",
+    initialContextFactory:"wso2mbInitialContextFactory",
+    providerUrl:
+    "amqp://admin:admin@carbon/carbon?brokerlist='tcp://localhost:5672'",
     connectionFactoryType:"queue",
     connectionFactoryName:"QueueConnectionFactory",
     destination:"MyQueue"
@@ -34,19 +35,19 @@ service<jms> jmsService {
         system:println("----------------------------------");
 
         map properties = {
-                             "initialContextFactory":"org.apache.activemq.jndi.ActiveMQInitialContextFactory",
-                             "providerUrl":"tcp://localhost:61616",
+                             "initialContextFactory":"wso2mbInitialContextFactory",
+                             "configFilePath":"../jndi.properties",
                              "connectionFactoryName": "QueueConnectionFactory",
                              "connectionFactoryType" : "queue"};
 
         jmsEP = create jms:ClientConnector(properties);
         jms:JMSMessage responseMessage = jms:createTextMessage(jmsEP);
 
-        responseMessage.setCorrelationID(responseMessage, "response-001");
-        responseMessage.setPriority(responseMessage, 8);
-        responseMessage.setDeliveryMode(responseMessage, 1);
-        responseMessage.setTextMessageContent(responseMessage, "{\"WSO2\":\"Ballerina\"}");
-        responseMessage.setType(responseMessage, "application/json");
+        responseMessage.setCorrelationID("response-001");
+        responseMessage.setPriority(8);
+        responseMessage.setDeliveryMode(1);
+        responseMessage.setTextMessageContent("{\"WSO2\":\"Ballerina\"}");
+        responseMessage.setType("application/json");
 
         jmsEP.send("MySecondQueue", responseMessage);
     }

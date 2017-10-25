@@ -4,7 +4,7 @@ function main (string[] args) {
     jmsSender();
 }
 
-function jmsSender() (boolean) {
+function jmsSender() {
     // We define the connection properties as a map. 'providerUrl' or 'configFilePath' and the 'initialContextFactory' vary according to the JMS provider you use.
     // In this example we connect to the WSO2 MB server.
     jms:ClientConnector jmsEP;
@@ -21,5 +21,4 @@ function jmsSender() (boolean) {
     queueMessage.setTextMessageContent("Hello from Ballerina!");
     // Send the Ballerina message to the JMS provider.
     jmsEP.send("MyQueue", queueMessage);
-    return true;
 }

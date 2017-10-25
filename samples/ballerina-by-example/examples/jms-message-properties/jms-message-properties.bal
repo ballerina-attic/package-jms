@@ -13,25 +13,10 @@ service<jms> jmsService {
     resource onMessage (jms:JMSMessage m) {
         jms:ClientConnector jmsEP;
 
-        // Read all the supported headers from the message.
-        string correlationId = m.getCorrelationID(m);
-        int timestamp = m.getTimestamp(m);
-        string messageType = m.getType(m);
-        string messageId = m.getMessageID(m);
-        boolean redelivered = m.getRedelivered(m);
-        int expirationTime = m.getExpiration(m);
-        int priority = m.getPriority(m);
-        int deliveryMode = m.getDeliveryMode(m);
-
-        // Print the header values.
-        system:println("correlationId : " + correlationId);
-        system:println("timestamp : " + timestamp);
-        system:println("message type : " + messageType);
-        system:println("message id : " + messageId);
-        system:println("is redelivered : " + redelivered);
-        system:println("expiration time : " + expirationTime);
-        system:println("priority : " + priority);
-        system:println("delivery mode : " + deliveryMode);
+        // Get and Print message properties values.
+        // Ballerina Supports JMS property types of string, boolean, float and int
+        system:println("String Property : " + m.getStringProperty("string-prop"));
+        system:println("Boolean Property : " + m.getBooleanProperty("boolean-prop"));
         system:println("----------------------------------");
 
         map properties = {
@@ -43,11 +28,8 @@ service<jms> jmsService {
         jmsEP = create jms:ClientConnector(properties);
         jms:JMSMessage responseMessage = jms:createTextMessage(jmsEP);
 
-        responseMessage.setCorrelationID(responseMessage, "response-001");
-        responseMessage.setPriority(responseMessage, 8);
-        responseMessage.setDeliveryMode(responseMessage, 1);
-        responseMessage.setTextMessageContent(responseMessage, "{\"WSO2\":\"Ballerina\"}");
-        responseMessage.setType(responseMessage, "application/json");
+        responseMessage.setIntProperty("int-prop",777);
+        responseMessage.setFloatProperty("float-prop",123);
 
         jmsEP.send("MySecondQueue", responseMessage);
     }
