@@ -120,10 +120,11 @@ public class Send extends AbstractJMSAction {
 
         Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(properties);
 
-        // Generate connector the   key, if its not already generated
+        // Generate connector the key, if its not already generated
         String connectorKey;
         if (EMPTY_CONNECTOR_ID.equals(bConnector.getStringField(0))) {
             connectorKey = UUID.randomUUID().toString();
+            bConnector.setStringField(0, connectorKey);
         } else {
             connectorKey = bConnector.getStringField(0);
         }
