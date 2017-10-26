@@ -1,0 +1,2 @@
+// This is a sample Ballerina configuration to do reliable message delivery from one JMS Queue to Two other JMS Queues
+// If any of the preceding send operations fails, the original message will not be removed from the 1st Queue
