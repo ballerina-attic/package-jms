@@ -142,7 +142,7 @@ public class BTestUtils {
             throw new IllegalStateException("compilation contains errors.");
         }
         ProgramFile programFile = compileResult.getProgFile();
-        return BLangFunctions.invokeNew(programFile, programFile.getEntryPkgName(), functionName, args, context, 10);
+        return BLangFunctions.invokeNew(programFile, programFile.getEntryPkgName(), functionName, args, context);
     }
 
     /**

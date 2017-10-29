@@ -95,6 +95,11 @@
                 <version>${javax.jms.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.wso2.carbon.transport</groupId>
+                <artifactId>org.wso2.carbon.transport.jms</artifactId>
+                <version>${carbon.transport.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
                 <version>${org.testng.version}</version>
@@ -103,7 +108,7 @@
     </dependencyManagement>
 
     <properties>
-        <ballerina.version>0.93.1-SNAPSHOT</ballerina.version>
+        <ballerina.version>0.94.0-SNAPSHOT</ballerina.version>
         <javax.jms.version>2.0.1</javax.jms.version>
         <org.testng.version>6.11</org.testng.version>
         <maven.findbugsplugin.version.exclude>findbugs-exclude.xml</maven.findbugsplugin.version.exclude>
