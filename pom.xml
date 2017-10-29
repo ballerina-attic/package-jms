@@ -111,6 +111,7 @@
         <ballerina.version>0.94.0-SNAPSHOT</ballerina.version>
         <javax.jms.version>2.0.1</javax.jms.version>
         <org.testng.version>6.11</org.testng.version>
+        <apache.commons-pool2.version>2.4.2</apache.commons-pool2.version>
         <maven.findbugsplugin.version.exclude>findbugs-exclude.xml</maven.findbugsplugin.version.exclude>
         <mvn.processor.plugin.version>2.2.4</mvn.processor.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
