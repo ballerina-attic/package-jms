@@ -3,13 +3,12 @@
 Ballerina JMS Connector is used to connect Ballerina with JMS Message Brokers. With the JMS Connector Ballerina can act as JMS Message Consumers and JMS Message Producers.
 
 Steps to configure,
-1. Copy following jars in to <BRE_HOME>/bre/lib/
+1. Extract ballerina-jms-connector-0.94.0-SNAPSHOT.zip and copy containing jars in to <BRE_HOME>/bre/lib/
 2. Copy JMS Broker Client jars into <BRE_HOME>/bre/lib/
 3. (Optional) Copy src/net/jms into Ballerina src
 
 Ballerina as a JMS Consumer
 
-    import ballerina.lang.system;
     import ballerina.net.jms;
     import ballerina.doc;
      
@@ -29,7 +28,7 @@ Ballerina as a JMS Consumer
             string stringPayload = m.getTextMessageContent();
      
             // Print the retrieved payload.
-            system:println("Payload: " + stringPayload);
+            println("Payload: " + stringPayload);
         }
     }
     
