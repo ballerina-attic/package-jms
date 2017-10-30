@@ -98,6 +98,7 @@ public class Constants {
 
     public static final String JMS_MESSAGE = "JMSMessage";
 
+    public static final String INBOUND_REQUEST = "INBOUND_REQUEST";
 
     public static final String JMS_API_MESSAGE = "JMS_API_MESSAGE";
 

@@ -22,6 +22,7 @@ import org.ballerinalang.bre.Context;
 import org.ballerinalang.connector.api.BallerinaConnectorException;
 import org.ballerinalang.connector.api.ConnectorFuture;
 import org.ballerinalang.model.types.TypeKind;
+import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.Argument;
@@ -61,10 +62,17 @@ public class Acknowledge extends AbstractNativeFunction {
         String deliveryStatus = getStringArgument(ctx, 0);
         ConnectorFuture future = ctx.getConnectorFuture();
         if (null == future) {
-            log.warn("JMS Acknowledge function can only be used with JMS Messages. "
+            throw new BallerinaException("JMS Acknowledge function can only be used with JMS Messages. "
                     + Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property is not found in the message.");
-            return VOID_RETURN;
         }
+
+        BStruct messageStruct = ((BStruct) this.getRefArgument(ctx, 0));
+        if (messageStruct.getNativeData(Constants.INBOUND_REQUEST) != null && !(Boolean) messageStruct
+                .getNativeData(Constants.INBOUND_REQUEST)) {
+            throw new BallerinaException(
+                    "JMS Acknowledgement function can only be used with Inbound JMS Messages.");
+        }
+
         Object jmsSessionAcknowledgementMode = ctx.getProperties().get(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE);
         if (!(jmsSessionAcknowledgementMode instanceof Integer)) {
             throw new BallerinaException(

@@ -78,6 +78,7 @@ public class CreateTextMessage extends AbstractNativeFunction {
                 .createAndGetStruct(context, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
 
         bStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE, jmsMessage);
+        bStruct.addNativeData(Constants.INBOUND_REQUEST, Boolean.FALSE);
 
         return this.getBValues(bStruct);
     }
