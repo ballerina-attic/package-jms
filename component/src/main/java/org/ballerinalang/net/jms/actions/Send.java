@@ -111,7 +111,7 @@ public class Send extends AbstractJMSAction {
         BStruct messageStruct = ((BStruct) getRefArgument(context, 1));
         String destination = getStringArgument(context, 0);
 
-        Message jmsMessage = (Message) messageStruct.getNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE);
+        Message jmsMessage = JMSUtils.getJMSMessage(messageStruct);
 
         validateParams(bConnector);
 

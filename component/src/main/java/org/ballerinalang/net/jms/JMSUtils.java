@@ -151,29 +151,26 @@ public class JMSUtils {
         return configParams;
     }
 
+    /**
+     * Extract JMS Message from the struct
+     * @param messageStruct ballerina struct
+     * @return {@link Message} instance located in struct
+     */
     public static Message getJMSMessage(BStruct messageStruct) {
-        Message jmsMessage = null;
         if (messageStruct.getNativeData(Constants.JMS_API_MESSAGE) != null) {
-            jmsMessage = (Message) messageStruct.getNativeData(Constants.JMS_API_MESSAGE);
+            return (Message) messageStruct.getNativeData(Constants.JMS_API_MESSAGE);
         } else {
-            //TODO: Test for scenarios where JMS Message is not already created, but tries to modify
-            BMap<String, BString> properties = (BMap<String, BString>) messageStruct.getRefField(0);
-            Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(properties);
-            String messageType = messageStruct.getStringField(0);
-
-            try {
-                jmsMessage = new JMSConnectorFactoryImpl().createClientConnector(propertyMap)
-                        .createMessage(messageType);
-            } catch (JMSConnectorException e) {
-                throw new BallerinaException("Failed to send message. " + e.getMessage(), e);
-            }
-
-            messageStruct.addNativeData(Constants.JMS_API_MESSAGE, jmsMessage);
+            throw new BallerinaException("JMS message has not been created.");
         }
-
-        return jmsMessage;
     }
 
+    /**
+     * Extract JMS Resource from the Ballerina Service
+     *
+     * @param service Service instance
+     * @return  extracted resource
+     * @throws BallerinaConnectorException if there is no Resource or more than one Resource inside the service
+     */
     public static Resource extractJMSResource (Service service) throws BallerinaConnectorException {
         Resource[] resources = service.getResources();
         if (resources.length == 0) {
