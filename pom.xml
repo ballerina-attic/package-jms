@@ -115,6 +115,8 @@
         <maven.findbugsplugin.version.exclude>findbugs-exclude.xml</maven.findbugsplugin.version.exclude>
         <mvn.processor.plugin.version>2.2.4</mvn.processor.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <docerina.maven.plugin.version>${project.version}</docerina.maven.plugin.version>
+        <connectors.source.temp.dir>${basedir}/target/classes/META-INF/natives</connectors.source.temp.dir>
     </properties>
 
     <modules>
