@@ -1,4 +1,3 @@
-import ballerina.lang.system;
 import ballerina.net.jms;
 
 @jms:configuration {
@@ -14,7 +13,7 @@ service<jms> jmsService {
     resource onMessage (jms:JMSMessage m) {
 
         string stringPayload = m.getTextMessageContent();
-        system:println("Payload: " + stringPayload);
+        println("Payload: " + stringPayload);
         // acknowledge the message with positive acknowledgment. If we want to reject the message due to some error
         // use 'jms:DELIVERY_ERROR'
         m.acknowledge(jms:DELIVERY_SUCCESS);

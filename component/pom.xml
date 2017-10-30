@@ -279,6 +279,12 @@
                                     <version>${apache.commons-pool2.version}</version>
                                     <type>${project.packaging}</type>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>commons-lang</groupId>
+                                    <artifactId>commons-lang</artifactId>
+                                    <version>${apache.commons.lang.version}</version>
+                                    <type>${project.packaging}</type>
+                                </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/distribution</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
@@ -321,6 +327,22 @@
                         <configuration>
                             <outputDir>${project.build.directory}/docs</outputDir>
                             <sourceDir>${connectors.source.temp.dir}</sourceDir>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <resourceBundles>
+                                <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
+                            </resourceBundles>
                         </configuration>
                     </execution>
                 </executions>

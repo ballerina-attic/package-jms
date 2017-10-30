@@ -10,7 +10,7 @@ function jmsSender() {
     jms:ClientConnector jmsEP;
     map properties = {
                          "initialContextFactory":"wso2mbInitialContextFactory",
-                         "configFilePath":"resources/jndi.properties",
+                         "configFilePath":"../jndi.properties",
                          "connectionFactoryName": "TopicConnectionFactory",
                          "connectionFactoryType" : "topic"};
     // Create the JMS client Connector using the connection properties we defined earlier.
@@ -20,5 +20,5 @@ function jmsSender() {
     // Set a string payload to the message.
     queueMessage.setTextMessageContent("Hello from Ballerina!");
     // Send the Ballerina message to the JMS provider.
-    jmsEP.send("MyTopic", queueMessage);
+    jmsEP.send("mytopic", queueMessage);
 }

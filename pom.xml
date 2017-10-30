@@ -160,6 +160,7 @@
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
         <wso2.maven.compiler.source>1.8</wso2.maven.compiler.source>
         <wso2.maven.compiler.target>1.8</wso2.maven.compiler.target>
+        <apache.commons.lang.version>2.6</apache.commons.lang.version>
     </properties>
 
     <modules>

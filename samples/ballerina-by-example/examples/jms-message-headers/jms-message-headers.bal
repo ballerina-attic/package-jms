@@ -1,4 +1,3 @@
-import ballerina.lang.system;
 import ballerina.net.jms;
 
 @jms:configuration {
@@ -24,15 +23,15 @@ service<jms> jmsService {
         int deliveryMode = m.getDeliveryMode();
 
         // Print the header values.
-        system:println("correlationId : " + correlationId);
-        system:println("timestamp : " + timestamp);
-        system:println("message type : " + messageType);
-        system:println("message id : " + messageId);
-        system:println("is redelivered : " + redelivered);
-        system:println("expiration time : " + expirationTime);
-        system:println("priority : " + priority);
-        system:println("delivery mode : " + deliveryMode);
-        system:println("----------------------------------");
+        println("correlationId : " + correlationId);
+        println("timestamp : " + timestamp);
+        println("message type : " + messageType);
+        println("message id : " + messageId);
+        println("is redelivered : " + redelivered);
+        println("expiration time : " + expirationTime);
+        println("priority : " + priority);
+        println("delivery mode : " + deliveryMode);
+        println("----------------------------------");
 
         map properties = {
                              "initialContextFactory":"wso2mbInitialContextFactory",

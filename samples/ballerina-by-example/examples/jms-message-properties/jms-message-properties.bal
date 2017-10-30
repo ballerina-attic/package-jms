@@ -1,4 +1,3 @@
-import ballerina.lang.system;
 import ballerina.net.jms;
 
 @jms:configuration {
@@ -15,9 +14,9 @@ service<jms> jmsService {
 
         // Get and Print message properties values.
         // Ballerina Supports JMS property types of string, boolean, float and int
-        system:println("String Property : " + m.getStringProperty("string-prop"));
-        system:println("Boolean Property : " + m.getBooleanProperty("boolean-prop"));
-        system:println("----------------------------------");
+        println("String Property : " + m.getStringProperty("string-prop"));
+        println("Boolean Property : " + m.getBooleanProperty("boolean-prop"));
+        println("----------------------------------");
 
         map properties = {
                              "initialContextFactory":"wso2mbInitialContextFactory",

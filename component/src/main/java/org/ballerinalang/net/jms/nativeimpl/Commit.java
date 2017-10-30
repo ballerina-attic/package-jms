@@ -56,13 +56,13 @@ public class Commit extends AbstractNativeFunction {
 
         if (null == future) {
             throw new BallerinaException("JMS Commit function can only be used with JMS Messages. "
-                    + Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property is not found in the message.");
+                    + Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property is not found in the message.", ctx);
         }
 
         BStruct messageStruct = ((BStruct) this.getRefArgument(ctx, 0));
         if (messageStruct.getNativeData(Constants.INBOUND_REQUEST) != null && !(Boolean) messageStruct
                 .getNativeData(Constants.INBOUND_REQUEST)) {
-            throw new BallerinaException("JMS Commit function can only be used with Inbound JMS Messages.");
+            throw new BallerinaException("JMS Commit function can only be used with Inbound JMS Messages.", ctx);
         }
 
         Object jmsSessionAcknowledgementMode = ctx.getProperties().get(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE);

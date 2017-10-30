@@ -1,5 +1,4 @@
 import ballerina.net.jms;
-import ballerina.lang.system;
 
 @jms:configuration {
     initialContextFactory:"wso2mbInitialContextFactory",
@@ -20,7 +19,7 @@ service<jms> jmsService {
                          };
 
         //Process the message
-        system:println("Payload: " + request.getTextMessageContent());
+        println("Payload: " + request.getTextMessageContent());
 
         jmsEP = create jms:ClientConnector(properties);
         jms:JMSMessage message2 = jms:createTextMessage(jmsEP);
@@ -29,10 +28,10 @@ service<jms> jmsService {
             jmsEP.send("MyQueue2", message2);
             jmsEP.send("MyQueue3", message2);
         } failed {
-            system:println("Reliable delivery process failed and rollbacked");
+            println("Reliable delivery process failed and rollbacked");
             request.acknowledge(jms:DELIVERY_ERROR);
         } committed {
-            system:println("Reliable delivery process successed and committed");
+            println("Reliable delivery process successed and committed");
             request.acknowledge(jms:DELIVERY_SUCCESS);
         }
     }

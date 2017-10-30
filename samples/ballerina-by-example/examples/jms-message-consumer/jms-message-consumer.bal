@@ -1,13 +1,12 @@
-import ballerina.lang.system;
 import ballerina.net.jms;
-import ballerina.doc;
 
-@doc:Description{value : "Service level annotation to provide connection details. Connection factory type can be either queue or topic depending on the requirement. "}
+@Description{value : "Service level annotation to provide connection details. Connection factory type can be either queue or topic depending on the requirement. "}
 @jms:configuration {
     initialContextFactory:"wso2mbInitialContextFactory",
     providerUrl:
     "amqp://admin:admin@carbon/carbon?brokerlist='tcp://localhost:5672'",
     connectionFactoryName:"QueueConnectionFactory",
+    concurrentConsumers:"300",
     destination:"MyQueue"
 }
 service<jms> jmsService {
@@ -17,6 +16,6 @@ service<jms> jmsService {
         string stringPayload = m.getTextMessageContent();
 
         // Print the retrieved payload.
-        system:println("Payload: " + stringPayload);
+        println("Payload: " + stringPayload);
     }
 }

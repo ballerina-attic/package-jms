@@ -1,5 +1,4 @@
 import ballerina.net.jms;
-import ballerina.lang.system;
 
 function main (string[] args) {
     jmsTransactedSender();
@@ -31,8 +30,8 @@ function jmsTransactedSender() {
         jmsEP.send("MyQueue", queueMessage);
         jmsEP.send("MySecondQueue", queueMessage);
     } failed {
-        system:println("Rollbakced");
+        println("Rollbacked");
     } committed {
-        system:println("Committed");
+        println("Committed");
     }
 }

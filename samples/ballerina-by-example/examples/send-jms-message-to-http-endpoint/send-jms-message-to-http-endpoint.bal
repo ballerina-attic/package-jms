@@ -1,6 +1,5 @@
 import ballerina.net.jms;
 import ballerina.net.http;
-import ballerina.lang.system;
 
 @jms:configuration {
     initialContextFactory: "wso2mbInitialContextFactory",
@@ -22,7 +21,7 @@ service<jms> jmsService {
         req.setStringPayload(req, m.getTextMessageContent());
 
         http:Response resp = httpConnector.post("/my-webapp/echo", req);
-        system:println("POST response: ");
-        system:println(resp.getJsonPayload());
+        println("POST response: ");
+        println(resp.getJsonPayload());
     }
 }

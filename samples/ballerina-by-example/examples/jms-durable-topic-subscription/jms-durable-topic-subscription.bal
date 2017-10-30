@@ -1,8 +1,6 @@
-import ballerina.lang.system;
 import ballerina.net.jms;
-import ballerina.doc;
 
-@doc:Description{value : "Add the subscriptionId when connecting to a topic to create a durable topic subscription.
+@Description{value : "Add the subscriptionId when connecting to a topic to create a durable topic subscription.
 clientId should be set if you are using any other broker. If you susbcribe without a subscription ID it will
 automatically be a non-durable susbcription. "}
 @jms:configuration {
@@ -21,6 +19,6 @@ service<jms> jmsService {
         string stringPayload = m.getTextMessageContent();
 
         // Print the retrieved payload.
-        system:println("Payload: " + stringPayload);
+        println("Payload: " + stringPayload);
     }
 }

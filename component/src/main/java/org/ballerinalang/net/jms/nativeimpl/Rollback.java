@@ -58,7 +58,7 @@ public class Rollback extends AbstractNativeFunction {
 
         if (null == future) {
             throw new BallerinaException("JMS Rollback function can only be used with JMS Messages. "
-                    + Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property is not found in the message.");
+                    + Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property is not found in the message.", ctx);
         }
 
         BStruct messageStruct = ((BStruct) this.getRefArgument(ctx, 0));
@@ -70,7 +70,7 @@ public class Rollback extends AbstractNativeFunction {
         Object jmsSessionAcknowledgementMode = ctx.getProperties().get(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE);
         if (!(jmsSessionAcknowledgementMode instanceof Integer)) {
             throw new BallerinaException(
-                    Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property should hold a " + "integer value. ");
+                    Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property should hold a " + "integer value. ", ctx);
         }
         if (Session.SESSION_TRANSACTED == (Integer) jmsSessionAcknowledgementMode) {
             ctx.getConnectorFuture()
