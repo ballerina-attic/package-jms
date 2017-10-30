@@ -80,11 +80,6 @@ public class Constants {
     public static final String MB_ICF_NAME = "org.wso2.andes.jndi.PropertiesFileInitialContextFactory";
     public static final String MB_CF_NAME_PREFIX = "connectionfactory.";
 
-    /**
-     * Alias for caching.
-     */
-    public static final String ALIAS_CLIENT_CACHING = "clientCaching";
-
     private static Map<String, String> mappingParameters;
 
     static {
@@ -97,40 +92,27 @@ public class Constants {
         mappingParameters.put(ALIAS_ACK_MODE, JMSConstants.PARAM_ACK_MODE);
         mappingParameters.put(ALIAS_CLIENT_ID, JMSConstants.PARAM_CLIENT_ID);
         mappingParameters.put(ALIAS_DURABLE_SUBSCRIBER_ID, JMSConstants.PARAM_DURABLE_SUB_ID);
-        mappingParameters.put(ALIAS_CLIENT_CACHING, JMSConstants.PARAM_JMS_CACHING);
     }
 
     public static final Map<String, String> MAPPING_PARAMETERS = Collections.unmodifiableMap(mappingParameters);
 
     public static final String JMS_MESSAGE = "JMSMessage";
 
-    public static final String TRANSPORT_MESSAGE = "transport_message";
 
     public static final String JMS_API_MESSAGE = "JMS_API_MESSAGE";
 
     public static final String JMS_MESSAGE_STRUCT_NAME = "JMSMessage";
 
-    /** JMS Headers **/
-
-    public static final String HEADER_MESSAGE_ID = "JMS_MESSAGE_ID";
-
-    public static final String HEADER_PRIORITY = "JMS_PRIORITY";
-
-    public static final String HEADER_EXPIRATION = "JMS_EXPIRATION";
-
-    public static final String HEADER_REDELIVERED = "JMS_REDELIVERED";
-
-    public static final String HEADER_CORRELATION_ID = "JMS_CORRELATION_ID";
-
-    public static final String HEADER_DESTINATION = "JMS_DESTINATION";
-
-    public static final String HEADER_TIMESTAMP = "JMS_TIMESTAMP";
-
-    public static final String HEADER_REPLY_TO = "JMS_REPLY_TO";
-
-    public static final String HEADER_MESSAGE_TYPE = "JMS_TYPE";
-
-    public static final String HEADER_DELIVERY_MODE = "JMS_DELIVERY_MODE";
-
     public static final String EMPTY_CONNECTOR_ID = "EMPTY_ID";
+
+    public static final String CONNECTOR_NAME = "ClientConnector";
+
+    /*
+     * Session acknowledgement mode of the particular message.
+     */
+    public static final String JMS_SESSION_ACKNOWLEDGEMENT_MODE = "JMS_SESSION_ACKNOWLEDGEMENT_MODE";
+
+    // Delivery statuses
+    public static final String JMS_MESSAGE_DELIVERY_ERROR = "ERROR";
+    public static final String JMS_MESSAGE_DELIVERY_SUCCESS = "SUCCESS";
 }

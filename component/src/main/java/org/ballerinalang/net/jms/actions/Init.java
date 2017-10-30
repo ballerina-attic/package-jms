@@ -27,7 +27,7 @@ import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.Attribute;
 import org.ballerinalang.natives.annotations.BallerinaAction;
 import org.ballerinalang.natives.annotations.BallerinaAnnotation;
-import org.ballerinalang.net.jms.actions.utils.Constants;
+import org.ballerinalang.net.jms.Constants;
 import org.osgi.service.component.annotations.Component;
 
 /**
