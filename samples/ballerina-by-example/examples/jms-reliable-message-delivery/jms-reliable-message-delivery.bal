@@ -11,17 +11,18 @@ import ballerina.net.jms;
 service<jms> jmsService {
     resource onMessage (jms:JMSMessage request) {
         jms:ClientConnector jmsEP;
-        map properties = {   "initialContextFactory":"wso2mbInitialContextFactory",
-                             "configFilePath":"../jndi.properties",
-                             "connectionFactoryName": "QueueConnectionFactory",
-                             "connectionFactoryType" : "queue",
-                             "acknowledgementMode": jms:SESSION_TRANSACTED
+        jms:ConnectorProperties conProperties = {
+                            initialContextFactory:"wso2mbInitialContextFactory",
+                            configFilePath:"../jndi.properties",
+                            connectionFactoryName: "QueueConnectionFactory",
+                            connectionFactoryType : "queue",
+                             acknowledgementMode: "SESSION_TRANSACTED"
                          };
 
         //Process the message
         println("Payload: " + request.getTextMessageContent());
 
-        jmsEP = create jms:ClientConnector(properties);
+        jmsEP = create jms:ClientConnector(conProperties);
         jms:JMSMessage message2 = jms:createTextMessage(jmsEP);
         message2.setTextMessageContent("{\"WSO2\":\"Ballerina\"}");
         transaction {

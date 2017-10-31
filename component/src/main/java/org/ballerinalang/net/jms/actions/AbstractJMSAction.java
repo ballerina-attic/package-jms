@@ -18,7 +18,6 @@ package org.ballerinalang.net.jms.actions;
 
 import org.ballerinalang.connector.api.AbstractNativeAction;
 import org.ballerinalang.model.values.BConnector;
-import org.ballerinalang.model.values.BMap;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.util.exceptions.BallerinaException;
 

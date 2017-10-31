@@ -18,13 +18,14 @@ service<jms> jmsService {
         println("Boolean Property : " + m.getBooleanProperty("boolean-prop"));
         println("----------------------------------");
 
-        map properties = {
-                             "initialContextFactory":"wso2mbInitialContextFactory",
-                             "configFilePath":"../jndi.properties",
-                             "connectionFactoryName": "QueueConnectionFactory",
-                             "connectionFactoryType" : "queue"};
+        jms:ConnectorProperties conProperties = {
+            initialContextFactory:"wso2mbInitialContextFactory",
+            configFilePath:"../jndi.properties",
+            connectionFactoryName: "QueueConnectionFactory",
+            connectionFactoryType : "queue"
+                                                };
 
-        jmsEP = create jms:ClientConnector(properties);
+        jmsEP = create jms:ClientConnector(conProperties);
         jms:JMSMessage responseMessage = jms:createTextMessage(jmsEP);
 
         responseMessage.setIntProperty("int-prop",777);

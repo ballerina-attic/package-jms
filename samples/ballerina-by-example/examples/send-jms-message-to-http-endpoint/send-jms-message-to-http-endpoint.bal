@@ -8,7 +8,7 @@ import ballerina.net.http;
     connectionFactoryType:"queue",
     connectionFactoryName:"QueueConnectionFactory",
     destination:"MyQueue",
-    acknowledgementMode: "AUTO_ACKNOWLEDGE"
+    acknowledgementMode: "CLIENT_ACKNOWLEDGE"
 }
 service<jms> jmsService {
     resource onMessage (jms:JMSMessage m) {
@@ -18,7 +18,7 @@ service<jms> jmsService {
         http:Request req = {};
 
         // Retrieve the string payload using native function and set as a json payload.
-        req.setStringPayload(req, m.getTextMessageContent());
+        req.setStringPayload(m.getTextMessageContent());
 
         http:Response resp = httpConnector.post("/my-webapp/echo", req);
         println("POST response: ");

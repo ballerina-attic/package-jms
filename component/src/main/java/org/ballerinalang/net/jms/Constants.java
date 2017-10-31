@@ -116,4 +116,6 @@ public class Constants {
     // Delivery statuses
     public static final String JMS_MESSAGE_DELIVERY_ERROR = "ERROR";
     public static final String JMS_MESSAGE_DELIVERY_SUCCESS = "SUCCESS";
+
+    public static final String EMPTY_STRING = "";
 }

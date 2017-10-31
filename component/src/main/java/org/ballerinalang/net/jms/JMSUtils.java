@@ -148,15 +148,21 @@ public class JMSUtils {
         boolean clientCaching = (connectorConfig.getBooleanField(0) != 0 ? Boolean.TRUE : Boolean.FALSE);
         String connectionUsername = connectorConfig.getStringField(5);
         String connectionPassword = connectorConfig.getStringField(6);
+        String configFilePath = connectorConfig.getStringField(7);
 
         // Add to the map
         configParams.put(Constants.ALIAS_INITIAL_CONTEXT_FACTORY, initialContextFactory);
-        configParams.put(Constants.ALIAS_PROVIDER_URL, providerUrl);
         configParams.put(Constants.ALIAS_CONNECTION_FACTORY_NAME, connectionFactoryName);
         configParams.put(Constants.ALIAS_CONNECTION_FACTORY_TYPE, connectionFactoryType);
         configParams.put(Constants.ALIAS_ACK_MODE, acknowledgementMode);
         configParams.put(JMSConstants.PARAM_JMS_CACHING, String.valueOf(clientCaching));
-        if (!"".equals(connectionUsername)) {
+        if (!Constants.EMPTY_STRING.equals(providerUrl)) {
+            configParams.put(Constants.ALIAS_PROVIDER_URL, providerUrl);
+        }
+        if (!Constants.EMPTY_STRING.equals(configFilePath)) {
+            configParams.put(Constants.CONFIG_FILE_PATH, configFilePath);
+        }
+        if (!Constants.EMPTY_STRING.equals(connectionUsername)) {
             configParams.put(JMSConstants.CONNECTION_USERNAME, connectionUsername);
             configParams.put(JMSConstants.CONNECTION_PASSWORD, connectionPassword);
         }

@@ -33,13 +33,13 @@ service<jms> jmsService {
         println("delivery mode : " + deliveryMode);
         println("----------------------------------");
 
-        map properties = {
-                             "initialContextFactory":"wso2mbInitialContextFactory",
-                             "configFilePath":"../jndi.properties",
-                             "connectionFactoryName": "QueueConnectionFactory",
-                             "connectionFactoryType" : "queue"};
+        jms:ConnectorProperties conProperties = {
+                             initialContextFactory:"wso2mbInitialContextFactory",
+                             configFilePath:"../jndi.properties",
+                             connectionFactoryName: "QueueConnectionFactory",
+                             connectionFactoryType : "queue"};
 
-        jmsEP = create jms:ClientConnector(properties);
+        jmsEP = create jms:ClientConnector(conProperties);
         jms:JMSMessage responseMessage = jms:createTextMessage(jmsEP);
 
         responseMessage.setCorrelationID("response-001");

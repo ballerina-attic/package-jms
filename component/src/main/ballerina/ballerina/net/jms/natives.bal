@@ -24,6 +24,9 @@ public native function <JMSMessage msg> commit ();
 @Field {value:"connectionFactoryType: Type of the connection factory (queue/topic)"}
 @Field {value:"acknowledgementMode: Ack mode (auto-ack, client-ack, dups-ok-ack, transacted, xa)"}
 @Field {value:"clientCaching: Is client caching enabled (default: enabled)"}
+@Field {value:"connectionUsername: Connection factory username"}
+@Field {value:"connectionPassword: Connection factory password"}
+@Field {value:"configFilePath: Path to be used for locating jndi configuration"}
 @Field {value:"properties: Additional Properties"}
 public struct ConnectorProperties {
     string initialContextFactory;
@@ -34,6 +37,7 @@ public struct ConnectorProperties {
     boolean clientCaching = true;
     string connectionUsername;
     string connectionPassword;
+    string configFilePath;
     map properties;
 }
 
