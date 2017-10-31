@@ -44,17 +44,9 @@ import javax.jms.Message;
                              structPackage = "ballerina.net.jms"),
         functionName = "getIntProperty",
         args = {@Argument(name = "propertyName", type = TypeKind.STRING)},
-        returnType = {@ReturnType(type = TypeKind.STRING)},
+        returnType = {@ReturnType(type = TypeKind.INT)},
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
-        value = "Gets a transport property from the message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "message",
-        value = "The JMS message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "propertyName",
-        value = "The property name") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "string",
-        value = "The property value") })
 public class GetIntProperty extends AbstractNativeFunction {
 
     private static final Logger log = LoggerFactory.getLogger(GetIntProperty.class);

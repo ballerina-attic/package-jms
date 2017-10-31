@@ -48,12 +48,6 @@ import javax.jms.Message;
                 @Argument(name = "value", type = TypeKind.STRING)},
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
-        value = "Sets the value of a transport property") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "key",
-        value = "The property name") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "value",
-        value = "The property value") })
 public class SetStringProperty extends AbstractNativeFunction {
 
     private static final Logger log = LoggerFactory.getLogger(SetStringProperty.class);

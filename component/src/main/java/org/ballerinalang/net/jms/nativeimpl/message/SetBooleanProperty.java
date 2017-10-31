@@ -48,14 +48,6 @@ import javax.jms.Message;
                 @Argument(name = "value", type = TypeKind.BOOLEAN)},
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
-        value = "Sets a boolean value of a transport property") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "jmsmessage",
-        value = "The current message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "key",
-        value = "The property name") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "value",
-        value = "The property value") })
 public class SetBooleanProperty extends AbstractNativeFunction {
 
     private static final Logger log = LoggerFactory.getLogger(SetBooleanProperty.class);

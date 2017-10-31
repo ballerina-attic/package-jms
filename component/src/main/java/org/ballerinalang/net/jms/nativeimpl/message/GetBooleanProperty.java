@@ -47,12 +47,6 @@ import javax.jms.Message;
         returnType = {@ReturnType(type = TypeKind.BOOLEAN)},
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
-        value = "Gets a transport boolean property from the message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "propertyName",
-        value = "The property name") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "boolean",
-        value = "The property value") })
 public class GetBooleanProperty extends AbstractNativeFunction {
 
     private static final Logger log = LoggerFactory.getLogger(GetBooleanProperty.class);

@@ -52,10 +52,6 @@ import javax.jms.Message;
                    returnType = {@ReturnType(type = TypeKind.STRUCT, structPackage = "ballerina.net.jms",
                                              structType = "JMSMessage")},
                    isPublic = true)
-@BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
-        value = "Create JMS Text message") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "JMSMessage",
-                                                                         value = "Created JMS text message") })
 public class CreateTextMessage extends AbstractNativeFunction {
     private static final Logger log = LoggerFactory.getLogger(CreateTextMessage.class);
 

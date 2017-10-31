@@ -64,12 +64,7 @@ public class JMSServerConnector implements BallerinaServerConnector {
             org.wso2.carbon.transport.jms.contract.JMSServerConnector serverConnector = new JMSConnectorFactoryImpl()
                     .createServerConnector(serviceId, configParams, jmsListener);
 
-            if (!connectorMap.containsKey(serviceId)) {
-                connectorMap.put(serviceId, serverConnector);
-            } else {
-                throw new BallerinaConnectorException(
-                        "JMS Service is already created under the service id " + serviceId);
-            }
+            connectorMap.put(serviceId, serverConnector);
             serverConnector.start();
         } catch (JMSConnectorException e) {
             throw new BallerinaException(

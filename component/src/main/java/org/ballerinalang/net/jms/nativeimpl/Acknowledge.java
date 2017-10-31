@@ -48,13 +48,6 @@ import javax.jms.Session;
         args = {@Argument(name = "deliveryStatus", type = TypeKind.STRING)},
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
-        value = "Message acknowledgement action implementation for jms connector when using jms client "
-                + "acknowledgement mode") })
-@BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "message",
-        value = "message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "deliveryStatus",
-        value = "Specify whether message delivery is SUCCESS or ERROR") })
 public class Acknowledge extends AbstractNativeFunction {
     private static final Logger log = LoggerFactory.getLogger(Acknowledge.class);
 

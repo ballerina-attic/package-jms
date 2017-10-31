@@ -46,10 +46,6 @@ import javax.jms.Session;
                              structPackage = "ballerina.net.jms"),
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
-        value = "Session rollback action implementation for jms connector when using jms session transaction mode") })
-@BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "message",
-        value = "message")})
 public class Rollback extends AbstractNativeFunction {
     private static final Logger log = LoggerFactory.getLogger(Rollback.class);
 

@@ -47,12 +47,6 @@ import javax.jms.TextMessage;
         returnType = {@ReturnType(type = TypeKind.STRING)},
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
-        value = "Set text content for the message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "message",
-        value = "The JMS message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "content",
-        value = "The message content") })
 public class SetTextMessageContent extends AbstractNativeFunction {
 
     private static final Logger log = LoggerFactory.getLogger(SetTextMessageContent.class);
@@ -71,7 +65,7 @@ public class SetTextMessageContent extends AbstractNativeFunction {
                 log.error("JMSMessage is not a Text message. ");
             }
         } catch (JMSException e) {
-            log.error("Error when setting JMS message content :" + e.getLocalizedMessage());
+            log.error("Error when setting JMS message content :" + e.getLocalizedMessage(), e);
         }
 
         if (log.isDebugEnabled()) {

@@ -47,12 +47,6 @@ import javax.jms.Message;
         args = {@Argument(name = "value", type = TypeKind.INT)},
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
-        value = "Sets Expiration value to transport header") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "jmsmessage",
-        value = "The current message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "value",
-        value = "The header value") })
 public class SetExpirationHeader extends AbstractNativeFunction {
 
     private static final Logger log = LoggerFactory.getLogger(SetExpirationHeader.class);

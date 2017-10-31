@@ -45,12 +45,6 @@ import javax.jms.Message;
         returnType = {@ReturnType(type = TypeKind.INT)},
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
-        value = "Get DeliveryMode header from the message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "message",
-        value = "The JMS message") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "int",
-        value = "The header value") })
 public class GetDeliveryModeHeader extends AbstractNativeFunction {
 
     private static final Logger log = LoggerFactory.getLogger(GetDeliveryModeHeader.class);

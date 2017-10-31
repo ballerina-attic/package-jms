@@ -46,10 +46,6 @@ import javax.jms.TextMessage;
         returnType = {@ReturnType(type = TypeKind.STRING)},
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
-        value = "Get text content of the message") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "string",
-        value = "The text message content") })
 public class GetTextMessageContent extends AbstractNativeFunction {
 
     private static final Logger log = LoggerFactory.getLogger(GetTextMessageContent.class);

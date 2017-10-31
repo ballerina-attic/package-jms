@@ -47,14 +47,6 @@ import javax.jms.Message;
         returnType = {@ReturnType(type = TypeKind.FLOAT)},
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
-        value = "Gets a transport float property from the message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "message",
-        value = "The JMS message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "propertyName",
-        value = "The property name") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "float",
-        value = "The property value") })
 public class GetFloatProperty extends AbstractNativeFunction {
 
     private static final Logger log = LoggerFactory.getLogger(GetFloatProperty.class);

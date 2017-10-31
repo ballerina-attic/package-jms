@@ -42,8 +42,6 @@ import javax.jms.Message;
                              structPackage = "ballerina.net.jms"),
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
-        value = "Clear JMS properties of the message") })
 public class ClearProperties extends AbstractNativeFunction {
 
     private static final Logger log = LoggerFactory.getLogger(ClearProperties.class);

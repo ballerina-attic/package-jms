@@ -45,12 +45,6 @@ import javax.jms.Message;
         returnType = {@ReturnType(type = TypeKind.BOOLEAN)},
         isPublic = true
 )
-@BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
-        value = "Get Redelivered header from the message") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "message",
-        value = "The JMS message") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "boolean",
-        value = "The header value") })
 public class GetRedeliveredHeader extends AbstractNativeFunction {
 
     private static final Logger log = LoggerFactory.getLogger(GetRedeliveredHeader.class);
