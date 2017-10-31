@@ -19,6 +19,7 @@ package org.ballerinalang.net.jms.actions;
 import org.ballerinalang.connector.api.AbstractNativeAction;
 import org.ballerinalang.model.values.BConnector;
 import org.ballerinalang.model.values.BMap;
+import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.util.exceptions.BallerinaException;
 
 /**
@@ -29,7 +30,7 @@ public abstract class AbstractJMSAction extends AbstractNativeAction {
 
     protected boolean validateParams(BConnector connector) {
         if ((connector != null)
-                && (connector.getRefField(0) != null) && (connector.getRefField(0) instanceof BMap)) {
+                && (connector.getRefField(0) != null) && (connector.getRefField(0) instanceof BStruct)) {
             return true;
         } else {
             throw new BallerinaException("Connector parameters not defined correctly.");

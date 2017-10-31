@@ -58,8 +58,8 @@ public class CreateTextMessage extends AbstractNativeFunction {
     public BValue[] execute(Context context) {
 
         BConnector connectorStruct = ((BConnector) this.getRefArgument(context, 0));
-        BMap<String, BString> properties = (BMap<String, BString>) connectorStruct.getRefField(0);
-        Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(properties);
+        BStruct propertiesStruct = (BStruct) connectorStruct.getRefField(0);
+        Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(propertiesStruct);
 
         Message jmsMessage = null;
 

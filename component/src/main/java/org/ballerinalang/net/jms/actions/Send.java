@@ -116,9 +116,9 @@ public class Send extends AbstractJMSAction {
         validateParams(bConnector);
 
         // Get the map of properties.
-        BMap<String, BString> properties = (BMap<String, BString>) bConnector.getRefField(0);
+        BStruct  connectorConfig = ((BStruct) bConnector.getRefField(0));
 
-        Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(properties);
+        Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(connectorConfig);
 
         // Generate connector the key, if its not already generated
         String connectorKey;

@@ -17,9 +17,29 @@ public native function <JMSMessage msg> rollback ();
 @Param { value:"message: message" }
 public native function <JMSMessage msg> commit ();
 
+@Description { value:"JMS Client connector properties to pass JMS client connector configurations"}
+@Field {value:"initialContextFactory: Initial context factory name, specific to the provider"}
+@Field {value:"providerUrl: Connection URL of the provider"}
+@Field {value:"connectionFactoryName: Name of the connection factory"}
+@Field {value:"connectionFactoryType: Type of the connection factory (queue/topic)"}
+@Field {value:"acknowledgementMode: Ack mode (auto-ack, client-ack, dups-ok-ack, transacted, xa)"}
+@Field {value:"clientCaching: Is client caching enabled (default: enabled)"}
+@Field {value:"properties: Additional Properties"}
+public struct ConnectorProperties {
+    string initialContextFactory;
+    string providerUrl;
+    string connectionFactoryName;
+    string connectionFactoryType = "queue";
+    string acknowledgementMode = "AUTO_ACKNOWLEDGE";
+    boolean clientCaching = true;
+    string connectionUsername;
+    string connectionPassword;
+    map properties;
+}
+
 @Description { value:"JMS client connector to send messages to the JMS provider."}
-@Param { value:"connection and optional properties for the connector"}
-public connector ClientConnector (map properties) {
+@Param { value:"connectionProperties: Pre-defind and additional properties for the connector"}
+public connector ClientConnector (ConnectorProperties connectionProperties) {
 
     string connectorID = "EMPTY_ID";
 
@@ -29,6 +49,7 @@ public connector ClientConnector (map properties) {
     native action send (string destinationName, JMSMessage m);
 
 }
+
 
 @Description { value:"Create JMS Message based on client connector"}
 @Param { value:"ClientConnector: clientConnector" }

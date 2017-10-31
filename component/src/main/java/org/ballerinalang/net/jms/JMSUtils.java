@@ -26,8 +26,6 @@ import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.util.exceptions.BallerinaException;
 import org.wso2.carbon.kernel.utils.StringUtils;
-import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
-import org.wso2.carbon.transport.jms.impl.JMSConnectorFactoryImpl;
 import org.wso2.carbon.transport.jms.utils.JMSConstants;
 
 import java.util.HashMap;
@@ -134,15 +132,37 @@ public class JMSUtils {
     }
 
     /**
-     * Process the provided properties in the {@link BMap} and convert it to jms connector friendly Map.
+     * Convert Client Connector Property Map into String key-value pair map
      *
-     * @param properties {@link BMap} of properties.
-     * @return properties map for JMS connector.
+     * @param connectorConfig Client Connector configuration map
+     * @return String key-value pair map
      */
-    public static Map<String, String> preProcessJmsConfig(BMap<String, BString> properties) {
+    public static Map<String, String> preProcessJmsConfig(BStruct connectorConfig) {
         Map<String, String> configParams = new HashMap<>();
-        for (String key : properties.keySet()) {
-            configParams.put(key, properties.get(key).stringValue());
+
+        String initialContextFactory = connectorConfig.getStringField(0);
+        String providerUrl = connectorConfig.getStringField(1);
+        String connectionFactoryName = connectorConfig.getStringField(2);
+        String connectionFactoryType = connectorConfig.getStringField(3);
+        String acknowledgementMode = connectorConfig.getStringField(4);
+        boolean clientCaching = (connectorConfig.getBooleanField(0) != 0 ? Boolean.TRUE : Boolean.FALSE);
+        String connectionUsername = connectorConfig.getStringField(5);
+        String connectionPassword = connectorConfig.getStringField(6);
+
+        // Add to the map
+        configParams.put(Constants.ALIAS_INITIAL_CONTEXT_FACTORY, initialContextFactory);
+        configParams.put(Constants.ALIAS_PROVIDER_URL, providerUrl);
+        configParams.put(Constants.ALIAS_CONNECTION_FACTORY_NAME, connectionFactoryName);
+        configParams.put(Constants.ALIAS_CONNECTION_FACTORY_TYPE, connectionFactoryType);
+        configParams.put(Constants.ALIAS_ACK_MODE, acknowledgementMode);
+        configParams.put(JMSConstants.PARAM_JMS_CACHING, String.valueOf(clientCaching));
+        if (!"".equals(connectionUsername)) {
+            configParams.put(JMSConstants.CONNECTION_USERNAME, connectionUsername);
+            configParams.put(JMSConstants.CONNECTION_PASSWORD, connectionPassword);
+        }
+
+        if (connectorConfig.getRefField(0) != null) {
+            preProcessJmsConfig(configParams, (BMap<String, BString>) connectorConfig.getRefField(0));
         }
 
         preProcessIfWso2MB(configParams);
@@ -152,7 +172,25 @@ public class JMSUtils {
     }
 
     /**
+     * Process the provided properties in the {@link BMap} and convert it to jms connector friendly Map.
+     *
+     * @param configParams Map instance that is getting filled.
+     * @param properties   {@link BMap} of properties.
+     * @return updated map for JMS connector.
+     */
+    public static Map<String, String> preProcessJmsConfig(Map<String, String> configParams,
+            BMap<String, BString> properties) {
+
+        for (String key : properties.keySet()) {
+            configParams.put(key, properties.get(key).stringValue());
+        }
+
+        return configParams;
+    }
+
+    /**
      * Extract JMS Message from the struct
+     *
      * @param messageStruct ballerina struct
      * @return {@link Message} instance located in struct
      */
@@ -168,10 +206,10 @@ public class JMSUtils {
      * Extract JMS Resource from the Ballerina Service
      *
      * @param service Service instance
-     * @return  extracted resource
+     * @return extracted resource
      * @throws BallerinaConnectorException if there is no Resource or more than one Resource inside the service
      */
-    public static Resource extractJMSResource (Service service) throws BallerinaConnectorException {
+    public static Resource extractJMSResource(Service service) throws BallerinaConnectorException {
         Resource[] resources = service.getResources();
         if (resources.length == 0) {
             throw new BallerinaException("No resources found to handle the JMS message in " + service.getName());

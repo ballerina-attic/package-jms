@@ -44,7 +44,7 @@ import org.osgi.service.component.annotations.Component;
                  },
                  connectorArgs = {
                          @Argument(name = "properties",
-                                   type = TypeKind.MAP)
+                                   type = TypeKind.STRUCT)
                  })
 @BallerinaAnnotation(annotationName = "Description",
                      attributes = {
