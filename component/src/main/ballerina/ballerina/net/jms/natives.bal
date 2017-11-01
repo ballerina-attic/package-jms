@@ -59,9 +59,13 @@ public connector ClientConnector (ConnectorProperties connectionProperties) {
 }
 
 
-@Description { value:"Create JMS Message based on client connector"}
+@Description { value:"Create JMS Text Message based on client connector"}
 @Param { value:"ClientConnector: clientConnector" }
 public native function createTextMessage (ClientConnector clientConnector) (JMSMessage);
+
+@Description { value:"Create JMS Bytes Message based on client connector"}
+@Param { value:"ClientConnector: clientConnector" }
+public native function createBytesMessage (ClientConnector clientConnector) (JMSMessage);
 
 @Description { value:"Value for persistent JMS message delivery mode"}
 public const int PERSISTENT_DELIVERY_MODE = 2;
@@ -143,6 +147,14 @@ public native function <JMSMessage msg> setTextMessageContent (string content);
 @Description { value:"Gets text content of the JMS message"}
 @Return { value:"string: Text Message Content" }
 public native function <JMSMessage msg> getTextMessageContent () (string);
+
+@Description { value:"Sets bytes content for the JMS message"}
+@Param { value:"content: Bytes Message Content" }
+public native function <JMSMessage msg> setBytesMessageContent (blob content);
+
+@Description { value:"Get bytes content of the JMS message"}
+@Return { value:"string: Bytes Message Content" }
+public native function <JMSMessage msg> getBytesMessageContent () (blob);
 
 @Description { value:"Get JMS transport header MessageID from the message"}
 @Return { value:"string: The header value" }
