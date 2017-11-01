@@ -6,7 +6,7 @@ import ballerina.net.jms;
     providerUrl:
     "amqp://admin:admin@carbon/carbon?brokerlist='tcp://localhost:5672'",
     connectionFactoryName:"QueueConnectionFactory",
-    concurrentConsumers:"300",
+    concurrentConsumers:300,
     destination:"MyQueue"
 }
 service<jms> jmsService {

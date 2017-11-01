@@ -61,7 +61,7 @@ public class JMSUtils {
         addStringParamIfPresent(Constants.ALIAS_DURABLE_SUBSCRIBER_ID, jmsConfig, configParams);
         addStringParamIfPresent(Constants.ALIAS_ACK_MODE, jmsConfig, configParams);
         addStringParamIfPresent(Constants.CONFIG_FILE_PATH, jmsConfig, configParams);
-        addStringParamIfPresent(JMSConstants.CONCURRENT_CONSUMERS, jmsConfig, configParams);
+        addIntParamIfPresent(JMSConstants.CONCURRENT_CONSUMERS, jmsConfig, configParams);
         addStringParamIfPresent(JMSConstants.CONNECTION_USERNAME, jmsConfig, configParams);
         addStringParamIfPresent(JMSConstants.CONNECTION_PASSWORD, jmsConfig, configParams);
 
@@ -128,6 +128,13 @@ public class JMSUtils {
         AnnAttrValue value = jmsConfig.getAnnAttrValue(paramName);
         if (value != null && value.getStringValue() != null) {
             paramsMap.put(paramName, value.getStringValue());
+        }
+    }
+
+    private static void addIntParamIfPresent(String paramName, Annotation jmsConfig, Map<String, String> paramsMap) {
+        AnnAttrValue value = jmsConfig.getAnnAttrValue(paramName);
+        if (value != null) {
+            paramsMap.put(paramName, String.valueOf(value.getIntValue()));
         }
     }
 

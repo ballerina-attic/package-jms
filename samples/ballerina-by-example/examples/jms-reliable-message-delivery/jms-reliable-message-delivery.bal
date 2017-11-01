@@ -30,10 +30,8 @@ service<jms> jmsService {
             jmsEP.send("MyQueue3", message2);
         } failed {
             println("Reliable delivery process failed and rollbacked");
-            request.acknowledge(jms:DELIVERY_ERROR);
         } committed {
             println("Reliable delivery process successed and committed");
-            request.acknowledge(jms:DELIVERY_SUCCESS);
         }
     }
 }

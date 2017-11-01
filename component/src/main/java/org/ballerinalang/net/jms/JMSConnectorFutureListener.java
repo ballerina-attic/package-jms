@@ -55,8 +55,6 @@ public class JMSConnectorFutureListener implements ConnectorFutureListener {
 
     @Override
     public void notifyFailure(BallerinaConnectorException ex) {
-        //TODO: temporary logging added until Ballerina level error logs enables for service invocations
-        log.error("Error while processing the JMS message : ", ex);
         informCallback(Boolean.FALSE);
     }
 

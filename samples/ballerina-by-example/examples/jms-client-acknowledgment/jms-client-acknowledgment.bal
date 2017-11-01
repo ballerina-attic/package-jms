@@ -14,9 +14,11 @@ service<jms> jmsService {
 
         string stringPayload = m.getTextMessageContent();
         println("Payload: " + stringPayload);
-        // acknowledge the message with positive acknowledgment. If we want to reject the message due to some error
+        // We don't need to do the explicit acknowledgement. Messages will get acked/restored based on the errors
+        // occurred. But in cases of user wants to do this manually, it can be done as follows.
+        // Following will acknowledge the message with positive acknowledgment. If the message needs to be rejected
         // use 'jms:DELIVERY_ERROR'
-        m.acknowledge(jms:DELIVERY_SUCCESS);
+        // m.acknowledge(jms:DELIVERY_SUCCESS);
 
     }
 }

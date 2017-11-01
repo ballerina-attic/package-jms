@@ -10,59 +10,60 @@ Steps to configure,
 Ballerina as a JMS Consumer
 
     import ballerina.net.jms;
-    import ballerina.doc;
-     
-    @doc:Description{value : "Service level annotation to provide connection details. Connection factory type can be either queue or topic depending on the requirement. "}
+    
+    @Description{value : "Service level annotation to provide connection details. Connection factory type can be either queue or topic depending on the requirement. "}
     @jms:configuration {
         initialContextFactory:"wso2mbInitialContextFactory",
         providerUrl:
         "amqp://admin:admin@carbon/carbon?brokerlist='tcp://localhost:5672'",
-        connectionFactoryType:"queue",
         connectionFactoryName:"QueueConnectionFactory",
+        concurrentConsumers:300,
         destination:"MyQueue"
     }
     service<jms> jmsService {
         resource onMessage (jms:JMSMessage m) {
-     
+    
             // Retrieve the string payload using native function.
             string stringPayload = m.getTextMessageContent();
-     
+    
             // Print the retrieved payload.
             println("Payload: " + stringPayload);
         }
     }
+
     
  
 Ballerina as a JMS Producer
 
     import ballerina.net.jms;
-     
+    
     function main (string[] args) {
         jmsSender();
     }
-     
+    
     function jmsSender() {
         // We define the connection properties as a map. 'providerUrl' or 'configFilePath' and the 'initialContextFactory' vary according to the JMS provider you use.
         // In this example we connect to the WSO2 MB server.
         jms:ClientConnector jmsEP;
-        map properties = {
-                             "initialContextFactory":"wso2mbInitialContextFactory",
-                             "configFilePath":"../jndi.properties",
-                             "connectionFactoryName": "QueueConnectionFactory",
-                             "connectionFactoryType" : "queue"};
-                              
+        jms:ConnectorProperties conProperties = {
+                             initialContextFactory:"wso2mbInitialContextFactory",
+                             configFilePath:"../jndi.properties",
+                             connectionFactoryName: "QueueConnectionFactory",
+                             connectionFactoryType : "queue"};
+        
         // Create the JMS client Connector using the connection properties we defined earlier.
-        jmsEP = create jms:ClientConnector(properties);
-         
+        jmsEP = create jms:ClientConnector(conProperties);
+        
         // Create an empty Ballerina message.
         jms:JMSMessage queueMessage = jms:createTextMessage(jmsEP);
-         
+        
         // Set a string payload to the message.
         queueMessage.setTextMessageContent("Hello from Ballerina!");
-         
+        
         // Send the Ballerina message to the JMS provider.
         jmsEP.send("MyQueue", queueMessage);
     }
+
      
 
 
