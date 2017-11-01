@@ -149,6 +149,8 @@ public class JMSUtils {
         String connectionUsername = connectorConfig.getStringField(5);
         String connectionPassword = connectorConfig.getStringField(6);
         String configFilePath = connectorConfig.getStringField(7);
+        int connectionCount = (int) connectorConfig.getIntField(0);
+        int sessionCount = (int) connectorConfig.getIntField(1);
 
         // Add to the map
         configParams.put(Constants.ALIAS_INITIAL_CONTEXT_FACTORY, initialContextFactory);
@@ -166,6 +168,8 @@ public class JMSUtils {
             configParams.put(JMSConstants.CONNECTION_USERNAME, connectionUsername);
             configParams.put(JMSConstants.CONNECTION_PASSWORD, connectionPassword);
         }
+        configParams.put(JMSConstants.PARAM_MAX_CONNECTIONS, String.valueOf(connectionCount));
+        configParams.put(JMSConstants.PARAM_MAX_SESSIONS_ON_CONNECTION, String.valueOf(sessionCount));
 
         if (connectorConfig.getRefField(0) != null) {
             preProcessJmsConfig(configParams, (BMap<String, BString>) connectorConfig.getRefField(0));

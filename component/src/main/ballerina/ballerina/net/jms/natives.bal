@@ -27,6 +27,8 @@ public native function <JMSMessage msg> commit ();
 @Field {value:"connectionUsername: Connection factory username"}
 @Field {value:"connectionPassword: Connection factory password"}
 @Field {value:"configFilePath: Path to be used for locating jndi configuration"}
+@Field {value:"connectionCount: Number of pooled connections to be used in the transport level (default: 5)"}
+@Field {value:"sessionCount: Number of pooled sessions to be used per connection in the transport level (default: 10)"}
 @Field {value:"properties: Additional Properties"}
 public struct ConnectorProperties {
     string initialContextFactory;
@@ -38,6 +40,8 @@ public struct ConnectorProperties {
     string connectionUsername;
     string connectionPassword;
     string configFilePath;
+    int connectionCount = 5;
+    int sessionCount = 10;
     map properties;
 }
 

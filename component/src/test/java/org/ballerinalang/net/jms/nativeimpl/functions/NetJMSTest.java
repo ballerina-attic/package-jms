@@ -20,8 +20,10 @@ package org.ballerinalang.net.jms.nativeimpl.functions;
 
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.connector.api.ConnectorFutureListener;
+import org.ballerinalang.connector.api.ConnectorUtils;
 import org.ballerinalang.connector.impl.BServerConnectorFuture;
 import org.ballerinalang.model.values.BString;
+import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.net.jms.JMSConnectorFutureListener;
@@ -58,7 +60,10 @@ public class NetJMSTest {
         ctx.setConnectorFuture(connectorFuture);
         ctx.setProperty(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE, javax.jms.Session.CLIENT_ACKNOWLEDGE);
 
-        BValue[] inputArgs = { null, new BString("SUCCESS") };
+        BStruct bStruct = ConnectorUtils
+                .createAndGetStruct(ctx, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
+
+        BValue[] inputArgs = { bStruct, new BString("SUCCESS") };
         BTestUtils.invoke(result, "testAcknowledge", inputArgs, ctx);
 
         Assert.assertTrue(jmsCallback.isAcknowledged(), "JMS message is not acknowledged properly");
@@ -76,7 +81,10 @@ public class NetJMSTest {
         ctx.setConnectorFuture(connectorFuture);
         ctx.setProperty(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE, javax.jms.Session.CLIENT_ACKNOWLEDGE);
 
-        BValue[] inputArgs = { null, new BString("ERROR") };
+        BStruct bStruct = ConnectorUtils
+                .createAndGetStruct(ctx, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
+
+        BValue[] inputArgs = { bStruct, new BString("ERROR") };
         BTestUtils.invoke(result, "testAcknowledge", inputArgs, ctx);
 
         Assert.assertTrue(jmsCallback.isReseted(), "JMS message is not unacknowledged properly");
@@ -94,7 +102,9 @@ public class NetJMSTest {
         ctx.setConnectorFuture(connectorFuture);
         ctx.setProperty(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE, Session.SESSION_TRANSACTED);
 
-        BValue[] inputArgs = { null };
+        BStruct bStruct = ConnectorUtils
+                .createAndGetStruct(ctx, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
+        BValue[] inputArgs = { bStruct };
         BTestUtils.invoke(result, "testCommit", inputArgs, ctx);
 
         Assert.assertTrue(jmsCallback.isCommited(), "JMS message is not committed properly");
@@ -112,7 +122,9 @@ public class NetJMSTest {
         ctx.setConnectorFuture(connectorFuture);
         ctx.setProperty(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE, Session.SESSION_TRANSACTED);
 
-        BValue[] inputArgs = { null };
+        BStruct bStruct = ConnectorUtils
+                .createAndGetStruct(ctx, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
+        BValue[] inputArgs = {bStruct};
         BTestUtils.invoke(result, "testRollback", inputArgs, ctx);
 
         Assert.assertTrue(jmsCallback.isRollbacked(), "JMS message is not rollbacked properly");
