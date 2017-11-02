@@ -49,8 +49,8 @@ public class JMSConnectorFutureListener implements ConnectorFutureListener {
     }
 
     @Override
-    public void notifyReply(BValue response) {
-        informCallback(Boolean.parseBoolean(response.stringValue()));
+    public void notifyReply(BValue... response) {
+        // not used in jms
     }
 
     @Override

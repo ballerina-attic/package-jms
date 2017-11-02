@@ -144,7 +144,7 @@
 
     <properties>
         <ballerina.version>0.94.0-SNAPSHOT</ballerina.version>
-        <carbon.transport.version>6.0.35-SNAPSHOT</carbon.transport.version>
+        <carbon.transport.version>6.0.41</carbon.transport.version>
         <javax.jms.version>2.0.1</javax.jms.version>
         <org.testng.version>6.11</org.testng.version>
         <apache.commons-pool2.version>2.4.2</apache.commons-pool2.version>

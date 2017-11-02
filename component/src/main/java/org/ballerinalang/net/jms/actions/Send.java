@@ -40,17 +40,12 @@ import org.wso2.carbon.transport.jms.contract.JMSClientConnector;
 import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
 import org.wso2.carbon.transport.jms.impl.JMSConnectorFactoryImpl;
 import org.wso2.carbon.transport.jms.sender.wrappers.SessionWrapper;
-import org.wso2.carbon.transport.jms.sender.wrappers.XASessionWrapper;
 import org.wso2.carbon.transport.jms.utils.JMSConstants;
 
 import java.util.Map;
 import java.util.UUID;
 import javax.jms.Message;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
-import javax.transaction.xa.XAResource;
 
 import static org.ballerinalang.net.jms.Constants.EMPTY_CONNECTOR_ID;
 
@@ -152,14 +147,12 @@ public class Send extends AbstractJMSAction {
                 // transaction block)
                 if (txContext == null) {
                     sessionWrapper = jmsClientConnector.acquireSession();
-                    txContext = new JMSTransactionContext(sessionWrapper, jmsClientConnector,
-                            (sessionWrapper instanceof XASessionWrapper));
-                    ballerinaTxManager.registerTransactionContext(connectorKey, txContext);
-
+                    txContext = new JMSTransactionContext(sessionWrapper, jmsClientConnector);
                     //Handle XA initialization
-                    if (sessionWrapper instanceof XASessionWrapper) {
-                        initializeXATransaction(ballerinaTxManager, (XASessionWrapper) sessionWrapper);
+                    if (txContext.getXAResource() != null) {
+                        initializeXATransaction(ballerinaTxManager);
                     }
+                    ballerinaTxManager.registerTransactionContext(connectorKey, txContext);
                 } else {
                     sessionWrapper = ((JMSTransactionContext) txContext).getSessionWrapper();
                 }
@@ -173,8 +166,7 @@ public class Send extends AbstractJMSAction {
         return future;
     }
 
-    private void initializeXATransaction(BallerinaTransactionManager ballerinaTxManager,
-            XASessionWrapper xASessionWrapper) {
+    private void initializeXATransaction(BallerinaTransactionManager ballerinaTxManager) {
         /* Atomikos transaction manager initialize only distributed transaction is present.*/
         if (!ballerinaTxManager.hasXATransactionManager()) {
             TransactionManager transactionManager = DistributedTxManagerProvider.getInstance().getTransactionManager();
@@ -182,16 +174,6 @@ public class Send extends AbstractJMSAction {
         }
         if (!ballerinaTxManager.isInXATransaction()) {
             ballerinaTxManager.beginXATransaction();
-        }
-        Transaction tx = ballerinaTxManager.getXATransaction();
-        try {
-            if (tx != null) {
-                XAResource xaResource = xASessionWrapper.getXASession().getXAResource();
-                tx.enlistResource(xaResource);
-            }
-        } catch (SystemException | RollbackException e) {
-            throw new BallerinaException(
-                    "error in enlisting distributed transaction resources: " + e.getCause().getMessage(), e);
         }
     }
 }

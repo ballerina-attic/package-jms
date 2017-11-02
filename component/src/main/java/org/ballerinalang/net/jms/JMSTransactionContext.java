@@ -19,25 +19,28 @@ package org.ballerinalang.net.jms;
 
 import org.ballerinalang.bre.BallerinaTransactionContext;
 import org.ballerinalang.util.exceptions.BallerinaException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wso2.carbon.transport.jms.contract.JMSClientConnector;
 import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
 import org.wso2.carbon.transport.jms.sender.wrappers.SessionWrapper;
+import org.wso2.carbon.transport.jms.sender.wrappers.XASessionWrapper;
 
 import javax.jms.JMSException;
+import javax.transaction.xa.XAResource;
 
 /**
  * {@link JMSTransactionContext} to hold information regarding the transactional stage
  * inside a Context flow.
  */
 public class JMSTransactionContext implements BallerinaTransactionContext {
+    private static final Logger log = LoggerFactory.getLogger(JMSConnectorFutureListener.class);
     private SessionWrapper sessionWrapper;
     private JMSClientConnector clientConnector;
-    private boolean xaConn;
 
-    public JMSTransactionContext(SessionWrapper sessionWrapper, JMSClientConnector clientConnector, boolean isXAConn) {
+    public JMSTransactionContext(SessionWrapper sessionWrapper, JMSClientConnector clientConnector) {
         this.sessionWrapper = sessionWrapper;
         this.clientConnector = clientConnector;
-        this.xaConn = isXAConn;
     }
 
     public SessionWrapper getSessionWrapper() {
@@ -51,7 +54,7 @@ public class JMSTransactionContext implements BallerinaTransactionContext {
                 sessionWrapper.getSession().commit();
             }
         } catch (JMSException e) {
-            throw new BallerinaException("transaction commit failed:" + e.getMessage());
+            throw new BallerinaException("transaction commit failed: " + e.getLocalizedMessage(), e);
         }
     }
 
@@ -62,25 +65,33 @@ public class JMSTransactionContext implements BallerinaTransactionContext {
                 sessionWrapper.getSession().rollback();
             }
         } catch (JMSException e) {
-            throw new BallerinaException("transaction rollback failed:" + e.getMessage());
+            throw new BallerinaException("transaction rollback failed: " + e.getLocalizedMessage(), e);
         }
     }
 
     @Override
     public void close() {
+    }
+
+    @Override
+    public void done() {
         if (sessionWrapper != null) {
             try {
                 clientConnector.releaseSession(sessionWrapper);
                 sessionWrapper = null;
             } catch (JMSConnectorException e) {
-                throw new BallerinaException("JMS Session release failed:" + e.getMessage());
+                log.error("jms session release failed: " + e.getLocalizedMessage(), e);
             }
         }
     }
 
     @Override
-    public boolean isXAConnection() {
-        return this.xaConn;
+    public XAResource getXAResource() {
+        XAResource xaResource = null;
+        if (sessionWrapper instanceof  XASessionWrapper) {
+            xaResource = ((XASessionWrapper) sessionWrapper).getXASession().getXAResource();
+        }
+        return xaResource;
     }
 
 }
