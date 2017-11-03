@@ -18,6 +18,7 @@
 
 package org.ballerinalang.net.jms;
 
+import org.ballerinalang.annotation.JavaSPIService;
 import org.ballerinalang.connector.api.Annotation;
 import org.ballerinalang.connector.api.BallerinaConnectorException;
 import org.ballerinalang.connector.api.BallerinaServerConnector;
@@ -36,6 +37,7 @@ import java.util.Map;
  *
  * @since 0.94
  */
+@JavaSPIService("org.ballerinalang.connector.api.BallerinaServerConnector")
 public class JMSServerConnector implements BallerinaServerConnector {
 
     private Map<String, org.wso2.carbon.transport.jms.contract.JMSServerConnector> connectorMap = new HashMap<>();
