@@ -1,0 +1,5 @@
+// This example shows you how to publish to a message queue using JMS publisher distributed transaction.
+// XA transactions can use used when multiple JMS Client Connector sends or other any other Ballerina Transacted
+// action(s) in present.
+// This example scenario can be achieved with Local transactions as well and it is the ideal way to do it. XA is
+// used for demonstration purpose.
