@@ -21,7 +21,6 @@ package org.ballerinalang.net.jms.nativeimpl;
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.connector.api.ConnectorUtils;
 import org.ballerinalang.model.types.TypeKind;
-import org.ballerinalang.model.values.BConnector;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.natives.AbstractNativeFunction;
@@ -44,7 +43,7 @@ import javax.jms.Message;
  * Create Text JMS Message.
  */
 @BallerinaFunction(packageName = "ballerina.net.jms", functionName = "createTextMessage", args = {
-        @Argument(name = "clientConnector", type = TypeKind.CONNECTOR) },
+        @Argument(name = "clientConnector", type = TypeKind.STRUCT) },
                    returnType = {@ReturnType(type = TypeKind.STRUCT, structPackage = "ballerina.net.jms",
                                              structType = "JMSMessage")},
                    isPublic = true)
@@ -53,8 +52,7 @@ public class CreateTextMessage extends AbstractNativeFunction {
 
     public BValue[] execute(Context context) {
 
-        BConnector connectorStruct = ((BConnector) this.getRefArgument(context, 0));
-        BStruct propertiesStruct = (BStruct) connectorStruct.getRefField(0);
+        BStruct propertiesStruct = ((BStruct) this.getRefArgument(context, 0));
         Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(propertiesStruct);
 
         Message jmsMessage = null;
