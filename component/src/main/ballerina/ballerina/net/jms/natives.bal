@@ -30,7 +30,7 @@ public native function <JMSMessage msg> commit ();
 @Field {value:"connectionCount: Number of pooled connections to be used in the transport level (default: 5)"}
 @Field {value:"sessionCount: Number of pooled sessions to be used per connection in the transport level (default: 10)"}
 @Field {value:"properties: Additional Properties"}
-public struct ConnectorProperties {
+public struct ClientProperties {
     string initialContextFactory;
     string providerUrl;
     string connectionFactoryName;
@@ -46,8 +46,8 @@ public struct ConnectorProperties {
 }
 
 @Description { value:"JMS client connector to send messages to the JMS provider."}
-@Param { value:"connectionProperties: Pre-defind and additional properties for the connector"}
-public connector ClientConnector (ConnectorProperties connectionProperties) {
+@Param { value:"clientProperties: Pre-defind and additional properties for the connector"}
+public connector JmsClient (ClientProperties clientProperties) {
 
     string connectorID = "EMPTY_ID";
 
@@ -60,12 +60,12 @@ public connector ClientConnector (ConnectorProperties connectionProperties) {
 
 
 @Description { value:"Create JMS Text Message based on client connector"}
-@Param { value:"ClientConnector: clientConnector" }
-public native function createTextMessage (ClientConnector clientConnector) (JMSMessage);
+@Param { value:"jmsClient: clientConnector" }
+public native function createTextMessage (ClientProperties jmsClient) (JMSMessage);
 
 @Description { value:"Create JMS Bytes Message based on client connector"}
-@Param { value:"ClientConnector: clientConnector" }
-public native function createBytesMessage (ClientConnector clientConnector) (JMSMessage);
+@Param { value:"jmsClient: clientConnector" }
+public native function createBytesMessage (ClientProperties jmsClient) (JMSMessage);
 
 @Description { value:"Value for persistent JMS message delivery mode"}
 public const int PERSISTENT_DELIVERY_MODE = 2;

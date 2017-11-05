@@ -10,7 +10,9 @@ import ballerina.net.jms;
 }
 service<jms> jmsService {
     resource onMessage (jms:JMSMessage m) {
-        jms:ClientConnector jmsEP;
+        endpoint<jms:JmsClient> jmsEP {
+             create jms:JmsClient (getConnectorConfig());
+        }
 
         // Get and Print message properties values.
         // Ballerina Supports JMS property types of string, boolean, float and int
@@ -18,15 +20,10 @@ service<jms> jmsService {
         println("Boolean Property : " + m.getBooleanProperty("boolean-prop"));
         println("----------------------------------");
 
-        jms:ConnectorProperties conProperties = {
-            initialContextFactory:"wso2mbInitialContextFactory",
-            configFilePath:"../jndi.properties",
-            connectionFactoryName: "QueueConnectionFactory",
-            connectionFactoryType : "queue"
-                                                };
-
-        jmsEP = create jms:ClientConnector(conProperties);
-        jms:JMSMessage responseMessage = jms:createTextMessage(jmsEP);
+        // Create an empty Ballerina message.
+        jms:JMSMessage responseMessage = jms:createTextMessage(getConnectorConfig());
+        // Set a string payload to the message.
+        responseMessage.setTextMessageContent("Hello from Ballerina!");
 
         responseMessage.setIntProperty("int-prop",777);
         responseMessage.setFloatProperty("float-prop",123);
@@ -34,3 +31,14 @@ service<jms> jmsService {
         jmsEP.send("MySecondQueue", responseMessage);
     }
 }
+
+function getConnectorConfig () (jms:ClientProperties) {
+    jms:ClientProperties properties = {
+                                         initialContextFactory:"wso2mbInitialContextFactory",
+                                         configFilePath:"../jndi.properties",
+                                         connectionFactoryName: "QueueConnectionFactory",
+                                         connectionFactoryType : "queue"
+                                     };
+    return properties;
+}
+

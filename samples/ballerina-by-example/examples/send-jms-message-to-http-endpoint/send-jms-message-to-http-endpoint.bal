@@ -12,15 +12,15 @@ import ballerina.net.http;
 }
 service<jms> jmsService {
     resource onMessage (jms:JMSMessage m) {
-        http:ClientConnector httpConnector;
-        http:Options connectorOptions = {};
-        httpConnector = create http:ClientConnector("http://localhost:8080", connectorOptions);
+        endpoint<http:HttpClient> httpConnector {
+             create http:HttpClient ("http://localhost:8080",{});
+        }
+
         http:Request req = {};
 
         // Retrieve the string payload using native function and set as a json payload.
         req.setStringPayload(m.getTextMessageContent());
-
-        http:Response resp = httpConnector.post("/my-webapp/echo", req);
+        var resp,err = httpConnector.get("/my-webapp/echo", req);
         println("POST response: ");
         println(resp.getJsonPayload());
     }
