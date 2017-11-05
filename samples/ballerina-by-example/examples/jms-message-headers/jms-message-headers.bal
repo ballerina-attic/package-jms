@@ -10,7 +10,9 @@ import ballerina.net.jms;
 }
 service<jms> jmsService {
     resource onMessage (jms:JMSMessage m) {
-        jms:ClientConnector jmsEP;
+        endpoint<jms:JmsClient> jmsEP {
+             create jms:JmsClient (getConnectorConfig());
+        }
 
         // Read all the supported headers from the message.
         string correlationId = m.getCorrelationID();
@@ -33,14 +35,7 @@ service<jms> jmsService {
         println("delivery mode : " + deliveryMode);
         println("----------------------------------");
 
-        jms:ConnectorProperties conProperties = {
-                             initialContextFactory:"wso2mbInitialContextFactory",
-                             configFilePath:"../jndi.properties",
-                             connectionFactoryName: "QueueConnectionFactory",
-                             connectionFactoryType : "queue"};
-
-        jmsEP = create jms:ClientConnector(conProperties);
-        jms:JMSMessage responseMessage = jms:createTextMessage(jmsEP);
+        jms:JMSMessage responseMessage = jms:createTextMessage(getConnectorConfig());
 
         responseMessage.setCorrelationID("response-001");
         responseMessage.setPriority(8);
@@ -50,4 +45,13 @@ service<jms> jmsService {
 
         jmsEP.send("MySecondQueue", responseMessage);
     }
+}
+
+function getConnectorConfig () (jms:ClientProperties) {
+    jms:ClientProperties properties = {
+                                          initialContextFactory:"wso2mbInitialContextFactory",
+                                          configFilePath:"../jndi.properties",
+                                          connectionFactoryName:"QueueConnectionFactory",
+                                          connectionFactoryType:"queue"};
+    return properties;
 }
