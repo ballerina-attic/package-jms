@@ -158,7 +158,7 @@
         <maven.findbugsplugin.version.exclude>findbugs-exclude.xml</maven.findbugsplugin.version.exclude>
         <mvn.processor.plugin.version>2.2.4</mvn.processor.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <docerina.maven.plugin.version>${project.version}</docerina.maven.plugin.version>
+        <docerina.maven.plugin.version>${ballerina.version}</docerina.maven.plugin.version>
         <connectors.source.temp.dir>${basedir}/target/classes/META-INF/natives</connectors.source.temp.dir>
         <slf4j.api.version>1.7.22</slf4j.api.version>
         <maven.dependency.plugin.version>2.10</maven.dependency.plugin.version>
