@@ -56,6 +56,11 @@ public connector JmsClient (ClientProperties clientProperties) {
     @Param {value:"message: Message"}
     native action send (string destinationName, JMSMessage m);
 
+    @Description {value:"POLL action implementation of the JMS Connector"}
+    @Param {value:"destinationName: Destination Name"}
+    @Param {value:"time: Timeout that needs to blocked on"}
+    native action poll (string destinationName, int time) (JMSMessage, error);
+
 }
 
 

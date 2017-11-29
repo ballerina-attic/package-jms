@@ -98,6 +98,10 @@ public class Constants {
 
     public static final String JMS_MESSAGE = "JMSMessage";
 
+    /* There are some operation that can be done only on inbound jms messages. eg: acknowledgement, rollback etc.
+    * This property will identify whether the message is coming from the server connector or not. Please note that
+    * When creating a new JMS message inside a native function/action, this property has be set to false
+    * */
     public static final String INBOUND_REQUEST = "INBOUND_REQUEST";
 
     public static final String JMS_API_MESSAGE = "JMS_API_MESSAGE";
