@@ -227,7 +227,7 @@
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
-                        <phase>install</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
@@ -279,13 +279,13 @@
                     <descriptors>
                         <descriptor>src/main/assembly/dist.xml</descriptor>
                     </descriptors>
-                    <finalName>ballerina-jms-connector-${project.version}</finalName>
+                    <finalName>${project.artifactId}-${project.version}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
                     <execution>
                         <id>make-assembly</id>
-                        <phase>install</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
