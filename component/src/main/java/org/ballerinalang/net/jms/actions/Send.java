@@ -36,11 +36,11 @@ import org.ballerinalang.util.DistributedTxManagerProvider;
 import org.ballerinalang.util.exceptions.BallerinaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wso2.carbon.transport.jms.contract.JMSClientConnector;
-import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
-import org.wso2.carbon.transport.jms.impl.JMSConnectorFactoryImpl;
-import org.wso2.carbon.transport.jms.sender.wrappers.SessionWrapper;
-import org.wso2.carbon.transport.jms.utils.JMSConstants;
+import org.wso2.transport.jms.contract.JMSClientConnector;
+import org.wso2.transport.jms.exception.JMSConnectorException;
+import org.wso2.transport.jms.impl.JMSConnectorFactoryImpl;
+import org.wso2.transport.jms.sender.wrappers.SessionWrapper;
+import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.util.Map;
 import java.util.UUID;

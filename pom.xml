@@ -146,9 +146,9 @@
                 <version>${javax.jms.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.transport</groupId>
-                <artifactId>org.wso2.carbon.transport.jms</artifactId>
-                <version>${carbon.transport.version}</version>
+                <groupId>org.wso2.transport.jms</groupId>
+                <artifactId>transport-jms</artifactId>
+                <version>${wso2.transport.jms.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.testng</groupId>
@@ -259,7 +259,7 @@
     <properties>
         <project.scm.id>my-scm-server</project.scm.id>
         <ballerina.version>0.95.0</ballerina.version>
-        <carbon.transport.version>6.0.41</carbon.transport.version>
+        <wso2.transport.jms.version>6.0.48</wso2.transport.jms.version>
         <javax.jms.version>2.0.1</javax.jms.version>
         <org.testng.version>6.11</org.testng.version>
         <apache.commons-pool2.version>2.4.2</apache.commons-pool2.version>

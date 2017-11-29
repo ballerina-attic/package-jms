@@ -22,8 +22,8 @@ import org.ballerinalang.connector.api.ConnectorFuture;
 import org.ballerinalang.connector.api.ConnectorFutureListener;
 import org.ballerinalang.connector.api.Executor;
 import org.ballerinalang.connector.api.Resource;
-import org.wso2.carbon.transport.jms.callback.JMSCallback;
-import org.wso2.carbon.transport.jms.contract.JMSListener;
+import org.wso2.transport.jms.callback.JMSCallback;
+import org.wso2.transport.jms.contract.JMSListener;
 
 import java.util.HashMap;
 import java.util.Map;

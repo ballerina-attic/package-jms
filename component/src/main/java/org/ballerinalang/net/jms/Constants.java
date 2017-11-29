@@ -18,7 +18,7 @@
 
 package org.ballerinalang.net.jms;
 
-import org.wso2.carbon.transport.jms.utils.JMSConstants;
+import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.util.Collections;
 import java.util.HashMap;
