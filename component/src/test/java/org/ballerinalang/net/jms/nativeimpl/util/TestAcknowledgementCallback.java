@@ -18,7 +18,7 @@
 
 package org.ballerinalang.net.jms.nativeimpl.util;
 
-import org.wso2.carbon.transport.jms.callback.JMSCallback;
+import org.wso2.transport.jms.callback.JMSCallback;
 
 import javax.jms.Session;
 

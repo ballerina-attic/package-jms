@@ -43,8 +43,8 @@
             <artifactId>ballerina-logging</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.transport</groupId>
-            <artifactId>org.wso2.carbon.transport.jms</artifactId>
+            <groupId>org.wso2.transport.jms</groupId>
+            <artifactId>transport-jms</artifactId>
         </dependency>
         <dependency>
             <groupId>org.ballerinalang</groupId>
@@ -240,9 +240,9 @@
                                     <type>${project.packaging}</type>
                                 </artifactItem>
                                 <artifactItem>
-                                    <groupId>org.wso2.carbon.transport</groupId>
-                                    <artifactId>org.wso2.carbon.transport.jms</artifactId>
-                                    <version>${carbon.transport.version}</version>
+                                    <groupId>org.wso2.transport.jms</groupId>
+                                    <artifactId>transport-jms</artifactId>
+                                    <version>${wso2.transport.jms.version}</version>
                                     <type>${project.packaging}</type>
                                 </artifactItem>
                                 <artifactItem>

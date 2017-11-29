@@ -26,7 +26,7 @@ import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.util.exceptions.BallerinaException;
 import org.wso2.carbon.kernel.utils.StringUtils;
-import org.wso2.carbon.transport.jms.utils.JMSConstants;
+import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.util.HashMap;
 import java.util.Iterator;

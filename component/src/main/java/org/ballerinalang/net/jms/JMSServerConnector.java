@@ -24,10 +24,10 @@ import org.ballerinalang.connector.api.BallerinaConnectorException;
 import org.ballerinalang.connector.api.BallerinaServerConnector;
 import org.ballerinalang.connector.api.Service;
 import org.ballerinalang.util.exceptions.BallerinaException;
-import org.wso2.carbon.transport.jms.contract.JMSListener;
-import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
-import org.wso2.carbon.transport.jms.impl.JMSConnectorFactoryImpl;
-import org.wso2.carbon.transport.jms.utils.JMSConstants;
+import org.wso2.transport.jms.contract.JMSListener;
+import org.wso2.transport.jms.exception.JMSConnectorException;
+import org.wso2.transport.jms.impl.JMSConnectorFactoryImpl;
+import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +40,7 @@ import java.util.Map;
 @JavaSPIService("org.ballerinalang.connector.api.BallerinaServerConnector")
 public class JMSServerConnector implements BallerinaServerConnector {
 
-    private Map<String, org.wso2.carbon.transport.jms.contract.JMSServerConnector> connectorMap = new HashMap<>();
+    private Map<String, org.wso2.transport.jms.contract.JMSServerConnector> connectorMap = new HashMap<>();
 
     @Override
     public String getProtocolPackage() {
@@ -63,7 +63,7 @@ public class JMSServerConnector implements BallerinaServerConnector {
         try {
             // Create a new JMS Listener for this this JMS Service and include it in a new JMS Server Connector
             JMSListener jmsListener = new JMSListenerImpl(JMSUtils.extractJMSResource(service));
-            org.wso2.carbon.transport.jms.contract.JMSServerConnector serverConnector = new JMSConnectorFactoryImpl()
+            org.wso2.transport.jms.contract.JMSServerConnector serverConnector = new JMSConnectorFactoryImpl()
                     .createServerConnector(serviceId, configParams, jmsListener);
 
             connectorMap.put(serviceId, serverConnector);
@@ -78,7 +78,7 @@ public class JMSServerConnector implements BallerinaServerConnector {
     public void serviceUnregistered(Service service) throws BallerinaConnectorException {
         String serviceId = service.getName();
         try {
-            org.wso2.carbon.transport.jms.contract.JMSServerConnector serverConnector = connectorMap.get(serviceId);
+            org.wso2.transport.jms.contract.JMSServerConnector serverConnector = connectorMap.get(serviceId);
             if (null != serverConnector) {
                 serverConnector.stop();
             }

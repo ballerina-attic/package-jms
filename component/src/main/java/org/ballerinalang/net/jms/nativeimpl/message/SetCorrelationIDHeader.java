@@ -34,7 +34,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 
 /**
- * Native function to set CorrelationID header to carbon message.
+ * Native function to set CorrelationID header to message.
  */
 
 @BallerinaFunction(
