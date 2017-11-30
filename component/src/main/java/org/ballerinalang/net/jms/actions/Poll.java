@@ -16,10 +16,7 @@
 
 package org.ballerinalang.net.jms.actions;
 
-import org.ballerinalang.bre.BallerinaTransactionContext;
-import org.ballerinalang.bre.BallerinaTransactionManager;
 import org.ballerinalang.bre.Context;
-import org.ballerinalang.bre.bvm.BLangVMErrors;
 import org.ballerinalang.connector.api.ConnectorFuture;
 import org.ballerinalang.connector.api.ConnectorUtils;
 import org.ballerinalang.model.types.TypeKind;
@@ -30,9 +27,8 @@ import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaAction;
 import org.ballerinalang.natives.annotations.ReturnType;
 import org.ballerinalang.net.jms.Constants;
-import org.ballerinalang.net.jms.JMSTransactionContext;
 import org.ballerinalang.net.jms.JMSUtils;
-import org.ballerinalang.util.DistributedTxManagerProvider;
+import org.ballerinalang.util.exceptions.BallerinaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.transport.jms.contract.JMSClientConnector;
@@ -47,7 +43,8 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
-import javax.transaction.TransactionManager;
+import javax.jms.Queue;
+import javax.jms.QueueSession;
 
 import static org.ballerinalang.net.jms.Constants.EMPTY_CONNECTOR_ID;
 
@@ -110,29 +107,29 @@ public class Poll extends AbstractJMSAction {
             if (!isTransacted) {
                 sessionWrapper = jmsClientConnector.acquireSession();
             } else {
-                BallerinaTransactionManager ballerinaTxManager = context.getBallerinaTransactionManager();
-                BallerinaTransactionContext txContext = ballerinaTxManager.getTransactionContext(connectorKey);
-                // if transaction initialization has not yet been done
-                // (if this is the first transacted action happens from this particular connector with this
-                // transaction block)
-                if (txContext == null) {
-                    sessionWrapper = jmsClientConnector.acquireSession();
-                    txContext = new JMSTransactionContext(sessionWrapper, jmsClientConnector);
-                    //Handle XA initialization
-                    if (txContext.getXAResource() != null) {
-                        initializeXATransaction(ballerinaTxManager);
-                    }
-                    ballerinaTxManager.registerTransactionContext(connectorKey, txContext);
+                sessionWrapper = getTxSession(context, jmsClientConnector, connectorKey);
+            }
+
+            // Extension work done on JMS transport to make polling work, using the API provided by JMSClientConnector.
+            Destination queue = jmsClientConnector.createDestination(destination, sessionWrapper);
+            MessageConsumer messageConsumer = null;
+            Message message = null;
+            try {
+                if (JMSConstants.JMS_SPEC_VERSION_1_0.equals(propertyMap.get(JMSConstants.PARAM_JMS_SPEC_VER))) {
+                    messageConsumer = ((QueueSession) sessionWrapper.getSession()).createReceiver((Queue) queue);
                 } else {
-                    sessionWrapper = ((JMSTransactionContext) txContext).getSessionWrapper();
+                    messageConsumer = sessionWrapper.getSession().createConsumer(queue);
+                }
+                message = messageConsumer.receive(timeout);
+            } catch (JMSException e) {
+                throw new BallerinaException("Failed to send message. " + e.getMessage(), e, context);
+            } finally {
+                if (messageConsumer != null) {
+                    messageConsumer.close();
                 }
             }
-            Destination queue = jmsClientConnector.createDestination(destination, sessionWrapper);
-            MessageConsumer messageConsumer = sessionWrapper.getSession().createConsumer(queue);
-            Message message = messageConsumer.receive(timeout);
 
-            messageConsumer.close();
-
+            // Inject the Message (if received) into a JMSMessage struct.
             if (message != null) {
                 BStruct bStruct = ConnectorUtils
                         .createAndGetStruct(context, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
@@ -141,27 +138,12 @@ public class Poll extends AbstractJMSAction {
                 bStruct.addNativeData(Constants.INBOUND_REQUEST, Boolean.FALSE);
 
                 context.getControlStackNew().getCurrentFrame().returnValues[0] = bStruct;
-            } else {
-                context.getControlStackNew().getCurrentFrame().returnValues[0] = null;
             }
-
         } catch (JMSConnectorException | JMSException e) {
-            context.getControlStackNew().getCurrentFrame().returnValues[1] =
-                    BLangVMErrors.createError(context, 0, e.getMessage());
+            throw new BallerinaException("Failed to send message. " + e.getMessage(), e, context);
         }
         ClientConnectorFuture future = new ClientConnectorFuture();
         future.notifySuccess();
         return future;
-    }
-
-    private void initializeXATransaction(BallerinaTransactionManager ballerinaTxManager) {
-        /* Atomikos transaction manager initialize only distributed transaction is present.*/
-        if (!ballerinaTxManager.hasXATransactionManager()) {
-            TransactionManager transactionManager = DistributedTxManagerProvider.getInstance().getTransactionManager();
-            ballerinaTxManager.setXATransactionManager(transactionManager);
-        }
-        if (!ballerinaTxManager.isInXATransaction()) {
-            ballerinaTxManager.beginXATransaction();
-        }
     }
 }
