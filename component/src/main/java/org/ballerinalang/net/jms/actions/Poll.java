@@ -39,12 +39,7 @@ import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.util.Map;
 import java.util.UUID;
-import javax.jms.Destination;
-import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.Queue;
-import javax.jms.QueueSession;
 
 import static org.ballerinalang.net.jms.Constants.EMPTY_CONNECTOR_ID;
 
@@ -103,30 +98,13 @@ public class Poll extends AbstractJMSAction {
             if (log.isDebugEnabled()) {
                 log.debug("Polling JMS Message from " + propertyMap.get(JMSConstants.PARAM_DESTINATION_NAME));
             }
-            SessionWrapper sessionWrapper;
-            if (!isTransacted) {
-                sessionWrapper = jmsClientConnector.acquireSession();
-            } else {
-                sessionWrapper = getTxSession(context, jmsClientConnector, connectorKey);
-            }
+            Message message;
 
-            // Extension work done on JMS transport to make polling work, using the API provided by JMSClientConnector.
-            Destination queue = jmsClientConnector.createDestination(destination, sessionWrapper);
-            MessageConsumer messageConsumer = null;
-            Message message = null;
-            try {
-                if (JMSConstants.JMS_SPEC_VERSION_1_0.equals(propertyMap.get(JMSConstants.PARAM_JMS_SPEC_VER))) {
-                    messageConsumer = ((QueueSession) sessionWrapper.getSession()).createReceiver((Queue) queue);
-                } else {
-                    messageConsumer = sessionWrapper.getSession().createConsumer(queue);
-                }
-                message = messageConsumer.receive(timeout);
-            } catch (JMSException e) {
-                throw new BallerinaException("Failed to send message. " + e.getMessage(), e, context);
-            } finally {
-                if (messageConsumer != null) {
-                    messageConsumer.close();
-                }
+            if (!isTransacted) {
+                message = jmsClientConnector.poll(destination, timeout);
+            } else {
+                SessionWrapper sessionWrapper = getTxSession(context, jmsClientConnector, connectorKey);
+                message = jmsClientConnector.pollTransacted(destination, timeout, sessionWrapper);
             }
 
             // Inject the Message (if received) into a JMSMessage struct.
@@ -139,7 +117,7 @@ public class Poll extends AbstractJMSAction {
 
                 context.getControlStackNew().getCurrentFrame().returnValues[0] = bStruct;
             }
-        } catch (JMSConnectorException | JMSException e) {
+        } catch (JMSConnectorException e) {
             throw new BallerinaException("Failed to send message. " + e.getMessage(), e, context);
         }
         ClientConnectorFuture future = new ClientConnectorFuture();
