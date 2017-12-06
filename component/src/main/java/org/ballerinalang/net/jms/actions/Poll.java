@@ -18,12 +18,14 @@ package org.ballerinalang.net.jms.actions;
 
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.connector.api.ConnectorFuture;
+import org.ballerinalang.connector.api.ConnectorUtils;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BConnector;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.nativeimpl.actions.ClientConnectorFuture;
 import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaAction;
+import org.ballerinalang.natives.annotations.ReturnType;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.net.jms.JMSUtils;
 import org.ballerinalang.util.exceptions.BallerinaException;
@@ -39,39 +41,39 @@ import java.util.Map;
 import javax.jms.Message;
 
 /**
- * {@code Send} is the send action implementation of the JMS Connector.
+ * {@code Poll} is the poll action implementation of the JMS Client Connector.
+ *
+ * @since 0.95.2
  */
 @BallerinaAction(packageName = "ballerina.net.jms",
-                 actionName = "send",
+                 actionName = "poll",
                  connectorName = Constants.CONNECTOR_NAME,
-                 args = {@Argument(name = "destinationName",
+                 args = {
+                         @Argument(name = "queueName",
                                    type = TypeKind.STRING),
-                         @Argument(name = "message",
-                                   type = TypeKind.STRUCT)
+                         @Argument(name = "timeout", type = TypeKind.INT)
                  },
-                 connectorArgs = {
-                         @Argument(name = "properties",
-                                   type = TypeKind.STRUCT)
-                 })
-public class Send extends AbstractJMSAction {
-    private static final Logger log = LoggerFactory.getLogger(Send.class);
+                 returnType = {@ReturnType(type = TypeKind.STRUCT, elementType = TypeKind.STRUCT,
+                                           structPackage = "ballerina.net.jms", structType = "JMSMessage"),
+                               @ReturnType(type = TypeKind.STRUCT)})
+public class Poll extends AbstractJMSAction {
+    private static final Logger log = LoggerFactory.getLogger(Poll.class);
 
     @Override
     public ConnectorFuture execute(Context context) {
+        ClientConnectorFuture future = new ClientConnectorFuture();
 
         // Extract argument values
         BConnector bConnector = (BConnector) getRefArgument(context, 0);
-        BStruct messageStruct = ((BStruct) getRefArgument(context, 1));
         String destination = getStringArgument(context, 0);
-
-        Message jmsMessage = JMSUtils.getJMSMessage(messageStruct);
+        int timeout = getIntArgument(context, 0);
 
         // Get the map of properties.
         BStruct  connectorConfig = ((BStruct) bConnector.getRefField(0));
 
         Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(connectorConfig);
 
-        // Generate connector the key, if its not already generated
+        // Get the connector key
         String connectorKey = bConnector.getStringField(0);
 
         propertyMap.put(JMSConstants.PARAM_DESTINATION_NAME, destination);
@@ -84,23 +86,34 @@ public class Send extends AbstractJMSAction {
         }
 
         try {
-            /* todo: Cache this created JMSClientConnector. Creating it per-request is costly because
-               todo: createClientConnector method of JMSConnectorFactoryImpl is having a synchronized call */
             JMSClientConnector jmsClientConnector = new JMSConnectorFactoryImpl().createClientConnector(propertyMap);
             if (log.isDebugEnabled()) {
-                log.debug("Sending JMS Message to " + propertyMap.get(JMSConstants.PARAM_DESTINATION_NAME));
+                log.debug("polling JMS Message from " + propertyMap.get(JMSConstants.PARAM_DESTINATION_NAME));
             }
+            Message message;
+
             if (!isTransacted) {
-                jmsClientConnector.send(jmsMessage, destination);
+                message = jmsClientConnector.poll(destination, timeout);
             } else {
                 SessionWrapper sessionWrapper = getTxSession(context, jmsClientConnector, connectorKey);
-                jmsClientConnector.sendTransactedMessage(jmsMessage, destination, sessionWrapper);
+                message = jmsClientConnector.pollTransacted(destination, timeout, sessionWrapper);
+            }
+
+            // Inject the Message (if received) into a JMSMessage struct.
+            if (message != null) {
+                BStruct bStruct = ConnectorUtils
+                        .createAndGetStruct(context, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
+
+                bStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE, message);
+                bStruct.addNativeData(Constants.INBOUND_REQUEST, Boolean.FALSE);
+
+                future.notifyReply(bStruct);
+            } else {
+                future.notifySuccess();
             }
         } catch (JMSConnectorException e) {
             throw new BallerinaException("Failed to send message. " + e.getMessage(), e, context);
         }
-        ClientConnectorFuture future = new ClientConnectorFuture();
-        future.notifySuccess();
         return future;
     }
 }

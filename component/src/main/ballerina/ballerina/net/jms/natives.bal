@@ -1,5 +1,6 @@
 package ballerina.net.jms;
 
+import ballerina.util;
 
 public struct JMSMessage {
 }
@@ -49,12 +50,17 @@ public struct ClientProperties {
 @Param { value:"clientProperties: Pre-defind and additional properties for the connector"}
 public connector JmsClient (ClientProperties clientProperties) {
 
-    string connectorID = "EMPTY_ID";
+    string connectorID = util:uuid();
 
     @Description {value:"SEND action implementation of the JMS Connector"}
     @Param {value:"destinationName: Destination Name"}
     @Param {value:"message: Message"}
     native action send (string destinationName, JMSMessage m);
+
+    @Description {value:"POLL action implementation of the JMS Connector"}
+    @Param {value:"destinationName: Destination Name"}
+    @Param {value:"time: Timeout that needs to blocked on"}
+    native action poll (string destinationName, int time) (JMSMessage);
 
 }
 

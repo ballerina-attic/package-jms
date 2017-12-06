@@ -19,16 +19,15 @@
 package org.ballerinalang.net.jms.actions;
 
 import org.ballerinalang.bre.Context;
-import org.ballerinalang.connector.api.AbstractNativeAction;
 import org.ballerinalang.connector.api.ConnectorFuture;
 import org.ballerinalang.model.types.TypeKind;
+import org.ballerinalang.model.values.BConnector;
+import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.nativeimpl.actions.ClientConnectorFuture;
 import org.ballerinalang.natives.annotations.Argument;
-import org.ballerinalang.natives.annotations.Attribute;
 import org.ballerinalang.natives.annotations.BallerinaAction;
-import org.ballerinalang.natives.annotations.BallerinaAnnotation;
 import org.ballerinalang.net.jms.Constants;
-import org.osgi.service.component.annotations.Component;
+import org.ballerinalang.util.exceptions.BallerinaException;
 
 /**
  * {@code Init} is the Init action implementation of the JMS Connector.
@@ -46,21 +45,24 @@ import org.osgi.service.component.annotations.Component;
                          @Argument(name = "properties",
                                    type = TypeKind.STRUCT)
                  })
-@BallerinaAnnotation(annotationName = "Description",
-                     attributes = {
-                             @Attribute(name = "value",
-                                        value = "The init action implementation for JMS connector.")
-                     })
-@Component(name = "action.net.jms.init",
-           immediate = true,
-           service = AbstractNativeAction.class)
 public class Init extends AbstractJMSAction {
 
     @Override
     public ConnectorFuture execute(Context context) {
+        BConnector bConnector = (BConnector) getRefArgument(context, 0);
+        validateParams(bConnector);
         ClientConnectorFuture future = new ClientConnectorFuture();
         future.notifySuccess();
         return future;
+    }
+
+    private boolean validateParams(BConnector connector) {
+        if ((connector != null)
+                && (connector.getRefField(0) != null) && (connector.getRefField(0) instanceof BStruct)) {
+            return true;
+        } else {
+            throw new BallerinaException("Connector parameters not defined correctly.");
+        }
     }
 
     @Override

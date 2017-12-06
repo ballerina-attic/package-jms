@@ -16,10 +16,17 @@
 
 package org.ballerinalang.net.jms.actions;
 
+import org.ballerinalang.bre.BallerinaTransactionContext;
+import org.ballerinalang.bre.BallerinaTransactionManager;
+import org.ballerinalang.bre.Context;
 import org.ballerinalang.connector.api.AbstractNativeAction;
-import org.ballerinalang.model.values.BConnector;
-import org.ballerinalang.model.values.BStruct;
-import org.ballerinalang.util.exceptions.BallerinaException;
+import org.ballerinalang.net.jms.JMSTransactionContext;
+import org.ballerinalang.util.DistributedTxManagerProvider;
+import org.wso2.transport.jms.contract.JMSClientConnector;
+import org.wso2.transport.jms.exception.JMSConnectorException;
+import org.wso2.transport.jms.sender.wrappers.SessionWrapper;
+
+import javax.transaction.TransactionManager;
 
 /**
  * {@code AbstractJMSAction} is the base class for all JMS Connector Actions.
@@ -27,12 +34,47 @@ import org.ballerinalang.util.exceptions.BallerinaException;
 
 public abstract class AbstractJMSAction extends AbstractNativeAction {
 
-    protected boolean validateParams(BConnector connector) {
-        if ((connector != null)
-                && (connector.getRefField(0) != null) && (connector.getRefField(0) instanceof BStruct)) {
-            return true;
+    /**
+     * Get tx SessionWrapper.
+     * If the transaction context is already started, we can re-use the session, otherwise acquire a new SessionWrapper
+     * from the transport.
+     *
+     * @param context Ballerina context.
+     * @param jmsClientConnector transport level JMSClientConnector of this Ballerina Connector.
+     * @param connectorKey Id of the Ballerina Connector.
+     * @return
+     * @throws JMSConnectorException Error when acquiring the session.
+     */
+    protected SessionWrapper getTxSession(Context context, JMSClientConnector jmsClientConnector, String connectorKey)
+            throws JMSConnectorException {
+        SessionWrapper sessionWrapper;
+        BallerinaTransactionManager ballerinaTxManager = context.getBallerinaTransactionManager();
+        BallerinaTransactionContext txContext = ballerinaTxManager.getTransactionContext(connectorKey);
+        // if transaction initialization has not yet been done
+        // (if this is the first transacted action happens from this particular connector within this
+        // transaction block)
+        if (txContext == null) {
+            sessionWrapper = jmsClientConnector.acquireSession();
+            txContext = new JMSTransactionContext(sessionWrapper, jmsClientConnector);
+            //Handle XA initialization
+            if (txContext.getXAResource() != null) {
+                initializeXATransaction(ballerinaTxManager);
+            }
+            ballerinaTxManager.registerTransactionContext(connectorKey, txContext);
         } else {
-            throw new BallerinaException("Connector parameters not defined correctly.");
+            sessionWrapper = ((JMSTransactionContext) txContext).getSessionWrapper();
+        }
+        return sessionWrapper;
+    }
+
+    private void initializeXATransaction(BallerinaTransactionManager ballerinaTxManager) {
+        /* Atomikos transaction manager initialize only distributed transaction is present.*/
+        if (!ballerinaTxManager.hasXATransactionManager()) {
+            TransactionManager transactionManager = DistributedTxManagerProvider.getInstance().getTransactionManager();
+            ballerinaTxManager.setXATransactionManager(transactionManager);
+        }
+        if (!ballerinaTxManager.isInXATransaction()) {
+            ballerinaTxManager.beginXATransaction();
         }
     }
 
