@@ -38,13 +38,12 @@ import org.wso2.transport.jms.sender.wrappers.SessionWrapper;
 import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.util.Map;
-import java.util.UUID;
 import javax.jms.Message;
-
-import static org.ballerinalang.net.jms.Constants.EMPTY_CONNECTOR_ID;
 
 /**
  * {@code Poll} is the poll action implementation of the JMS Client Connector.
+ *
+ * @since 0.95.2
  */
 @BallerinaAction(packageName = "ballerina.net.jms",
                  actionName = "poll",
@@ -62,27 +61,20 @@ public class Poll extends AbstractJMSAction {
 
     @Override
     public ConnectorFuture execute(Context context) {
+        ClientConnectorFuture future = new ClientConnectorFuture();
 
         // Extract argument values
         BConnector bConnector = (BConnector) getRefArgument(context, 0);
         String destination = getStringArgument(context, 0);
         int timeout = getIntArgument(context, 0);
 
-        validateParams(bConnector);
-
         // Get the map of properties.
         BStruct  connectorConfig = ((BStruct) bConnector.getRefField(0));
 
         Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(connectorConfig);
 
-        // Generate connector the key, if its not already generated
-        String connectorKey;
-        if (EMPTY_CONNECTOR_ID.equals(bConnector.getStringField(0))) {
-            connectorKey = UUID.randomUUID().toString();
-            bConnector.setStringField(0, connectorKey);
-        } else {
-            connectorKey = bConnector.getStringField(0);
-        }
+        // Get the connector key
+        String connectorKey = bConnector.getStringField(0);
 
         propertyMap.put(JMSConstants.PARAM_DESTINATION_NAME, destination);
 
@@ -96,7 +88,7 @@ public class Poll extends AbstractJMSAction {
         try {
             JMSClientConnector jmsClientConnector = new JMSConnectorFactoryImpl().createClientConnector(propertyMap);
             if (log.isDebugEnabled()) {
-                log.debug("Polling JMS Message from " + propertyMap.get(JMSConstants.PARAM_DESTINATION_NAME));
+                log.debug("polling JMS Message from " + propertyMap.get(JMSConstants.PARAM_DESTINATION_NAME));
             }
             Message message;
 
@@ -115,13 +107,13 @@ public class Poll extends AbstractJMSAction {
                 bStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE, message);
                 bStruct.addNativeData(Constants.INBOUND_REQUEST, Boolean.FALSE);
 
-                context.getControlStackNew().getCurrentFrame().returnValues[0] = bStruct;
+                future.notifyReply(bStruct);
+            } else {
+                future.notifySuccess();
             }
         } catch (JMSConnectorException e) {
             throw new BallerinaException("Failed to send message. " + e.getMessage(), e, context);
         }
-        ClientConnectorFuture future = new ClientConnectorFuture();
-        future.notifySuccess();
         return future;
     }
 }

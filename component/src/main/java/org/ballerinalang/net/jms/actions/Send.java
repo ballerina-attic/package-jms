@@ -23,9 +23,7 @@ import org.ballerinalang.model.values.BConnector;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.nativeimpl.actions.ClientConnectorFuture;
 import org.ballerinalang.natives.annotations.Argument;
-import org.ballerinalang.natives.annotations.Attribute;
 import org.ballerinalang.natives.annotations.BallerinaAction;
-import org.ballerinalang.natives.annotations.BallerinaAnnotation;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.net.jms.JMSUtils;
 import org.ballerinalang.util.exceptions.BallerinaException;
@@ -38,10 +36,7 @@ import org.wso2.transport.jms.sender.wrappers.SessionWrapper;
 import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.util.Map;
-import java.util.UUID;
 import javax.jms.Message;
-
-import static org.ballerinalang.net.jms.Constants.EMPTY_CONNECTOR_ID;
 
 /**
  * {@code Send} is the send action implementation of the JMS Connector.
@@ -58,21 +53,6 @@ import static org.ballerinalang.net.jms.Constants.EMPTY_CONNECTOR_ID;
                          @Argument(name = "properties",
                                    type = TypeKind.STRUCT)
                  })
-@BallerinaAnnotation(annotationName = "Description",
-                     attributes = {
-                             @Attribute(name = "value",
-                                        value = "SEND action implementation of the JMS Connector")
-                     })
-@BallerinaAnnotation(annotationName = "Param",
-                     attributes = {
-                             @Attribute(name = "destinationName",
-                                        value = "Destination Name")
-                     })
-@BallerinaAnnotation(annotationName = "Param",
-                     attributes = {
-                             @Attribute(name = "message",
-                                        value = "JMS Message")
-                     })
 public class Send extends AbstractJMSAction {
     private static final Logger log = LoggerFactory.getLogger(Send.class);
 
@@ -86,21 +66,13 @@ public class Send extends AbstractJMSAction {
 
         Message jmsMessage = JMSUtils.getJMSMessage(messageStruct);
 
-        validateParams(bConnector);
-
         // Get the map of properties.
         BStruct  connectorConfig = ((BStruct) bConnector.getRefField(0));
 
         Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(connectorConfig);
 
         // Generate connector the key, if its not already generated
-        String connectorKey;
-        if (EMPTY_CONNECTOR_ID.equals(bConnector.getStringField(0))) {
-            connectorKey = UUID.randomUUID().toString();
-            bConnector.setStringField(0, connectorKey);
-        } else {
-            connectorKey = bConnector.getStringField(0);
-        }
+        String connectorKey = bConnector.getStringField(0);
 
         propertyMap.put(JMSConstants.PARAM_DESTINATION_NAME, destination);
 

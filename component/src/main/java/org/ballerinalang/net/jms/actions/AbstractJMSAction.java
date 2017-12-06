@@ -20,11 +20,8 @@ import org.ballerinalang.bre.BallerinaTransactionContext;
 import org.ballerinalang.bre.BallerinaTransactionManager;
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.connector.api.AbstractNativeAction;
-import org.ballerinalang.model.values.BConnector;
-import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.net.jms.JMSTransactionContext;
 import org.ballerinalang.util.DistributedTxManagerProvider;
-import org.ballerinalang.util.exceptions.BallerinaException;
 import org.wso2.transport.jms.contract.JMSClientConnector;
 import org.wso2.transport.jms.exception.JMSConnectorException;
 import org.wso2.transport.jms.sender.wrappers.SessionWrapper;
@@ -36,15 +33,6 @@ import javax.transaction.TransactionManager;
  */
 
 public abstract class AbstractJMSAction extends AbstractNativeAction {
-
-    protected boolean validateParams(BConnector connector) {
-        if ((connector != null)
-                && (connector.getRefField(0) != null) && (connector.getRefField(0) instanceof BStruct)) {
-            return true;
-        } else {
-            throw new BallerinaException("Connector parameters not defined correctly.");
-        }
-    }
 
     /**
      * Get tx SessionWrapper.

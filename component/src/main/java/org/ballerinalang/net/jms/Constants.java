@@ -108,8 +108,6 @@ public class Constants {
 
     public static final String JMS_MESSAGE_STRUCT_NAME = "JMSMessage";
 
-    public static final String EMPTY_CONNECTOR_ID = "EMPTY_ID";
-
     public static final String CONNECTOR_NAME = "JmsClient";
 
     /*
