@@ -112,7 +112,7 @@ public class Poll extends AbstractJMSAction {
                 future.notifySuccess();
             }
         } catch (JMSConnectorException e) {
-            throw new BallerinaException("Failed to send message. " + e.getMessage(), e, context);
+            throw new BallerinaException("failed to poll message. " + e.getMessage(), e, context);
         }
         return future;
     }

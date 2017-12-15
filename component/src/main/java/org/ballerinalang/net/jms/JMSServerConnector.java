@@ -30,6 +30,8 @@ import org.wso2.transport.jms.impl.JMSConnectorFactoryImpl;
 import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,8 +45,10 @@ public class JMSServerConnector implements BallerinaServerConnector {
     private Map<String, org.wso2.transport.jms.contract.JMSServerConnector> connectorMap = new HashMap<>();
 
     @Override
-    public String getProtocolPackage() {
-        return Constants.PROTOCOL_PACKAGE_JMS;
+    public List<String> getProtocolPackages() {
+        List<String> protocolPackages = new LinkedList<>();
+        protocolPackages.add(Constants.PROTOCOL_PACKAGE_JMS);
+        return protocolPackages;
     }
 
     @Override
@@ -71,20 +75,6 @@ public class JMSServerConnector implements BallerinaServerConnector {
         } catch (JMSConnectorException e) {
             throw new BallerinaException(
                     "Error when starting to listen to the queue/topic while " + serviceId + " deployment", e);
-        }
-    }
-
-    @Override
-    public void serviceUnregistered(Service service) throws BallerinaConnectorException {
-        String serviceId = service.getName();
-        try {
-            org.wso2.transport.jms.contract.JMSServerConnector serverConnector = connectorMap.get(serviceId);
-            if (null != serverConnector) {
-                serverConnector.stop();
-            }
-        } catch (JMSConnectorException e) {
-            throw new BallerinaException(
-                    "Error while stopping the jms server connector related with the service " + serviceId, e);
         }
     }
 

@@ -175,7 +175,7 @@ public class BTestUtils {
         Diagnostic diag = result.getDiagnostics()[errorIndex];
         Assert.assertEquals(diag.getMessage(), expectedErrMsg, "incorrect error message:");
         Assert.assertEquals(diag.getPosition().getStartLine(), expectedErrLine, "incorrect line number:");
-        Assert.assertEquals(diag.getPosition().startColumn(), expectedErrCol, "incorrect column position:");
+        Assert.assertEquals(diag.getPosition().getStartColumn(), expectedErrCol, "incorrect column position:");
     }
 
     public static BStruct createAndGetStruct(ProgramFile programFile, String packagePath, String structName) {
