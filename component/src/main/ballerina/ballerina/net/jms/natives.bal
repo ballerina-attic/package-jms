@@ -46,7 +46,7 @@ public struct ClientProperties {
     map properties;
 }
 
-@Description { value:"JMS client connector to send messages to the JMS provider."}
+@Description { value:"JMS client connector to poll messages to the JMS provider."}
 @Param { value:"clientProperties: Pre-defind and additional properties for the connector"}
 public connector JmsClient (ClientProperties clientProperties) {
 
