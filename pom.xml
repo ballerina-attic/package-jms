@@ -22,14 +22,14 @@
     <groupId>org.ballerinalang</groupId>
     <artifactId>ballerina-jms-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.95.3-SNAPSHOT</version>
+    <version>0.95.3</version>
     <name>Ballerina - JMS Parent</name>
 
     <scm>
         <url>https://github.com/ballerinalang/connector-jms.git</url>
         <developerConnection>scm:git:https://github.com/ballerinalang/connector-jms.git</developerConnection>
         <connection>scm:git:https://github.com/ballerinalang/connector-jms.git</connection>
-        <tag>HEAD</tag>
+        <tag>v0.95.3</tag>
     </scm>
 
     <repositories>
