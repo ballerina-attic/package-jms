@@ -53,8 +53,18 @@ public class JMSServerConnector implements BallerinaServerConnector {
 
     @Override
     public void serviceRegistered(Service service) throws BallerinaConnectorException {
-        Annotation jmsConfig = service.getAnnotation(Constants.JMS_PACKAGE, Constants.ANNOTATION_JMS_CONFIGURATION);
-
+        List<Annotation> annotationList = service.getAnnotationList(Constants.JMS_PACKAGE,
+                Constants.ANNOTATION_JMS_CONFIGURATION);
+        String serviceName = getServiceKey(service);
+        if (annotationList == null) {
+            throw new BallerinaConnectorException("Unable to find the associated configuration " +
+                    "annotation for given service: " + serviceName);
+        }
+        if (annotationList.size() > 1) {
+            throw new BallerinaException(
+                    "multiple service configuration annotations found in service: " + service.getName());
+        }
+        Annotation jmsConfig = annotationList.get(0);
         if (jmsConfig == null) {
             throw new BallerinaException("Error jms 'configuration' annotation missing in " + service.getName());
         }
@@ -81,5 +91,9 @@ public class JMSServerConnector implements BallerinaServerConnector {
     @Override
     public void deploymentComplete() throws BallerinaConnectorException {
 
+    }
+
+    private String getServiceKey(Service service) {
+        return service.getPackage() != null ? (service.getPackage() + "_" + service.getName()) : service.getName();
     }
 }
