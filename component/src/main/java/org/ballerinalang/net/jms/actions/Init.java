@@ -27,7 +27,13 @@ import org.ballerinalang.nativeimpl.actions.ClientConnectorFuture;
 import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaAction;
 import org.ballerinalang.net.jms.Constants;
+import org.ballerinalang.net.jms.JMSUtils;
 import org.ballerinalang.util.exceptions.BallerinaException;
+import org.wso2.transport.jms.contract.JMSClientConnector;
+import org.wso2.transport.jms.exception.JMSConnectorException;
+import org.wso2.transport.jms.impl.JMSConnectorFactoryImpl;
+
+import java.util.Map;
 
 /**
  * {@code Init} is the Init action implementation of the JMS Connector.
@@ -51,6 +57,20 @@ public class Init extends AbstractJMSAction {
     public ConnectorFuture execute(Context context) {
         BConnector bConnector = (BConnector) getRefArgument(context, 0);
         validateParams(bConnector);
+
+        // Create the JMS Transport Client Connector and store it as a native data in the Ballerina JMS Client
+        // Connector under the key of JMS_TRANSPORT_CLIENT_CONNECTOR
+        // When performing an action this native object can be retrieved
+        BStruct  connectorConfig = ((BStruct) bConnector.getRefField(0));
+        Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(connectorConfig);
+
+        try {
+            JMSClientConnector jmsClientConnector = new JMSConnectorFactoryImpl().createClientConnector(propertyMap);
+            bConnector.setNativeData(Constants.JMS_TRANSPORT_CLIENT_CONNECTOR, jmsClientConnector);
+        } catch (JMSConnectorException e) {
+            throw new BallerinaException("failed to create jms client connector. " + e.getMessage(), e, context);
+        }
+
         ClientConnectorFuture future = new ClientConnectorFuture();
         future.notifySuccess();
         return future;

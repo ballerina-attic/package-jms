@@ -27,17 +27,14 @@ import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaAction;
 import org.ballerinalang.natives.annotations.ReturnType;
 import org.ballerinalang.net.jms.Constants;
-import org.ballerinalang.net.jms.JMSUtils;
 import org.ballerinalang.util.exceptions.BallerinaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.transport.jms.contract.JMSClientConnector;
 import org.wso2.transport.jms.exception.JMSConnectorException;
-import org.wso2.transport.jms.impl.JMSConnectorFactoryImpl;
 import org.wso2.transport.jms.sender.wrappers.SessionWrapper;
 import org.wso2.transport.jms.utils.JMSConstants;
 
-import java.util.Map;
 import javax.jms.Message;
 
 /**
@@ -70,47 +67,46 @@ public class Poll extends AbstractJMSAction {
 
         // Get the map of properties.
         BStruct  connectorConfig = ((BStruct) bConnector.getRefField(0));
+        String acknowledgementMode = connectorConfig.getStringField(Constants.CLIENT_CONFIG_ACK_FIELD_INDEX);
 
-        Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(connectorConfig);
+        // Retrieve transport client
+        JMSClientConnector jmsClientConnector = (JMSClientConnector) bConnector
+                .getnativeData(Constants.JMS_TRANSPORT_CLIENT_CONNECTOR);
 
         // Get the connector key
         String connectorKey = bConnector.getStringField(0);
 
-        propertyMap.put(JMSConstants.PARAM_DESTINATION_NAME, destination);
-
-        boolean isTransacted = Boolean.FALSE;
-        if (propertyMap.get(JMSConstants.PARAM_ACK_MODE) != null) {
-            isTransacted = (JMSConstants.SESSION_TRANSACTED_MODE.equals(propertyMap.get(JMSConstants.PARAM_ACK_MODE))
-                    || JMSConstants.XA_TRANSACTED_MODE.equals(propertyMap.get(JMSConstants.PARAM_ACK_MODE))) && context
-                    .isInTransaction();
-        }
-
         try {
-            JMSClientConnector jmsClientConnector = new JMSConnectorFactoryImpl().createClientConnector(propertyMap);
-            if (log.isDebugEnabled()) {
-                log.debug("polling JMS Message from " + propertyMap.get(JMSConstants.PARAM_DESTINATION_NAME));
-            }
             Message message;
-
-            if (!isTransacted) {
-                message = jmsClientConnector.poll(destination, timeout);
-            } else {
+            if (log.isDebugEnabled()) {
+                log.debug("polling JMS Message from " + destination);
+            }
+            if (JMSConstants.SESSION_TRANSACTED_MODE.equalsIgnoreCase(acknowledgementMode)
+                    || JMSConstants.XA_TRANSACTED_MODE.equalsIgnoreCase(acknowledgementMode)) {
+                // if the action is not called inside a transaction block
+                if (!context.isInTransaction()) {
+                    throw new BallerinaException(
+                            "jms transacted poll action should perform inside a transaction block ", context);
+                }
                 SessionWrapper sessionWrapper = getTxSession(context, jmsClientConnector, connectorKey);
                 message = jmsClientConnector.pollTransacted(destination, timeout, sessionWrapper);
+            } else {
+                message = jmsClientConnector.poll(destination, timeout);
             }
 
             // Inject the Message (if received) into a JMSMessage struct.
-            if (message != null) {
-                BStruct bStruct = ConnectorUtils
-                        .createAndGetStruct(context, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
-
-                bStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE, message);
-                bStruct.addNativeData(Constants.INBOUND_REQUEST, Boolean.FALSE);
-
-                future.notifyReply(bStruct);
-            } else {
+            if (message == null) {
                 future.notifySuccess();
+                return future;
             }
+
+            BStruct bStruct = ConnectorUtils
+                    .createAndGetStruct(context, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
+
+            bStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE, message);
+            bStruct.addNativeData(Constants.INBOUND_REQUEST, Boolean.FALSE);
+
+            future.notifyReply(bStruct);
         } catch (JMSConnectorException e) {
             throw new BallerinaException("failed to poll message. " + e.getMessage(), e, context);
         }

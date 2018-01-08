@@ -31,11 +31,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.transport.jms.contract.JMSClientConnector;
 import org.wso2.transport.jms.exception.JMSConnectorException;
-import org.wso2.transport.jms.impl.JMSConnectorFactoryImpl;
 import org.wso2.transport.jms.sender.wrappers.SessionWrapper;
 import org.wso2.transport.jms.utils.JMSConstants;
 
-import java.util.Map;
 import javax.jms.Message;
 
 /**
@@ -44,10 +42,10 @@ import javax.jms.Message;
 @BallerinaAction(packageName = "ballerina.net.jms",
                  actionName = "send",
                  connectorName = Constants.CONNECTOR_NAME,
-                 args = {@Argument(name = "destinationName",
-                                   type = TypeKind.STRING),
-                         @Argument(name = "message",
-                                   type = TypeKind.STRUCT)
+                 args = {
+                         @Argument(name = "destinationName",
+                                   type = TypeKind.STRING), @Argument(name = "message",
+                                                                      type = TypeKind.STRUCT)
                  },
                  connectorArgs = {
                          @Argument(name = "properties",
@@ -64,40 +62,36 @@ public class Send extends AbstractJMSAction {
         BStruct messageStruct = ((BStruct) getRefArgument(context, 1));
         String destination = getStringArgument(context, 0);
 
-        Message jmsMessage = JMSUtils.getJMSMessage(messageStruct);
+        // Retrieve the ack mode from jms client configuration
+        BStruct connectorConfig = ((BStruct) bConnector.getRefField(0));
+        String acknowledgementMode = connectorConfig.getStringField(Constants.CLIENT_CONFIG_ACK_FIELD_INDEX);
 
-        // Get the map of properties.
-        BStruct  connectorConfig = ((BStruct) bConnector.getRefField(0));
+        // Retrieve transport client
+        JMSClientConnector jmsClientConnector = (JMSClientConnector) bConnector
+                .getnativeData(Constants.JMS_TRANSPORT_CLIENT_CONNECTOR);
 
-        Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(connectorConfig);
-
-        // Generate connector the key, if its not already generated
         String connectorKey = bConnector.getStringField(0);
 
-        propertyMap.put(JMSConstants.PARAM_DESTINATION_NAME, destination);
-
-        boolean isTransacted = Boolean.FALSE;
-        if (propertyMap.get(JMSConstants.PARAM_ACK_MODE) != null) {
-            isTransacted = (JMSConstants.SESSION_TRANSACTED_MODE.equals(propertyMap.get(JMSConstants.PARAM_ACK_MODE))
-                    || JMSConstants.XA_TRANSACTED_MODE.equals(propertyMap.get(JMSConstants.PARAM_ACK_MODE))) && context
-                    .isInTransaction();
-        }
+        Message jmsMessage = JMSUtils.getJMSMessage(messageStruct);
 
         try {
-            /* todo: Cache this created JMSClientConnector. Creating it per-request is costly because
-               todo: createClientConnector method of JMSConnectorFactoryImpl is having a synchronized call */
-            JMSClientConnector jmsClientConnector = new JMSConnectorFactoryImpl().createClientConnector(propertyMap);
             if (log.isDebugEnabled()) {
-                log.debug("Sending JMS Message to " + propertyMap.get(JMSConstants.PARAM_DESTINATION_NAME));
+                log.debug("sending JMS Message to " + destination);
             }
-            if (!isTransacted) {
-                jmsClientConnector.send(jmsMessage, destination);
-            } else {
+            if (JMSConstants.SESSION_TRANSACTED_MODE.equalsIgnoreCase(acknowledgementMode)
+                    || JMSConstants.XA_TRANSACTED_MODE.equalsIgnoreCase(acknowledgementMode)) {
+                // if the action is not called inside a transaction block
+                if (!context.isInTransaction()) {
+                    throw new BallerinaException(
+                            "jms transacted send action should perform inside a transaction block ", context);
+                }
                 SessionWrapper sessionWrapper = getTxSession(context, jmsClientConnector, connectorKey);
                 jmsClientConnector.sendTransactedMessage(jmsMessage, destination, sessionWrapper);
+            } else {
+                jmsClientConnector.send(jmsMessage, destination);
             }
         } catch (JMSConnectorException e) {
-            throw new BallerinaException("Failed to send message. " + e.getMessage(), e, context);
+            throw new BallerinaException("failed to send message. " + e.getMessage(), e, context);
         }
         ClientConnectorFuture future = new ClientConnectorFuture();
         future.notifySuccess();

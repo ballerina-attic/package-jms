@@ -104,7 +104,11 @@ public class Constants {
     * */
     public static final String INBOUND_REQUEST = "INBOUND_REQUEST";
 
+    /* Constant to represent key of the JMS Message inside the JMSMessage Struct */
     public static final String JMS_API_MESSAGE = "JMS_API_MESSAGE";
+
+    /* Constant to represent key of the cached JMS Client Connector */
+    public static final String JMS_TRANSPORT_CLIENT_CONNECTOR = "JMS_TRANSPORT_CLIENT_CONNECTOR";
 
     public static final String JMS_MESSAGE_STRUCT_NAME = "JMSMessage";
 
@@ -120,4 +124,6 @@ public class Constants {
     public static final String JMS_MESSAGE_DELIVERY_SUCCESS = "SUCCESS";
 
     public static final String EMPTY_STRING = "";
+
+    public static final int CLIENT_CONFIG_ACK_FIELD_INDEX = 4;
 }
