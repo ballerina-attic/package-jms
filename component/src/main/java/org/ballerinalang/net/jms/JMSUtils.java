@@ -26,11 +26,15 @@ import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.util.exceptions.BallerinaException;
 import org.wso2.carbon.kernel.utils.StringUtils;
+import org.wso2.transport.jms.contract.JMSClientConnector;
+import org.wso2.transport.jms.exception.JMSConnectorException;
 import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import javax.jms.Destination;
+import javax.jms.JMSException;
 import javax.jms.Message;
 
 /**
@@ -206,25 +210,45 @@ public class JMSUtils {
     }
 
     /**
-     * Extract JMS Message from the struct
+     * Extract JMS Message from the struct.
      *
-     * @param messageStruct ballerina struct
-     * @return {@link Message} instance located in struct
+     * @param messageStruct ballerina struct.
+     * @return {@link Message} instance located in struct.
      */
     public static Message getJMSMessage(BStruct messageStruct) {
         if (messageStruct.getNativeData(Constants.JMS_API_MESSAGE) != null) {
-            return (Message) messageStruct.getNativeData(Constants.JMS_API_MESSAGE);
+            BallerinaJMSMessage ballerinaJMSMessage = (BallerinaJMSMessage) messageStruct
+                    .getNativeData(Constants.JMS_API_MESSAGE);
+            return ballerinaJMSMessage.getJmsMessage();
         } else {
             throw new BallerinaException("JMS message has not been created.");
         }
     }
 
     /**
-     * Extract JMS Resource from the Ballerina Service
+     * Wrap JMS Message from BallerinaJMSMessage.
      *
-     * @param service Service instance
-     * @return extracted resource
-     * @throws BallerinaConnectorException if there is no Resource or more than one Resource inside the service
+     * @param message JMS transport message.
+     * @return {@link BallerinaJMSMessage} wrapped message instance.
+     */
+    public static BallerinaJMSMessage buildBallerinaJMSMessage(Message message) {
+        BallerinaJMSMessage ballerinaJMSMessage = new BallerinaJMSMessage(message);
+        try {
+            if (message.getJMSReplyTo() != null) {
+                ballerinaJMSMessage.setReplyDestinationName(message.getJMSReplyTo().toString());
+            }
+        } catch (JMSException e) {
+            throw new BallerinaException("error retrieving reply destination from the message. " + e.getMessage(), e);
+        }
+        return ballerinaJMSMessage;
+    }
+
+    /**
+     * Extract JMS Resource from the Ballerina Service.
+     *
+     * @param service Service instance.
+     * @return extracted resource.
+     * @throws BallerinaConnectorException if there is no Resource or more than one Resource inside the service.
      */
     public static Resource extractJMSResource(Service service) throws BallerinaConnectorException {
         Resource[] resources = service.getResources();
@@ -236,5 +260,28 @@ public class JMSUtils {
                     + ".JMS Service should only have one resource");
         }
         return resources[0];
+    }
+
+    /**
+     * Create the ReplyTo destination and set it to the {@link Message}.
+     *
+     * @param messageStruct      respective Ballerina Message Struct.
+     * @param jmsClientConnector client connector use to create the destination.
+     */
+    public static void updateReplyToDestination(BStruct messageStruct, JMSClientConnector jmsClientConnector) {
+        BallerinaJMSMessage ballerinaJMSMessage = (BallerinaJMSMessage) messageStruct
+                .getNativeData(Constants.JMS_API_MESSAGE);
+        if (ballerinaJMSMessage.getReplyDestinationName() == null) {
+            return;
+        }
+
+        try {
+            Destination destination = jmsClientConnector
+                    .createDestination(ballerinaJMSMessage.getReplyDestinationName());
+            ballerinaJMSMessage.getJmsMessage().setJMSReplyTo(destination);
+        } catch (JMSConnectorException | JMSException e) {
+            throw new BallerinaException("error setting ReplyTo destination to the jms message");
+        }
+
     }
 }

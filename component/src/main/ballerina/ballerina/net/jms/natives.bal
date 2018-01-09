@@ -62,6 +62,12 @@ public connector JmsClient (ClientProperties clientProperties) {
     @Param {value:"time: Timeout that needs to blocked on"}
     native action poll (string destinationName, int time) (JMSMessage);
 
+    @Description {value:"POLL action implementation with selector support of the JMS Connector"}
+    @Param {value:"destinationName: Destination Name"}
+    @Param {value:"time: Timeout that needs to blocked on"}
+    @Param {value:"selector: Selector to filter out messages"}
+    native action pollWithSelector (string destinationName, int time, string selector) (JMSMessage);
+
 }
 
 
@@ -213,6 +219,14 @@ public native function <JMSMessage msg> setType(string s);
 @Description { value:"Get JMS transport header Type from the message"}
 @Return { value:"string: The header value" }
 public native function <JMSMessage msg> getType() (string);
+
+@Description { value:"Sets ReplyTo JMS destinaiton name to the message"}
+@Param { value:"s: The header value" }
+public native function <JMSMessage msg> setReplyTo(string s);
+
+@Description { value:"Get ReplyTo JMS destinaiton name from the message"}
+@Return { value:"string: The header value" }
+public native function <JMSMessage msg> getReplyTo() (string);
 
 @Description { value:"Clear JMS properties of the message"}
 public native function <JMSMessage msg> clearProperties();

@@ -27,6 +27,7 @@ import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaAction;
 import org.ballerinalang.natives.annotations.ReturnType;
 import org.ballerinalang.net.jms.Constants;
+import org.ballerinalang.net.jms.JMSUtils;
 import org.ballerinalang.util.exceptions.BallerinaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,12 @@ public class Poll extends AbstractJMSAction {
 
     @Override
     public ConnectorFuture execute(Context context) {
+        // pass selector as null, because this is invoked under non-selector poll
+        String messageSelector = null;
+        return executePollAction(context, messageSelector);
+    }
+
+    protected ConnectorFuture executePollAction(Context context, String messageSelector) {
         ClientConnectorFuture future = new ClientConnectorFuture();
 
         // Extract argument values
@@ -89,21 +96,22 @@ public class Poll extends AbstractJMSAction {
                             "jms transacted poll action should perform inside a transaction block ", context);
                 }
                 SessionWrapper sessionWrapper = getTxSession(context, jmsClientConnector, connectorKey);
-                message = jmsClientConnector.pollTransacted(destination, timeout, sessionWrapper);
+                message = jmsClientConnector.pollTransacted(destination, timeout, sessionWrapper, messageSelector);
             } else {
-                message = jmsClientConnector.poll(destination, timeout);
+                message = jmsClientConnector.poll(destination, timeout, messageSelector);
             }
 
-            // Inject the Message (if received) into a JMSMessage struct.
+            // Return from here if no message received
             if (message == null) {
                 future.notifySuccess();
                 return future;
             }
 
+            // Inject the Message (if received) into a JMSMessage struct.
             BStruct bStruct = ConnectorUtils
                     .createAndGetStruct(context, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
-
-            bStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE, message);
+            bStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE,
+                    JMSUtils.buildBallerinaJMSMessage(message));
             bStruct.addNativeData(Constants.INBOUND_REQUEST, Boolean.FALSE);
 
             future.notifyReply(bStruct);

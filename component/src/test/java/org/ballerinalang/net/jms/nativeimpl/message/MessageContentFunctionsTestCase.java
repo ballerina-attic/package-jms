@@ -21,7 +21,9 @@ package org.ballerinalang.net.jms.nativeimpl.message;
 import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.model.values.BValue;
+import org.ballerinalang.net.jms.BallerinaJMSMessage;
 import org.ballerinalang.net.jms.Constants;
+import org.ballerinalang.net.jms.JMSUtils;
 import org.ballerinalang.net.jms.nativeimpl.util.BTestUtils;
 import org.ballerinalang.net.jms.nativeimpl.util.CompileResult;
 import org.ballerinalang.net.jms.nativeimpl.util.MockJMSTextMessage;
@@ -49,14 +51,14 @@ public class MessageContentFunctionsTestCase {
         messageStruct1 = BTestUtils.createAndGetStruct(result.getProgFile(), Constants.PROTOCOL_PACKAGE_JMS,
                 Constants.JMS_MESSAGE_STRUCT_NAME);
 
-        messageStruct1.addNativeData(Constants.JMS_API_MESSAGE, jmsMessage1);
+        messageStruct1.addNativeData(Constants.JMS_API_MESSAGE, new BallerinaJMSMessage(jmsMessage1));
 
         TextMessage jmsMessage2 = new MockJMSTextMessage();
         jmsMessage2.setText(textContent);
         messageStruct2 = BTestUtils.createAndGetStruct(result.getProgFile(), Constants.PROTOCOL_PACKAGE_JMS,
                 Constants.JMS_MESSAGE_STRUCT_NAME);
 
-        messageStruct2.addNativeData(Constants.JMS_API_MESSAGE, jmsMessage2);
+        messageStruct2.addNativeData(Constants.JMS_API_MESSAGE, new BallerinaJMSMessage(jmsMessage2));
     }
 
     @Test(description = "Test Ballerina native JMSMessage setTextContent ")
@@ -67,8 +69,7 @@ public class MessageContentFunctionsTestCase {
         BValue[] returnBValues = BTestUtils.invoke(result, "funcSetJMSTextContent", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BStruct) {
-            MockJMSTextMessage jmsMessage = (MockJMSTextMessage) ((BStruct) returnBValues[0])
-                    .getNativeData(Constants.JMS_API_MESSAGE);
+            TextMessage jmsMessage = (TextMessage) JMSUtils.getJMSMessage((BStruct) returnBValues[0]);
             resultValue = jmsMessage.getText();
         }
 
