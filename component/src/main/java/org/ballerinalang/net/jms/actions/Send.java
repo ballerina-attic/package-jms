@@ -78,6 +78,9 @@ public class Send extends AbstractJMSAction {
             if (log.isDebugEnabled()) {
                 log.debug("sending JMS Message to " + destination);
             }
+            // Add ReplyTo header to the message
+            JMSUtils.updateReplyToDestination(messageStruct, jmsClientConnector);
+
             if (JMSConstants.SESSION_TRANSACTED_MODE.equalsIgnoreCase(acknowledgementMode)
                     || JMSConstants.XA_TRANSACTED_MODE.equalsIgnoreCase(acknowledgementMode)) {
                 // if the action is not called inside a transaction block
@@ -85,8 +88,8 @@ public class Send extends AbstractJMSAction {
                     throw new BallerinaException(
                             "jms transacted send action should perform inside a transaction block ", context);
                 }
-                SessionWrapper sessionWrapper = getTxSession(context, jmsClientConnector, connectorKey);
-                jmsClientConnector.sendTransactedMessage(jmsMessage, destination, sessionWrapper);
+            SessionWrapper sessionWrapper = getTxSession(context, jmsClientConnector, connectorKey);
+            jmsClientConnector.sendTransactedMessage(jmsMessage, destination, sessionWrapper);
             } else {
                 jmsClientConnector.send(jmsMessage, destination);
             }

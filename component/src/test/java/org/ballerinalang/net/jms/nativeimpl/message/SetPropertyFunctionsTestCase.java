@@ -24,7 +24,9 @@ import org.ballerinalang.model.values.BInteger;
 import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.model.values.BValue;
+import org.ballerinalang.net.jms.BallerinaJMSMessage;
 import org.ballerinalang.net.jms.Constants;
+import org.ballerinalang.net.jms.JMSUtils;
 import org.ballerinalang.net.jms.nativeimpl.util.BTestUtils;
 import org.ballerinalang.net.jms.nativeimpl.util.CompileResult;
 import org.ballerinalang.net.jms.nativeimpl.util.MockJMSMessage;
@@ -50,7 +52,8 @@ public class SetPropertyFunctionsTestCase {
         messageStruct = BTestUtils.createAndGetStruct(result.getProgFile(), Constants.PROTOCOL_PACKAGE_JMS,
                 Constants.JMS_MESSAGE_STRUCT_NAME);
 
-        messageStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE, jmsMessage);
+        messageStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE,
+                new BallerinaJMSMessage(jmsMessage));
     }
 
     @Test(description = "Test Ballerina native JMSMessage setStringProperty ")
@@ -62,14 +65,12 @@ public class SetPropertyFunctionsTestCase {
         BValue[] inputBValues = { messageStruct, new BString(propKey), new BString(propValue) };
         BValue[] returnBValues = BTestUtils.invoke(result, "funcSetStringProperty", inputBValues);
 
-        if (returnBValues != null && returnBValues.length == 1 &&  returnBValues[0] instanceof BStruct) {
-            MockJMSMessage jmsMessage = (MockJMSMessage) ((BStruct) returnBValues[0])
-                    .getNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE);
+        if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BStruct) {
+            MockJMSMessage jmsMessage = (MockJMSMessage) JMSUtils.getJMSMessage((BStruct) returnBValues[0]);
             resultValue = jmsMessage.getStringProperty(propKey);
         }
 
-        Assert.assertEquals(propValue, resultValue,
-                "String property is not correctly set to the JMS Message");
+        Assert.assertEquals(propValue, resultValue, "String property is not correctly set to the JMS Message");
     }
 
     @Test(description = "Test Ballerina native JMSMessage setStringProperty ")
@@ -81,14 +82,12 @@ public class SetPropertyFunctionsTestCase {
         BValue[] inputBValues = { messageStruct, new BString(propKey), new BBoolean(propValue) };
         BValue[] returnBValues = BTestUtils.invoke(result, "funcSetBooleanProperty", inputBValues);
 
-        if (returnBValues != null && returnBValues.length == 1 &&  returnBValues[0] instanceof BStruct) {
-            MockJMSMessage jmsMessage = (MockJMSMessage) ((BStruct) returnBValues[0])
-                    .getNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE);
+        if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BStruct) {
+            MockJMSMessage jmsMessage = (MockJMSMessage) JMSUtils.getJMSMessage((BStruct) returnBValues[0]);
             resultValue = jmsMessage.getBooleanProperty(propKey);
         }
 
-        Assert.assertEquals(propValue, resultValue,
-                "Boolean property is not correctly set to the JMS Message");
+        Assert.assertEquals(propValue, resultValue, "Boolean property is not correctly set to the JMS Message");
     }
 
     @Test(description = "Test Ballerina native JMSMessage setIntProperty ")
@@ -100,14 +99,12 @@ public class SetPropertyFunctionsTestCase {
         BValue[] inputBValues = { messageStruct, new BString(propKey), new BInteger(propValue) };
         BValue[] returnBValues = BTestUtils.invoke(result, "funcSetIntProperty", inputBValues);
 
-        if (returnBValues != null && returnBValues.length == 1 &&  returnBValues[0] instanceof BStruct) {
-            MockJMSMessage jmsMessage = (MockJMSMessage) ((BStruct) returnBValues[0])
-                    .getNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE);
+        if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BStruct) {
+            MockJMSMessage jmsMessage = (MockJMSMessage) JMSUtils.getJMSMessage((BStruct) returnBValues[0]);
             resultValue = jmsMessage.getIntProperty(propKey);
         }
 
-        Assert.assertEquals(propValue, resultValue,
-                "Boolean property is not correctly set to the JMS Message");
+        Assert.assertEquals(propValue, resultValue, "Boolean property is not correctly set to the JMS Message");
     }
 
     @Test(description = "Test Ballerina native JMSMessage setFloatProperty ")
@@ -119,14 +116,12 @@ public class SetPropertyFunctionsTestCase {
         BValue[] inputBValues = { messageStruct, new BString(propKey), new BFloat(propValue) };
         BValue[] returnBValues = BTestUtils.invoke(result, "funcSetFloatProperty", inputBValues);
 
-        if (returnBValues != null && returnBValues.length == 1 &&  returnBValues[0] instanceof BStruct) {
-            MockJMSMessage jmsMessage = (MockJMSMessage) ((BStruct) returnBValues[0])
-                    .getNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE);
+        if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BStruct) {
+            MockJMSMessage jmsMessage = (MockJMSMessage) JMSUtils.getJMSMessage((BStruct) returnBValues[0]);
             resultValue = jmsMessage.getFloatProperty(propKey);
         }
 
-        Assert.assertEquals(propValue, resultValue,
-                "Float property is not correctly set to the JMS Message");
+        Assert.assertEquals(propValue, resultValue, "Float property is not correctly set to the JMS Message");
     }
 
 }

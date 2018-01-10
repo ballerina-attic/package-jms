@@ -23,6 +23,7 @@ import org.ballerinalang.model.values.BInteger;
 import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.model.values.BValue;
+import org.ballerinalang.net.jms.BallerinaJMSMessage;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.net.jms.nativeimpl.util.BTestUtils;
 import org.ballerinalang.net.jms.nativeimpl.util.CompileResult;
@@ -68,7 +69,7 @@ public class GetHeadersFunctionsTestCase {
         messageStruct = BTestUtils.createAndGetStruct(result.getProgFile(), Constants.PROTOCOL_PACKAGE_JMS,
                 Constants.JMS_MESSAGE_STRUCT_NAME);
 
-        messageStruct.addNativeData(Constants.JMS_API_MESSAGE, jmsMessage);
+        messageStruct.addNativeData(Constants.JMS_API_MESSAGE, new BallerinaJMSMessage(jmsMessage));
     }
 
     @Test(description = "Test Ballerina native JMSMessage getDeliveryMode ")

@@ -37,7 +37,7 @@ public class JMSDispatcher {
 
     public static BValue[] getSignatureParameters(Resource resource, Message jmsCarbonMessage) {
         BStruct message = ConnectorUtils.createStruct(resource, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE);
-        message.addNativeData(Constants.JMS_API_MESSAGE, jmsCarbonMessage);
+        message.addNativeData(Constants.JMS_API_MESSAGE, JMSUtils.buildBallerinaJMSMessage(jmsCarbonMessage));
         message.addNativeData(Constants.INBOUND_REQUEST, Boolean.TRUE);
 
         List<ParamDetail> paramDetails = resource.getParamDetails();

@@ -22,7 +22,9 @@ import org.ballerinalang.model.values.BInteger;
 import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.model.values.BValue;
+import org.ballerinalang.net.jms.BallerinaJMSMessage;
 import org.ballerinalang.net.jms.Constants;
+import org.ballerinalang.net.jms.JMSUtils;
 import org.ballerinalang.net.jms.nativeimpl.util.BTestUtils;
 import org.ballerinalang.net.jms.nativeimpl.util.CompileResult;
 import org.ballerinalang.net.jms.nativeimpl.util.MockJMSMessage;
@@ -48,7 +50,7 @@ public class SetHeadersFunctionsTestCase {
         messageStruct = BTestUtils.createAndGetStruct(result.getProgFile(), Constants.PROTOCOL_PACKAGE_JMS,
                 Constants.JMS_MESSAGE_STRUCT_NAME);
 
-        messageStruct.addNativeData(Constants.JMS_API_MESSAGE, jmsMessage);
+        messageStruct.addNativeData(Constants.JMS_API_MESSAGE, new BallerinaJMSMessage(jmsMessage));
     }
 
     @Test(description = "Test Ballerina native JMSMessage setDeliveryMode Header ")
@@ -60,8 +62,7 @@ public class SetHeadersFunctionsTestCase {
         BValue[] returnBValues = BTestUtils.invoke(result, "funcSetJMSDeliveryModeHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BStruct) {
-            MockJMSMessage jmsMessage = (MockJMSMessage) ((BStruct) returnBValues[0])
-                    .getNativeData(Constants.JMS_API_MESSAGE);
+            MockJMSMessage jmsMessage = (MockJMSMessage) JMSUtils.getJMSMessage((BStruct) returnBValues[0]);
             actualValue = jmsMessage.getJMSDeliveryMode();
         }
 
@@ -77,8 +78,7 @@ public class SetHeadersFunctionsTestCase {
         BValue[] returnBValues = BTestUtils.invoke(result, "funcSetJMSPriorityHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BStruct) {
-            MockJMSMessage jmsMessage = (MockJMSMessage) ((BStruct) returnBValues[0])
-                    .getNativeData(Constants.JMS_API_MESSAGE);
+            MockJMSMessage jmsMessage = (MockJMSMessage) JMSUtils.getJMSMessage((BStruct) returnBValues[0]);
             actualValue = jmsMessage.getJMSPriority();
         }
 
@@ -94,8 +94,7 @@ public class SetHeadersFunctionsTestCase {
         BValue[] returnBValues = BTestUtils.invoke(result, "funcSetJMSCorrelationIDHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BStruct) {
-            MockJMSMessage jmsMessage = (MockJMSMessage) ((BStruct) returnBValues[0])
-                    .getNativeData(Constants.JMS_API_MESSAGE);
+            MockJMSMessage jmsMessage = (MockJMSMessage) JMSUtils.getJMSMessage((BStruct) returnBValues[0]);
             actualValue = jmsMessage.getJMSCorrelationID();
         }
 
@@ -111,8 +110,7 @@ public class SetHeadersFunctionsTestCase {
         BValue[] returnBValues = BTestUtils.invoke(result, "funcSetJMSTypeHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BStruct) {
-            MockJMSMessage jmsMessage = (MockJMSMessage) ((BStruct) returnBValues[0])
-                    .getNativeData(Constants.JMS_API_MESSAGE);
+            MockJMSMessage jmsMessage = (MockJMSMessage) JMSUtils.getJMSMessage((BStruct) returnBValues[0]);
             actualValue = jmsMessage.getJMSType();
         }
 
@@ -128,8 +126,7 @@ public class SetHeadersFunctionsTestCase {
         BValue[] returnBValues = BTestUtils.invoke(result, "funcSetJMSExpirationHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BStruct) {
-            MockJMSMessage jmsMessage = (MockJMSMessage) ((BStruct) returnBValues[0])
-                    .getNativeData(Constants.JMS_API_MESSAGE);
+            MockJMSMessage jmsMessage = (MockJMSMessage) JMSUtils.getJMSMessage((BStruct) returnBValues[0]);
             actualValue = jmsMessage.getJMSExpiration();
         }
 

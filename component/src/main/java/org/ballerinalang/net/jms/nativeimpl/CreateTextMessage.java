@@ -27,6 +27,7 @@ import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.ReturnType;
+import org.ballerinalang.net.jms.BallerinaJMSMessage;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.net.jms.JMSUtils;
 import org.ballerinalang.util.exceptions.BallerinaException;
@@ -67,7 +68,7 @@ public class CreateTextMessage extends AbstractNativeFunction {
         BStruct bStruct = ConnectorUtils
                 .createAndGetStruct(context, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
 
-        bStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE, jmsMessage);
+        bStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE, new BallerinaJMSMessage(jmsMessage));
         bStruct.addNativeData(Constants.INBOUND_REQUEST, Boolean.FALSE);
 
         return this.getBValues(bStruct);
