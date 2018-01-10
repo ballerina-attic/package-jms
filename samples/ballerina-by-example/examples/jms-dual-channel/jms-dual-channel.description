@@ -1,0 +1,15 @@
+// JMS can be used for request response scenarios, Ballerina provide this feature by manipulating ReplyTo header, JMSCorrelationID header and Message selectors. This sample shows how Http client can invoke a JMS backend Client and receive the response
+
+// Sample configuration contains two services, front Http service and backend JMS request processing service.
+
+// 1. Start the JMS Broker
+// 2. Copy required libraries into <BRE_HOME>/bre/lib/
+// 3. Start ballerina
+// 4. Invoke with following request
+
+curl -X POST \
+  http://localhost:9090/hello/sayHello \
+  -H 'content-type: application/json' \
+  -d '{
+   "Hello":"From Http Client"
+}'

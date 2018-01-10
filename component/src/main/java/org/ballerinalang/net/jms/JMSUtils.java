@@ -25,6 +25,8 @@ import org.ballerinalang.model.values.BMap;
 import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.util.exceptions.BallerinaException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wso2.carbon.kernel.utils.StringUtils;
 import org.wso2.transport.jms.contract.JMSClientConnector;
 import org.wso2.transport.jms.exception.JMSConnectorException;
@@ -36,11 +38,15 @@ import java.util.Map;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.Queue;
+import javax.jms.Topic;
 
 /**
  * Utility class for JMS related common operations.
  */
 public class JMSUtils {
+
+    private static final Logger log = LoggerFactory.getLogger(JMSUtils.class);
 
     /**
      * Utility class cannot be instantiated.
@@ -235,7 +241,13 @@ public class JMSUtils {
         BallerinaJMSMessage ballerinaJMSMessage = new BallerinaJMSMessage(message);
         try {
             if (message.getJMSReplyTo() != null) {
-                ballerinaJMSMessage.setReplyDestinationName(message.getJMSReplyTo().toString());
+                if (message.getJMSReplyTo() instanceof Queue) {
+                    ballerinaJMSMessage.setReplyDestinationName(((Queue) message.getJMSReplyTo()).getQueueName());
+                } else if (message.getJMSReplyTo() instanceof Topic) {
+                    ballerinaJMSMessage.setReplyDestinationName(((Topic) message.getJMSReplyTo()).getTopicName());
+                } else {
+                    log.warn("ignore unexpected jms destination type received as ReplyTo header.");
+                }
             }
         } catch (JMSException e) {
             throw new BallerinaException("error retrieving reply destination from the message. " + e.getMessage(), e);
