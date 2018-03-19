@@ -75,7 +75,7 @@ public class InitEndpoint extends AbstractJMSAction {
         // Connector under the key of JMS_TRANSPORT_CLIENT_CONNECTOR
         // When performing an action this native object can be retrieved
         //        BStruct connectorConfig = ((BStruct) bConnector.getRefField(0));
-        Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(clientEndpointConfig);
+        Map<String, String> propertyMap = JMSUtils.preProcessEndpointConfig(clientEndpointConfig);
 
         JMSClientConnector jmsClientConnector;
         try {

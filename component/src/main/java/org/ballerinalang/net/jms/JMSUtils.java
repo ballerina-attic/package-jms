@@ -61,23 +61,14 @@ public class JMSUtils {
      * @param jmsConfig {@link Annotation}
      * @return Map of String key value properties.
      */
-    public static Map<String, String> preProcessJmsConfig(Annotation jmsConfig) {
+    public static Map<String, String> preProcessServiceConfig(Annotation jmsConfig) {
         Map<String, String> configParams = new HashMap<>();
-        addStringParamIfPresent(Constants.ALIAS_INITIAL_CONTEXT_FACTORY, jmsConfig, configParams);
-        addStringParamIfPresent(Constants.ALIAS_PROVIDER_URL, jmsConfig, configParams);
-        addStringParamIfPresent(Constants.ALIAS_CONNECTION_FACTORY_TYPE, jmsConfig, configParams);
-        addStringParamIfPresent(Constants.ALIAS_CONNECTION_FACTORY_NAME, jmsConfig, configParams);
         addStringParamIfPresent(Constants.ALIAS_DESTINATION, jmsConfig, configParams);
         addStringParamIfPresent(Constants.ALIAS_CLIENT_ID, jmsConfig, configParams);
         addStringParamIfPresent(Constants.ALIAS_DURABLE_SUBSCRIBER_ID, jmsConfig, configParams);
         addStringParamIfPresent(Constants.ALIAS_ACK_MODE, jmsConfig, configParams);
-        addStringParamIfPresent(Constants.CONFIG_FILE_PATH, jmsConfig, configParams);
-        addIntParamIfPresent(JMSConstants.CONCURRENT_CONSUMERS, jmsConfig, configParams);
-        addStringParamIfPresent(JMSConstants.CONNECTION_USERNAME, jmsConfig, configParams);
-        addStringParamIfPresent(JMSConstants.CONNECTION_PASSWORD, jmsConfig, configParams);
 
         processPropertiesArray(jmsConfig, configParams);
-        preProcessIfWso2MB(configParams);
         updateMappedParameters(configParams);
         return configParams;
     }
@@ -152,29 +143,27 @@ public class JMSUtils {
     /**
      * Convert Client Connector Property Map into String key-value pair map
      *
-     * @param connectorConfig Client Connector configuration map
+     * @param endpointConfig Client Connector configuration map
      * @return String key-value pair map
      */
-    public static Map<String, String> preProcessJmsConfig(Struct connectorConfig) {
+    public static Map<String, String> preProcessEndpointConfig(Struct endpointConfig) {
         Map<String, String> configParams = new HashMap<>();
 
-        String initialContextFactory = connectorConfig.getStringField("initialContextFactory");
-        String providerUrl = connectorConfig.getStringField("providerUrl");
-        String connectionFactoryName = connectorConfig.getStringField("connectionFactoryName");
-        String connectionFactoryType = connectorConfig.getStringField("connectionFactoryType");
-        String acknowledgementMode = connectorConfig.getStringField("acknowledgementMode");
-        boolean clientCaching = connectorConfig.getBooleanField("clientCaching");
-        String connectionUsername = connectorConfig.getStringField("connectionUsername");
-        String connectionPassword = connectorConfig.getStringField("connectionPassword");
-        String configFilePath = connectorConfig.getStringField("configFilePath");
-        int connectionCount = (int) connectorConfig.getIntField("connectionCount");
-        int sessionCount = (int) connectorConfig.getIntField("sessionCount");
+        String initialContextFactory = endpointConfig.getStringField("initialContextFactory");
+        String providerUrl = endpointConfig.getStringField("providerUrl");
+        String connectionFactoryName = endpointConfig.getStringField("connectionFactoryName");
+        String connectionFactoryType = endpointConfig.getStringField("connectionFactoryType");
+        boolean clientCaching = endpointConfig.getBooleanField("clientCaching");
+        String connectionUsername = endpointConfig.getStringField("connectionUsername");
+        String connectionPassword = endpointConfig.getStringField("connectionPassword");
+        String configFilePath = endpointConfig.getStringField("configFilePath");
+        int connectionCount = (int) endpointConfig.getIntField("connectionCount");
+        int sessionCount = (int) endpointConfig.getIntField("sessionCount");
 
         // Add to the map
         configParams.put(Constants.ALIAS_INITIAL_CONTEXT_FACTORY, initialContextFactory);
         configParams.put(Constants.ALIAS_CONNECTION_FACTORY_NAME, connectionFactoryName);
         configParams.put(Constants.ALIAS_CONNECTION_FACTORY_TYPE, connectionFactoryType);
-        configParams.put(Constants.ALIAS_ACK_MODE, acknowledgementMode);
         configParams.put(JMSConstants.PARAM_JMS_CACHING, String.valueOf(clientCaching));
         if (isBlank(providerUrl)) {
             configParams.put(Constants.ALIAS_PROVIDER_URL, providerUrl);
@@ -189,8 +178,8 @@ public class JMSUtils {
         configParams.put(JMSConstants.PARAM_MAX_CONNECTIONS, String.valueOf(connectionCount));
         configParams.put(JMSConstants.PARAM_MAX_SESSIONS_ON_CONNECTION, String.valueOf(sessionCount));
 
-        if (connectorConfig.getMapField("properties") != null) {
-            preProcessJmsConfig(configParams, connectorConfig.getMapField("properties"));
+        if (endpointConfig.getMapField("properties") != null) {
+            preProcessJmsConfig(configParams, endpointConfig.getMapField("properties"));
         }
 
         preProcessIfWso2MB(configParams);

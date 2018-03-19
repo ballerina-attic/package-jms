@@ -24,9 +24,9 @@ import org.ballerinalang.connector.api.Resource;
 import org.wso2.transport.jms.callback.JMSCallback;
 import org.wso2.transport.jms.contract.JMSListener;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import javax.jms.Message;
 
 /**
@@ -42,23 +42,19 @@ public class JMSListenerImpl implements JMSListener {
 
     @Override
     public void onMessage(Message jmsMessage, JMSCallback jmsCallback) {
-        if (jmsCallback != null) {
-            Map<String, Object> properties = new HashMap<>();
+        Map<String, Object> properties = new HashMap<>();
+
+        // TODO: implement a auto ack call back in transport jms.
+        if (Objects.nonNull(jmsCallback)) {
             properties.put(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE, jmsCallback.getAcknowledgementMode());
-
-
-            CallableUnitCallback callback = new JMSConnectorFutureListener(jmsCallback);
-            Executor.submit(resource, callback, properties, JMSDispatcher.getSignatureParameters(resource,
-                                                                                                      jmsMessage));
-        } else {
-            Executor.submit(resource, null, Collections.emptyMap(), JMSDispatcher.getSignatureParameters(resource,
-                                                                                                         jmsMessage));
         }
+        CallableUnitCallback callback = new JMSConnectorFutureListener(jmsCallback);
+        Executor.submit(resource, callback, properties, JMSDispatcher.getSignatureParameters(resource, jmsMessage));
     }
 
     @Override
     public void onError(Throwable throwable) {
-
+        // ignore
     }
 
 }

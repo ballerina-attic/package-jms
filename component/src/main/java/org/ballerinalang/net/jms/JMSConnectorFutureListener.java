@@ -23,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.transport.jms.callback.JMSCallback;
 
+import java.util.Objects;
+
 /**
  * {@code JMSConnectorFutureListener} is the responsible for acting on notifications received from Ballerina side.
  *
@@ -55,7 +57,9 @@ public class JMSConnectorFutureListener implements CallableUnitCallback {
     private void informCallback(boolean status) {
         if (!isInformedCallback) {
             isInformedCallback = Boolean.TRUE;
-            jmsCallback.done(status);
+            if (Objects.nonNull(jmsCallback)) {
+                jmsCallback.done(status);
+            }
         }
     }
 }

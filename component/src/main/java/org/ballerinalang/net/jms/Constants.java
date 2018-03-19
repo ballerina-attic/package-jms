@@ -34,10 +34,15 @@ public class Constants {
     private Constants() {
     }
 
+    public static final String SERVER_CONNECTOR = "serverConnector";
+
+    public static final String SERVICE_ENDPOINT = "ServiceEndpoint";
+
+    public static final String ENDPOINT_CONFIG_KEY = "config";
     /**
      * JMSSource annotation name which is used to define a JMS server connector.
      */
-    public static final String ANNOTATION_JMS_CONFIGURATION = "configuration";
+    public static final String ANNOTATION_JMS_CONFIGURATION = "serviceConfig";
 
     // jms protocol name
     public static final String PROTOCOL_JMS = "jms";

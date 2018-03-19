@@ -69,7 +69,7 @@ public class JMSServerConnector implements BallerinaServerConnector {
             throw new BallerinaException("Error jms 'configuration' annotation missing in " + service.getName());
         }
 
-        Map<String, String> configParams = JMSUtils.preProcessJmsConfig(jmsConfig);
+        Map<String, String> configParams = JMSUtils.preProcessServiceConfig(jmsConfig);
 
         String serviceId = service.getName();
         configParams.putIfAbsent(JMSConstants.PARAM_DESTINATION_NAME, serviceId);
