@@ -77,10 +77,10 @@ public native function<ClientConnector ep> send (string destinationName, JMSMess
 @Description {value:"POLL action implementation of the JMS Connector"}
 @Param {value:"destinationName: Destination Name"}
 @Param {value:"time: Timeout that needs to blocked on"}
-public native function<ClientConnector ep>  poll (string destinationName, int time) (JMSMessage);
+public native function<ClientConnector ep> poll (string destinationName, int time) (JMSMessage);
 
-//@Description {value:"POLL action implementation with selector support of the JMS Connector"}
-//@Param {value:"destinationName: Destination Name"}
-//@Param {value:"time: Timeout that needs to blocked on"}
-//@Param {value:"selector: Selector to filter out messages"}
-//public native function<ClientConnector ep>  pollWithSelector (string destinationName, int time, string selector) (JMSMessage);
+@Description {value:"POLL action implementation with selector support of the JMS Connector"}
+@Param {value:"destinationName: Destination Name"}
+@Param {value:"time: Timeout that needs to blocked on"}
+@Param {value:"selector: Selector to filter out messages"}
+public native function<ClientConnector ep> pollWithSelector (string destinationName, int time, string selector) (JMSMessage);

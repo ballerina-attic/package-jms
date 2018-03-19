@@ -18,32 +18,6 @@ public native function <JMSMessage msg> rollback ();
 @Param { value:"message: message" }
 public native function <JMSMessage msg> commit ();
 
-
-//@Description { value:"JMS client connector to poll messages to the JMS provider."}
-//@Param { value:"clientProperties: Pre-defind and additional properties for the connector"}
-//public connector JmsClient (ClientProperties clientProperties) {
-//
-//    string connectorID = util:uuid();
-//
-//    @Description {value:"SEND action implementation of the JMS Connector"}
-//    @Param {value:"destinationName: Destination Name"}
-//    @Param {value:"message: Message"}
-//    native action send (string destinationName, JMSMessage m);
-//
-//    @Description {value:"POLL action implementation of the JMS Connector"}
-//    @Param {value:"destinationName: Destination Name"}
-//    @Param {value:"time: Timeout that needs to blocked on"}
-//    native action poll (string destinationName, int time) (JMSMessage);
-//
-//    @Description {value:"POLL action implementation with selector support of the JMS Connector"}
-//    @Param {value:"destinationName: Destination Name"}
-//    @Param {value:"time: Timeout that needs to blocked on"}
-//    @Param {value:"selector: Selector to filter out messages"}
-//    native action pollWithSelector (string destinationName, int time, string selector) (JMSMessage);
-//
-//}
-
-
 //@Description { value:"Create JMS Text Message based on client connector"}
 //@Param { value:"jmsClient: clientConnector" }
 //public native function createTextMessage (ClientProperties jmsClient) (JMSMessage);

@@ -20,9 +20,9 @@ import org.ballerinalang.bre.Context;
 import org.ballerinalang.bre.bvm.CallableUnitCallback;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.natives.annotations.Argument;
-import org.ballerinalang.natives.annotations.BallerinaAction;
+import org.ballerinalang.natives.annotations.BallerinaFunction;
+import org.ballerinalang.natives.annotations.Receiver;
 import org.ballerinalang.natives.annotations.ReturnType;
-import org.ballerinalang.net.jms.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,18 +31,28 @@ import org.slf4j.LoggerFactory;
  *
  * @since 0.95.5
  */
-@BallerinaAction(packageName = "ballerina.net.jms",
-                 actionName = "pollWithSelector",
-                 connectorName = Constants.CONNECTOR_NAME,
-                 args = {
-                         @Argument(name = "queueName",
-                                   type = TypeKind.STRING),
-                         @Argument(name = "timeout", type = TypeKind.INT),
-                         @Argument(name = "selector", type = TypeKind.STRING)
-                 },
-                 returnType = {@ReturnType(type = TypeKind.STRUCT, elementType = TypeKind.STRUCT,
-                                           structPackage = "ballerina.net.jms", structType = "JMSMessage"),
-                               @ReturnType(type = TypeKind.STRUCT)})
+@BallerinaFunction(packageName = "ballerina.net.jms",
+                   functionName = "pollWithSelector",
+                   receiver = @Receiver(type = TypeKind.STRUCT,
+                                        structType = "ClientConnector",
+                                        structPackage =
+                                                "ballerina.net.jms"),
+                   args = {
+                           @Argument(name = "client",
+                                     type = TypeKind.STRUCT),
+                           @Argument(name = "queueName",
+                                     type = TypeKind.STRING),
+                           @Argument(name = "timeout",
+                                     type = TypeKind.INT),
+                           @Argument(name = "selector",
+                                     type = TypeKind.STRING)
+                   },
+                   returnType = {
+                           @ReturnType(type = TypeKind.STRUCT,
+                                       structPackage = "ballerina.net.jms",
+                                       structType = "JMSMessage")
+                   }
+)
 public class SelectorPoll extends Poll {
     private static final Logger log = LoggerFactory.getLogger(SelectorPoll.class);
 

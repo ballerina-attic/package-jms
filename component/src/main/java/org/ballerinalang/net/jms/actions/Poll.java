@@ -69,8 +69,7 @@ public class Poll extends AbstractJMSAction {
     @Override
     public void execute(Context context, CallableUnitCallback callableUnitCallback) {
         // pass selector as null, because this is invoked under non-selector poll
-        String messageSelector = null;
-        executePollAction(context, callableUnitCallback, messageSelector);
+        executePollAction(context, callableUnitCallback, null);
     }
 
     protected void executePollAction(Context context,
