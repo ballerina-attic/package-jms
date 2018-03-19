@@ -52,7 +52,7 @@ import javax.jms.Message;
                            @Argument(name = "message",
                                      type = TypeKind.STRUCT)
                    }
-                   )
+)
 public class Send extends AbstractJMSAction {
     private static final Logger log = LoggerFactory.getLogger(Send.class);
 

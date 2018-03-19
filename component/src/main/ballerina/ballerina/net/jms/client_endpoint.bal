@@ -74,11 +74,11 @@ public function <ClientEndpoint ep> stop () {
 @Param {value:"message: Message"}
 public native function<ClientConnector ep> send (string destinationName, JMSMessage m);
 
-//@Description {value:"POLL action implementation of the JMS Connector"}
-//@Param {value:"destinationName: Destination Name"}
-//@Param {value:"time: Timeout that needs to blocked on"}
-//public native function<ClientConnector ep>  poll (string destinationName, int time) (JMSMessage);
-//
+@Description {value:"POLL action implementation of the JMS Connector"}
+@Param {value:"destinationName: Destination Name"}
+@Param {value:"time: Timeout that needs to blocked on"}
+public native function<ClientConnector ep>  poll (string destinationName, int time) (JMSMessage);
+
 //@Description {value:"POLL action implementation with selector support of the JMS Connector"}
 //@Param {value:"destinationName: Destination Name"}
 //@Param {value:"time: Timeout that needs to blocked on"}

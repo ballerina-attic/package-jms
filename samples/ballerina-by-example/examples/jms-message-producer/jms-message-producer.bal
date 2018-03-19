@@ -8,11 +8,6 @@ endpoint jms:ClientEndpoint jmsEP {
 };
 
 function main (string[] args) {
-    jmsSender();
-}
-
-function jmsSender() {
-
     // Create an empty Ballerina message.
     jms:JMSMessage queueMessage = jmsEP.createTextMessage();
     // Set a string payload to the message.
