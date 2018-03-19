@@ -71,10 +71,6 @@ public class JMSTransactionContext implements BallerinaTransactionContext {
 
     @Override
     public void close() {
-    }
-
-    @Override
-    public void done() {
         if (sessionWrapper != null) {
             try {
                 clientConnector.releaseSession(sessionWrapper);
@@ -83,6 +79,10 @@ public class JMSTransactionContext implements BallerinaTransactionContext {
                 log.error("jms session release failed: " + e.getLocalizedMessage(), e);
             }
         }
+    }
+
+    @Override
+    public void done() {
     }
 
     @Override

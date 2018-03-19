@@ -64,6 +64,9 @@ public abstract class AbstractJMSAction extends AbstractNonBlockinAction {
                                                               txContext.getXAResource());
             }
             localTransactionInfo.registerTransactionContext(connectorKey, txContext);
+            TransactionResourceManager.getInstance().register(localTransactionInfo.getGlobalTransactionId(),
+                                                              localTransactionInfo.getCurrentTransactionBlockId(),
+                                                              txContext);
         } else {
             sessionWrapper = ((JMSTransactionContext) txContext).getSessionWrapper();
         }
