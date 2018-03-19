@@ -23,6 +23,7 @@ import org.ballerinalang.bre.bvm.CallableUnitCallback;
 import org.ballerinalang.connector.api.BLangConnectorSPIUtil;
 import org.ballerinalang.connector.api.Struct;
 import org.ballerinalang.model.types.TypeKind;
+import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
@@ -36,6 +37,7 @@ import org.wso2.transport.jms.exception.JMSConnectorException;
 import org.wso2.transport.jms.impl.JMSConnectorFactoryImpl;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * {@code InitEndpoint} is the InitEndpoint action implementation of the JMS Connector.
@@ -75,12 +77,21 @@ public class InitEndpoint extends AbstractJMSAction {
         //        BStruct connectorConfig = ((BStruct) bConnector.getRefField(0));
         Map<String, String> propertyMap = JMSUtils.preProcessJmsConfig(clientEndpointConfig);
 
+        JMSClientConnector jmsClientConnector;
         try {
-            JMSClientConnector jmsClientConnector = new JMSConnectorFactoryImpl().createClientConnector(propertyMap);
+            jmsClientConnector = new JMSConnectorFactoryImpl().createClientConnector(propertyMap);
             clientEndpoint.addNativeData(Constants.JMS_TRANSPORT_CLIENT_CONNECTOR, jmsClientConnector);
         } catch (JMSConnectorException e) {
             throw new BallerinaException("failed to create jms client connector. " + e.getMessage(), e, context);
         }
+
+        BStruct ballerinaClientConnector
+                = BLangConnectorSPIUtil.createBStruct(context.getProgramFile(), Constants.PROTOCOL_PACKAGE_JMS,
+                                                      Constants.CLIENT_CONNECTOR, UUID.randomUUID().toString(),
+                                                      clientEndpointConfig.getVMValue());
+        ballerinaClientConnector.addNativeData(Constants.JMS_TRANSPORT_CLIENT_CONNECTOR, jmsClientConnector);
+        clientEndpoint.addNativeData(Constants.B_CLIENT_CONNECTOR, ballerinaClientConnector);
+
         callableUnitCallback.notifySuccess();
     }
 }

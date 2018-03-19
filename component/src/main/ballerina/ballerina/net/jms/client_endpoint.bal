@@ -1,4 +1,4 @@
-qpackage ballerina.net.jms;
+package ballerina.net.jms;
 
 
 @Description {value:"Represents a JMS client endpoint"}
@@ -38,7 +38,8 @@ public struct ClientEndpointConfiguration {
 }
 
 public struct ClientConnector {
-
+    string connectorId;
+    ClientEndpointConfiguration config;
 }
 
 public function <ClientEndpoint ep> init (ClientEndpointConfiguration config) {
@@ -60,10 +61,7 @@ public function <ClientEndpoint ep> start () {
 
 @Description { value:"Returns the connector that client code uses"}
 @Return { value:"The connector that client code uses" }
-public function <ClientEndpoint ep> getClient () (ClientConnector) {
-    ClientConnector client = {};
-    return client;
-}
+public native function <ClientEndpoint ep> getClient () (ClientConnector);
 
 @Description { value:"Stops the registered service"}
 @Return { value:"Error occured during registration" }
@@ -71,10 +69,10 @@ public function <ClientEndpoint ep> stop () {
 
 }
 
-//@Description {value:"SEND action implementation of the JMS Connector"}
-//@Param {value:"destinationName: Destination Name"}
-//@Param {value:"message: Message"}
-//public native function<ClientConnector ep> send (string destinationName, JMSMessage m);
+@Description {value:"SEND action implementation of the JMS Connector"}
+@Param {value:"destinationName: Destination Name"}
+@Param {value:"message: Message"}
+public native function<ClientConnector ep> send (string destinationName, JMSMessage m);
 
 //@Description {value:"POLL action implementation of the JMS Connector"}
 //@Param {value:"destinationName: Destination Name"}
