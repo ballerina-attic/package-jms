@@ -19,13 +19,13 @@
 package org.ballerinalang.net.jms.nativeimpl.message;
 
 import org.ballerinalang.bre.Context;
+import org.ballerinalang.bre.bvm.CallableUnitCallback;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BStruct;
-import org.ballerinalang.model.values.BValue;
-import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
+import org.ballerinalang.net.jms.AbstractBlockinAction;
 import org.ballerinalang.net.jms.JMSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,16 +46,16 @@ import javax.jms.Message;
                 @Argument(name = "value", type = TypeKind.BOOLEAN)},
         isPublic = true
 )
-public class SetBooleanProperty extends AbstractNativeFunction {
+public class SetBooleanProperty extends AbstractBlockinAction {
 
     private static final Logger log = LoggerFactory.getLogger(SetBooleanProperty.class);
 
     @Override
-    public BValue[] execute(Context context) {
+    public void execute(Context context, CallableUnitCallback callableUnitCallback) {
 
-        BStruct messageStruct  = ((BStruct) this.getRefArgument(context, 0));
-        String propertyName = this.getStringArgument(context, 0);
-        boolean propertyValue = this.getBooleanArgument(context, 0);
+        BStruct messageStruct  = ((BStruct) context.getRefArgument(0));
+        String propertyName = context.getStringArgument(0);
+        boolean propertyValue = context.getBooleanArgument(0);
 
         Message jmsMessage = JMSUtils.getJMSMessage(messageStruct);
 
@@ -68,7 +68,5 @@ public class SetBooleanProperty extends AbstractNativeFunction {
         if (log.isDebugEnabled()) {
             log.debug("Add " + propertyName + " to message with value: " + propertyValue);
         }
-
-        return AbstractNativeFunction.VOID_RETURN;
     }
 }

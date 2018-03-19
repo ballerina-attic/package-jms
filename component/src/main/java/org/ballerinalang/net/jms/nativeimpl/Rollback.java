@@ -19,14 +19,12 @@
 package org.ballerinalang.net.jms.nativeimpl;
 
 import org.ballerinalang.bre.Context;
-import org.ballerinalang.connector.api.BallerinaConnectorException;
-import org.ballerinalang.connector.api.ConnectorFuture;
+import org.ballerinalang.bre.bvm.CallableUnitCallback;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BStruct;
-import org.ballerinalang.model.values.BValue;
-import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
+import org.ballerinalang.net.jms.AbstractBlockinAction;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.util.exceptions.BallerinaException;
 import org.slf4j.Logger;
@@ -44,35 +42,33 @@ import javax.jms.Session;
                              structPackage = "ballerina.net.jms"),
         isPublic = true
 )
-public class Rollback extends AbstractNativeFunction {
+public class Rollback extends AbstractBlockinAction {
     private static final Logger log = LoggerFactory.getLogger(Rollback.class);
 
-    public BValue[] execute(Context ctx) {
-        ConnectorFuture future = ctx.getConnectorFuture();
+    @Override
+    public void execute(Context context, CallableUnitCallback callableUnitCallback) {
 
-        if (null == future) {
+        if (null == callableUnitCallback) {
             throw new BallerinaException("JMS Rollback function can only be used with JMS Messages. "
-                    + Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property is not found in the message.", ctx);
+                    + Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property is not found in the message.");
         }
 
-        BStruct messageStruct = ((BStruct) this.getRefArgument(ctx, 0));
+        BStruct messageStruct = ((BStruct) context.getRefArgument(0));
         if (messageStruct.getNativeData(Constants.INBOUND_REQUEST) != null && !(Boolean) messageStruct
                 .getNativeData(Constants.INBOUND_REQUEST)) {
             throw new BallerinaException("JMS Rollback function can only be used with Inbound JMS Messages.");
         }
 
-        Object jmsSessionAcknowledgementMode = ctx.getProperties().get(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE);
+        Object jmsSessionAcknowledgementMode = context.getProperties().get(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE);
         if (!(jmsSessionAcknowledgementMode instanceof Integer)) {
             throw new BallerinaException(
-                    Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property should hold a " + "integer value. ", ctx);
+                    Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property should hold a " + "integer value. ");
         }
         if (Session.SESSION_TRANSACTED == (Integer) jmsSessionAcknowledgementMode) {
-            ctx.getConnectorFuture()
-                    .notifyFailure(new BallerinaConnectorException("Error when processing the JMS message"));
+            throw new BallerinaException("Error when processing the JMS message");
 
         } else {
             log.warn("JMS Rollback function can only be used with JMS Session Transacted Mode.");
         }
-        return VOID_RETURN;
     }
 }

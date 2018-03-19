@@ -17,13 +17,13 @@
 package org.ballerinalang.net.jms.nativeimpl.message;
 
 import org.ballerinalang.bre.Context;
+import org.ballerinalang.bre.bvm.CallableUnitCallback;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BStruct;
-import org.ballerinalang.model.values.BValue;
-import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
+import org.ballerinalang.net.jms.AbstractBlockinAction;
 import org.ballerinalang.net.jms.JMSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,14 +43,15 @@ import javax.jms.Message;
         args = {@Argument(name = "content", type = TypeKind.BLOB)},
         isPublic = true
 )
-public class SetBytesMessageContent extends AbstractNativeFunction {
+public class SetBytesMessageContent extends AbstractBlockinAction {
 
     private static final Logger log = LoggerFactory.getLogger(SetBytesMessageContent.class);
 
-    public BValue[] execute(Context context) {
+    @Override
+    public void execute(Context context, CallableUnitCallback callableUnitCallback) {
 
-        BStruct messageStruct  = ((BStruct) this.getRefArgument(context, 0));
-        byte[] messageContent = this.getBlobArgument(context, 0);
+        BStruct messageStruct  = ((BStruct) context.getRefArgument(0));
+        byte[] messageContent = context.getBlobArgument(0);
 
         Message jmsMessage = JMSUtils.getJMSMessage(messageStruct);
 
@@ -67,7 +68,5 @@ public class SetBytesMessageContent extends AbstractNativeFunction {
         if (log.isDebugEnabled()) {
             log.debug("Set content for the JMS message");
         }
-
-        return AbstractNativeFunction.VOID_RETURN;
     }
 }

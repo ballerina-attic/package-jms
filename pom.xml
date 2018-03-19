@@ -258,7 +258,7 @@
 
     <properties>
         <project.scm.id>my-scm-server</project.scm.id>
-        <ballerina.version>0.95.6</ballerina.version>
+        <ballerina.version>0.964.1-SNAPSHOT</ballerina.version>
         <wso2.transport.jms.version>6.0.50</wso2.transport.jms.version>
         <javax.jms.version>2.0.1</javax.jms.version>
         <org.testng.version>6.11</org.testng.version>

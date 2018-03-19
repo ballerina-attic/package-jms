@@ -21,8 +21,8 @@ import org.ballerinalang.connector.api.Annotation;
 import org.ballerinalang.connector.api.BallerinaConnectorException;
 import org.ballerinalang.connector.api.Resource;
 import org.ballerinalang.connector.api.Service;
-import org.ballerinalang.model.values.BMap;
-import org.ballerinalang.model.values.BString;
+import org.ballerinalang.connector.api.Struct;
+import org.ballerinalang.connector.api.Value;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.util.exceptions.BallerinaException;
 import org.slf4j.Logger;
@@ -35,6 +35,7 @@ import org.wso2.transport.jms.utils.JMSConstants;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -154,20 +155,20 @@ public class JMSUtils {
      * @param connectorConfig Client Connector configuration map
      * @return String key-value pair map
      */
-    public static Map<String, String> preProcessJmsConfig(BStruct connectorConfig) {
+    public static Map<String, String> preProcessJmsConfig(Struct connectorConfig) {
         Map<String, String> configParams = new HashMap<>();
 
-        String initialContextFactory = connectorConfig.getStringField(0);
-        String providerUrl = connectorConfig.getStringField(1);
-        String connectionFactoryName = connectorConfig.getStringField(2);
-        String connectionFactoryType = connectorConfig.getStringField(3);
-        String acknowledgementMode = connectorConfig.getStringField(4);
-        boolean clientCaching = (connectorConfig.getBooleanField(0) != 0 ? Boolean.TRUE : Boolean.FALSE);
-        String connectionUsername = connectorConfig.getStringField(5);
-        String connectionPassword = connectorConfig.getStringField(6);
-        String configFilePath = connectorConfig.getStringField(7);
-        int connectionCount = (int) connectorConfig.getIntField(0);
-        int sessionCount = (int) connectorConfig.getIntField(1);
+        String initialContextFactory = connectorConfig.getStringField("initialContextFactory");
+        String providerUrl = connectorConfig.getStringField("providerUrl");
+        String connectionFactoryName = connectorConfig.getStringField("connectionFactoryName");
+        String connectionFactoryType = connectorConfig.getStringField("connectionFactoryType");
+        String acknowledgementMode = connectorConfig.getStringField("acknowledgementMode");
+        boolean clientCaching = connectorConfig.getBooleanField("clientCaching");
+        String connectionUsername = connectorConfig.getStringField("connectionUsername");
+        String connectionPassword = connectorConfig.getStringField("connectionPassword");
+        String configFilePath = connectorConfig.getStringField("configFilePath");
+        int connectionCount = (int) connectorConfig.getIntField("connectionCount");
+        int sessionCount = (int) connectorConfig.getIntField("sessionCount");
 
         // Add to the map
         configParams.put(Constants.ALIAS_INITIAL_CONTEXT_FACTORY, initialContextFactory);
@@ -175,21 +176,21 @@ public class JMSUtils {
         configParams.put(Constants.ALIAS_CONNECTION_FACTORY_TYPE, connectionFactoryType);
         configParams.put(Constants.ALIAS_ACK_MODE, acknowledgementMode);
         configParams.put(JMSConstants.PARAM_JMS_CACHING, String.valueOf(clientCaching));
-        if (!Constants.EMPTY_STRING.equals(providerUrl)) {
+        if (isBlank(providerUrl)) {
             configParams.put(Constants.ALIAS_PROVIDER_URL, providerUrl);
         }
-        if (!Constants.EMPTY_STRING.equals(configFilePath)) {
+        if (isBlank(configFilePath)) {
             configParams.put(Constants.CONFIG_FILE_PATH, configFilePath);
         }
-        if (!Constants.EMPTY_STRING.equals(connectionUsername)) {
+        if (isBlank(connectionUsername)) {
             configParams.put(JMSConstants.CONNECTION_USERNAME, connectionUsername);
             configParams.put(JMSConstants.CONNECTION_PASSWORD, connectionPassword);
         }
         configParams.put(JMSConstants.PARAM_MAX_CONNECTIONS, String.valueOf(connectionCount));
         configParams.put(JMSConstants.PARAM_MAX_SESSIONS_ON_CONNECTION, String.valueOf(sessionCount));
 
-        if (connectorConfig.getRefField(0) != null) {
-            preProcessJmsConfig(configParams, (BMap<String, BString>) connectorConfig.getRefField(0));
+        if (connectorConfig.getMapField("properties") != null) {
+            preProcessJmsConfig(configParams, connectorConfig.getMapField("properties"));
         }
 
         preProcessIfWso2MB(configParams);
@@ -198,18 +199,22 @@ public class JMSUtils {
         return configParams;
     }
 
+    private static boolean isBlank(String string) {
+        return Objects.nonNull(string) && !string.isEmpty();
+    }
+
     /**
-     * Process the provided properties in the {@link BMap} and convert it to jms connector friendly Map.
+     * Process the provided properties in the {@link Map} and convert it to jms connector friendly Map.
      *
      * @param configParams Map instance that is getting filled.
-     * @param properties   {@link BMap} of properties.
+     * @param properties   {@link Map} of properties.
      * @return updated map for JMS connector.
      */
     public static Map<String, String> preProcessJmsConfig(Map<String, String> configParams,
-            BMap<String, BString> properties) {
+                                                          Map<String, Value> properties) {
 
         for (String key : properties.keySet()) {
-            configParams.put(key, properties.get(key).stringValue());
+            configParams.put(key, properties.get(key).getStringValue());
         }
 
         return configParams;

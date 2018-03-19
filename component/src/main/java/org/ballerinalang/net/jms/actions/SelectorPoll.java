@@ -17,7 +17,7 @@
 package org.ballerinalang.net.jms.actions;
 
 import org.ballerinalang.bre.Context;
-import org.ballerinalang.connector.api.ConnectorFuture;
+import org.ballerinalang.bre.bvm.CallableUnitCallback;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaAction;
@@ -47,8 +47,8 @@ public class SelectorPoll extends Poll {
     private static final Logger log = LoggerFactory.getLogger(SelectorPoll.class);
 
     @Override
-    public ConnectorFuture execute(Context context) {
-        String messageSelector = getStringArgument(context, 1);
-        return executePollAction(context, messageSelector);
+    public void execute(Context context, CallableUnitCallback callableUnitCallback) {
+        String messageSelector = context.getStringArgument(1);
+        executePollAction(context, callableUnitCallback, messageSelector);
     }
 }

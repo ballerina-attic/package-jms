@@ -30,7 +30,7 @@ import org.ballerinalang.spi.ExtensionPackageRepositoryProvider;
 @JavaSPIService("org.ballerinalang.spi.ExtensionPackageRepositoryProvider")
 public class StandardExtensionPackageRepositoryProvider implements ExtensionPackageRepositoryProvider {
 
-    private static final String JAR_SYSTEM_LIB_LOCATION = "/META-INF/natives/";
+    private static final String JAR_SYSTEM_LIB_LOCATION = "natives";
 
     @Override
     public PackageRepository loadRepository() {

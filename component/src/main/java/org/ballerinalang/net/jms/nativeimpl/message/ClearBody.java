@@ -17,12 +17,12 @@
 package org.ballerinalang.net.jms.nativeimpl.message;
 
 import org.ballerinalang.bre.Context;
+import org.ballerinalang.bre.bvm.CallableUnitCallback;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BStruct;
-import org.ballerinalang.model.values.BValue;
-import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
+import org.ballerinalang.net.jms.AbstractBlockinAction;
 import org.ballerinalang.net.jms.JMSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,13 +40,14 @@ import javax.jms.Message;
                              structPackage = "ballerina.net.jms"),
         isPublic = true
 )
-public class ClearBody extends AbstractNativeFunction {
+public class ClearBody extends AbstractBlockinAction {
 
     private static final Logger log = LoggerFactory.getLogger(ClearBody.class);
 
-    public BValue[] execute(Context context) {
+    @Override
+    public void execute(Context context, CallableUnitCallback callableUnitCallback) {
 
-        BStruct messageStruct  = ((BStruct) this.getRefArgument(context, 0));
+        BStruct messageStruct  = ((BStruct) context.getRefArgument(0));
         Message jmsMessage = JMSUtils.getJMSMessage(messageStruct);
 
         try {
@@ -58,8 +59,6 @@ public class ClearBody extends AbstractNativeFunction {
         if (log.isDebugEnabled()) {
             log.debug("Clear JMS body from the JMS message");
         }
-
-        return AbstractNativeFunction.VOID_RETURN;
     }
 
 }

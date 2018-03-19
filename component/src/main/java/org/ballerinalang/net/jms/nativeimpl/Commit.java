@@ -19,13 +19,13 @@
 package org.ballerinalang.net.jms.nativeimpl;
 
 import org.ballerinalang.bre.Context;
-import org.ballerinalang.connector.api.ConnectorFuture;
+import org.ballerinalang.bre.bvm.BLangVMErrors;
+import org.ballerinalang.bre.bvm.CallableUnitCallback;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BStruct;
-import org.ballerinalang.model.values.BValue;
-import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
+import org.ballerinalang.net.jms.AbstractNonBlockinAction;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.util.exceptions.BallerinaException;
 import org.slf4j.Logger;
@@ -37,23 +37,25 @@ import javax.jms.Session;
  * To commit the jms transacted sessions.
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms", functionName = "commit",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+        packageName = "ballerina.net.jms",
+        functionName = "commit",
+        receiver = @Receiver(type = TypeKind.STRUCT,
+                             structType = "JMSMessage",
                              structPackage = "ballerina.net.jms"),
         isPublic = true
 )
-public class Commit extends AbstractNativeFunction {
+public class Commit extends AbstractNonBlockinAction {
     private static final Logger log = LoggerFactory.getLogger(Commit.class);
 
-    public BValue[] execute(Context ctx) {
-        ConnectorFuture future = ctx.getConnectorFuture();
+    public void execute(Context ctx, CallableUnitCallback callback) {
 
-        if (null == future) {
+        if (null == callback) {
             throw new BallerinaException("JMS Commit function can only be used with JMS Messages. "
-                    + Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property is not found in the message.", ctx);
+                                                 + Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE
+                                                 + " property is not found in the message.", ctx);
         }
 
-        BStruct messageStruct = ((BStruct) this.getRefArgument(ctx, 0));
+        BStruct messageStruct = ((BStruct) ctx.getRefArgument(0));
         if (messageStruct.getNativeData(Constants.INBOUND_REQUEST) != null && !(Boolean) messageStruct
                 .getNativeData(Constants.INBOUND_REQUEST)) {
             throw new BallerinaException("JMS Commit function can only be used with Inbound JMS Messages.", ctx);
@@ -65,11 +67,12 @@ public class Commit extends AbstractNativeFunction {
                     Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property should hold a " + "integer value. ");
         }
         if (Session.SESSION_TRANSACTED == (Integer) jmsSessionAcknowledgementMode) {
-            ctx.getConnectorFuture().notifySuccess();
+            callback.notifySuccess();
 
         } else {
-            log.warn("JMS Commit function can only be used with JMS Session Transacted Mode.");
+            String errorMessage = "JMS Commit function can only be used with JMS Session Transacted Mode.";
+            log.warn(errorMessage);
+            callback.notifyFailure(BLangVMErrors.createError(ctx, errorMessage));
         }
-        return VOID_RETURN;
     }
 }

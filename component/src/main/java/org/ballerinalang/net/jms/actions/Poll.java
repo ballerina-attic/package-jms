@@ -17,12 +17,12 @@
 package org.ballerinalang.net.jms.actions;
 
 import org.ballerinalang.bre.Context;
-import org.ballerinalang.connector.api.ConnectorFuture;
-import org.ballerinalang.connector.api.ConnectorUtils;
+import org.ballerinalang.bre.bvm.BLangVMErrors;
+import org.ballerinalang.bre.bvm.CallableUnitCallback;
+import org.ballerinalang.connector.api.BLangConnectorSPIUtil;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BConnector;
 import org.ballerinalang.model.values.BStruct;
-import org.ballerinalang.nativeimpl.actions.ClientConnectorFuture;
 import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaAction;
 import org.ballerinalang.natives.annotations.ReturnType;
@@ -58,19 +58,19 @@ public class Poll extends AbstractJMSAction {
     private static final Logger log = LoggerFactory.getLogger(Poll.class);
 
     @Override
-    public ConnectorFuture execute(Context context) {
+    public void execute(Context context, CallableUnitCallback callableUnitCallback) {
         // pass selector as null, because this is invoked under non-selector poll
         String messageSelector = null;
-        return executePollAction(context, messageSelector);
+        executePollAction(context, callableUnitCallback, messageSelector);
     }
 
-    protected ConnectorFuture executePollAction(Context context, String messageSelector) {
-        ClientConnectorFuture future = new ClientConnectorFuture();
-
+    protected void executePollAction(Context context,
+                                                CallableUnitCallback callableUnitCallback,
+                                                String messageSelector) {
         // Extract argument values
-        BConnector bConnector = (BConnector) getRefArgument(context, 0);
-        String destination = getStringArgument(context, 0);
-        int timeout = getIntArgument(context, 0);
+        BConnector bConnector = (BConnector) context.getRefArgument(0);
+        String destination = context.getStringArgument(0);
+        int timeout = Math.toIntExact(context.getIntArgument(0));
 
         // Get the map of properties.
         BStruct  connectorConfig = ((BStruct) bConnector.getRefField(0));
@@ -78,7 +78,7 @@ public class Poll extends AbstractJMSAction {
 
         // Retrieve transport client
         JMSClientConnector jmsClientConnector = (JMSClientConnector) bConnector
-                .getnativeData(Constants.JMS_TRANSPORT_CLIENT_CONNECTOR);
+                .getNativeData(Constants.JMS_TRANSPORT_CLIENT_CONNECTOR);
 
         // Get the connector key
         String connectorKey = bConnector.getStringField(0);
@@ -103,21 +103,21 @@ public class Poll extends AbstractJMSAction {
 
             // Return from here if no message received
             if (message == null) {
-                future.notifySuccess();
-                return future;
+                callableUnitCallback.notifySuccess();
             }
 
             // Inject the Message (if received) into a JMSMessage struct.
-            BStruct bStruct = ConnectorUtils
-                    .createAndGetStruct(context, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
+            BStruct bStruct = BLangConnectorSPIUtil
+                    .createBStruct(context, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
             bStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE,
                     JMSUtils.buildBallerinaJMSMessage(message));
             bStruct.addNativeData(Constants.INBOUND_REQUEST, Boolean.FALSE);
 
-            future.notifyReply(bStruct);
+            context.setReturnValues(bStruct);
+            callableUnitCallback.notifySuccess();
         } catch (JMSConnectorException e) {
-            throw new BallerinaException("failed to poll message. " + e.getMessage(), e, context);
+            callableUnitCallback.notifyFailure(BLangVMErrors.createError(context,
+                                                                         "failed to poll message. " + e.getMessage()));
         }
-        return future;
     }
 }

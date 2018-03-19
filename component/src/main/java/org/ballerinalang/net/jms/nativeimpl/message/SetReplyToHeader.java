@@ -19,13 +19,13 @@
 package org.ballerinalang.net.jms.nativeimpl.message;
 
 import org.ballerinalang.bre.Context;
+import org.ballerinalang.bre.bvm.CallableUnitCallback;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BStruct;
-import org.ballerinalang.model.values.BValue;
-import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
+import org.ballerinalang.net.jms.AbstractBlockinAction;
 import org.ballerinalang.net.jms.BallerinaJMSMessage;
 import org.ballerinalang.net.jms.Constants;
 import org.slf4j.Logger;
@@ -46,15 +46,15 @@ import org.slf4j.LoggerFactory;
         args = {@Argument(name = "value", type = TypeKind.STRING)},
         isPublic = true
 )
-public class SetReplyToHeader extends AbstractNativeFunction {
+public class SetReplyToHeader extends AbstractBlockinAction {
 
     private static final Logger log = LoggerFactory.getLogger(SetReplyToHeader.class);
 
     @Override
-    public BValue[] execute(Context context) {
+    public void execute(Context context, CallableUnitCallback callableUnitCallback) {
 
-        BStruct messageStruct  = ((BStruct) this.getRefArgument(context, 0));
-        String value = this.getStringArgument(context, 0);
+        BStruct messageStruct  = ((BStruct) context.getRefArgument(0));
+        String value = context.getStringArgument(0);
 
         BallerinaJMSMessage ballerinaJMSMessage = (org.ballerinalang.net.jms.BallerinaJMSMessage) messageStruct
                 .getNativeData(Constants.JMS_API_MESSAGE);
@@ -62,7 +62,5 @@ public class SetReplyToHeader extends AbstractNativeFunction {
         if (log.isDebugEnabled()) {
             log.debug("add Reply destination name to the jms message");
         }
-
-        return AbstractNativeFunction.VOID_RETURN;
     }
 }

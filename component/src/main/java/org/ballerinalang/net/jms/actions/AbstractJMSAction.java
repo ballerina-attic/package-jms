@@ -16,23 +16,21 @@
 
 package org.ballerinalang.net.jms.actions;
 
-import org.ballerinalang.bre.BallerinaTransactionContext;
-import org.ballerinalang.bre.BallerinaTransactionManager;
 import org.ballerinalang.bre.Context;
-import org.ballerinalang.connector.api.AbstractNativeAction;
+import org.ballerinalang.net.jms.AbstractNonBlockinAction;
 import org.ballerinalang.net.jms.JMSTransactionContext;
-import org.ballerinalang.util.DistributedTxManagerProvider;
+import org.ballerinalang.util.transactions.BallerinaTransactionContext;
+import org.ballerinalang.util.transactions.LocalTransactionInfo;
+import org.ballerinalang.util.transactions.TransactionResourceManager;
 import org.wso2.transport.jms.contract.JMSClientConnector;
 import org.wso2.transport.jms.exception.JMSConnectorException;
 import org.wso2.transport.jms.sender.wrappers.SessionWrapper;
-
-import javax.transaction.TransactionManager;
 
 /**
  * {@code AbstractJMSAction} is the base class for all JMS Connector Actions.
  */
 
-public abstract class AbstractJMSAction extends AbstractNativeAction {
+public abstract class AbstractJMSAction extends AbstractNonBlockinAction {
 
     /**
      * Get tx SessionWrapper.
@@ -48,8 +46,10 @@ public abstract class AbstractJMSAction extends AbstractNativeAction {
     protected SessionWrapper getTxSession(Context context, JMSClientConnector jmsClientConnector, String connectorKey)
             throws JMSConnectorException {
         SessionWrapper sessionWrapper;
-        BallerinaTransactionManager ballerinaTxManager = context.getBallerinaTransactionManager();
-        BallerinaTransactionContext txContext = ballerinaTxManager.getTransactionContext(connectorKey);
+
+        LocalTransactionInfo localTransactionInfo = context.getLocalTransactionInfo();
+
+        BallerinaTransactionContext txContext = localTransactionInfo.getTransactionContext(connectorKey);
         // if transaction initialization has not yet been done
         // (if this is the first transacted action happens from this particular connector within this
         // transaction block)
@@ -58,24 +58,15 @@ public abstract class AbstractJMSAction extends AbstractNativeAction {
             txContext = new JMSTransactionContext(sessionWrapper, jmsClientConnector);
             //Handle XA initialization
             if (txContext.getXAResource() != null) {
-                initializeXATransaction(ballerinaTxManager);
+                TransactionResourceManager.getInstance()
+                                          .beginXATransaction(localTransactionInfo.getGlobalTransactionId(),
+                                                              localTransactionInfo.getCurrentTransactionBlockId(),
+                                                              txContext.getXAResource());
             }
-            ballerinaTxManager.registerTransactionContext(connectorKey, txContext);
+            localTransactionInfo.registerTransactionContext(connectorKey, txContext);
         } else {
             sessionWrapper = ((JMSTransactionContext) txContext).getSessionWrapper();
         }
         return sessionWrapper;
     }
-
-    private void initializeXATransaction(BallerinaTransactionManager ballerinaTxManager) {
-        /* Atomikos transaction manager initialize only distributed transaction is present.*/
-        if (!ballerinaTxManager.hasXATransactionManager()) {
-            TransactionManager transactionManager = DistributedTxManagerProvider.getInstance().getTransactionManager();
-            ballerinaTxManager.setXATransactionManager(transactionManager);
-        }
-        if (!ballerinaTxManager.isInXATransaction()) {
-            ballerinaTxManager.beginXATransaction();
-        }
-    }
-
 }

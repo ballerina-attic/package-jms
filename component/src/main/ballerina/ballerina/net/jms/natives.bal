@@ -18,66 +18,39 @@ public native function <JMSMessage msg> rollback ();
 @Param { value:"message: message" }
 public native function <JMSMessage msg> commit ();
 
-@Description { value:"JMS Client connector properties to pass JMS client connector configurations"}
-@Field {value:"initialContextFactory: Initial context factory name, specific to the provider"}
-@Field {value:"providerUrl: Connection URL of the provider"}
-@Field {value:"connectionFactoryName: Name of the connection factory"}
-@Field {value:"connectionFactoryType: Type of the connection factory (queue/topic)"}
-@Field {value:"acknowledgementMode: Ack mode (auto-ack, client-ack, dups-ok-ack, transacted, xa)"}
-@Field {value:"clientCaching: Is client caching enabled (default: enabled)"}
-@Field {value:"connectionUsername: Connection factory username"}
-@Field {value:"connectionPassword: Connection factory password"}
-@Field {value:"configFilePath: Path to be used for locating jndi configuration"}
-@Field {value:"connectionCount: Number of pooled connections to be used in the transport level (default: 5)"}
-@Field {value:"sessionCount: Number of pooled sessions to be used per connection in the transport level (default: 10)"}
-@Field {value:"properties: Additional Properties"}
-public struct ClientProperties {
-    string initialContextFactory;
-    string providerUrl;
-    string connectionFactoryName;
-    string connectionFactoryType = "queue";
-    string acknowledgementMode = "AUTO_ACKNOWLEDGE";
-    boolean clientCaching = true;
-    string connectionUsername;
-    string connectionPassword;
-    string configFilePath;
-    int connectionCount = 5;
-    int sessionCount = 10;
-    map properties;
-}
 
-@Description { value:"JMS client connector to poll messages to the JMS provider."}
-@Param { value:"clientProperties: Pre-defind and additional properties for the connector"}
-public connector JmsClient (ClientProperties clientProperties) {
-
-    string connectorID = util:uuid();
-
-    @Description {value:"SEND action implementation of the JMS Connector"}
-    @Param {value:"destinationName: Destination Name"}
-    @Param {value:"message: Message"}
-    native action send (string destinationName, JMSMessage m);
-
-    @Description {value:"POLL action implementation of the JMS Connector"}
-    @Param {value:"destinationName: Destination Name"}
-    @Param {value:"time: Timeout that needs to blocked on"}
-    native action poll (string destinationName, int time) (JMSMessage);
-
-    @Description {value:"POLL action implementation with selector support of the JMS Connector"}
-    @Param {value:"destinationName: Destination Name"}
-    @Param {value:"time: Timeout that needs to blocked on"}
-    @Param {value:"selector: Selector to filter out messages"}
-    native action pollWithSelector (string destinationName, int time, string selector) (JMSMessage);
-
-}
+//@Description { value:"JMS client connector to poll messages to the JMS provider."}
+//@Param { value:"clientProperties: Pre-defind and additional properties for the connector"}
+//public connector JmsClient (ClientProperties clientProperties) {
+//
+//    string connectorID = util:uuid();
+//
+//    @Description {value:"SEND action implementation of the JMS Connector"}
+//    @Param {value:"destinationName: Destination Name"}
+//    @Param {value:"message: Message"}
+//    native action send (string destinationName, JMSMessage m);
+//
+//    @Description {value:"POLL action implementation of the JMS Connector"}
+//    @Param {value:"destinationName: Destination Name"}
+//    @Param {value:"time: Timeout that needs to blocked on"}
+//    native action poll (string destinationName, int time) (JMSMessage);
+//
+//    @Description {value:"POLL action implementation with selector support of the JMS Connector"}
+//    @Param {value:"destinationName: Destination Name"}
+//    @Param {value:"time: Timeout that needs to blocked on"}
+//    @Param {value:"selector: Selector to filter out messages"}
+//    native action pollWithSelector (string destinationName, int time, string selector) (JMSMessage);
+//
+//}
 
 
-@Description { value:"Create JMS Text Message based on client connector"}
-@Param { value:"jmsClient: clientConnector" }
-public native function createTextMessage (ClientProperties jmsClient) (JMSMessage);
-
-@Description { value:"Create JMS Bytes Message based on client connector"}
-@Param { value:"jmsClient: clientConnector" }
-public native function createBytesMessage (ClientProperties jmsClient) (JMSMessage);
+//@Description { value:"Create JMS Text Message based on client connector"}
+//@Param { value:"jmsClient: clientConnector" }
+//public native function createTextMessage (ClientProperties jmsClient) (JMSMessage);
+//
+//@Description { value:"Create JMS Bytes Message based on client connector"}
+//@Param { value:"jmsClient: clientConnector" }
+//public native function createBytesMessage (ClientProperties jmsClient) (JMSMessage);
 
 @Description { value:"Value for persistent JMS message delivery mode"}
 public const int PERSISTENT_DELIVERY_MODE = 2;
