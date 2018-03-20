@@ -19,15 +19,13 @@
 package org.ballerinalang.net.jms.nativeimpl;
 
 import org.ballerinalang.bre.Context;
-import org.ballerinalang.connector.api.BallerinaConnectorException;
-import org.ballerinalang.connector.api.ConnectorFuture;
+import org.ballerinalang.bre.bvm.CallableUnitCallback;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BStruct;
-import org.ballerinalang.model.values.BValue;
-import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
+import org.ballerinalang.net.jms.AbstractBlockinAction;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.util.exceptions.BallerinaException;
 import org.slf4j.Logger;
@@ -41,40 +39,37 @@ import javax.jms.Session;
 @BallerinaFunction(
         packageName = "ballerina.net.jms",
         functionName = "acknowledge",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),
         args = {@Argument(name = "deliveryStatus", type = TypeKind.STRING)},
         isPublic = true
 )
-public class Acknowledge extends AbstractNativeFunction {
+public class Acknowledge extends AbstractBlockinAction {
     private static final Logger log = LoggerFactory.getLogger(Acknowledge.class);
 
-    public BValue[] execute(Context ctx) {
-        String deliveryStatus = getStringArgument(ctx, 0);
-        ConnectorFuture future = ctx.getConnectorFuture();
-        if (null == future) {
+    @Override
+    public void execute(Context context, CallableUnitCallback callableUnitCallback) {
+        String deliveryStatus = context.getStringArgument(0);
+        if (null == callableUnitCallback) {
             throw new BallerinaException("JMS Acknowledge function can only be used with JMS Messages. "
-                    + Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property is not found in the message.", ctx);
+                    + Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property is not found in the message.");
         }
 
-        BStruct messageStruct = ((BStruct) this.getRefArgument(ctx, 0));
+        BStruct messageStruct = ((BStruct) context.getRefArgument(0));
         if (messageStruct.getNativeData(Constants.INBOUND_REQUEST) != null && !(Boolean) messageStruct
                 .getNativeData(Constants.INBOUND_REQUEST)) {
             throw new BallerinaException(
-                    "JMS Acknowledgement function can only be used with Inbound JMS Messages.", ctx);
+                    "JMS Acknowledgement function can only be used with Inbound JMS Messages.");
         }
 
-        Object jmsSessionAcknowledgementMode = ctx.getProperties().get(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE);
+        Object jmsSessionAcknowledgementMode = context.getProperties().get(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE);
         if (!(jmsSessionAcknowledgementMode instanceof Integer)) {
             throw new BallerinaException(
                     Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE + " property should hold a " + "integer value. ");
         }
         if (Session.CLIENT_ACKNOWLEDGE == (Integer) jmsSessionAcknowledgementMode) {
-            if (Constants.JMS_MESSAGE_DELIVERY_SUCCESS.equalsIgnoreCase(deliveryStatus)) {
-                ctx.getConnectorFuture().notifySuccess();
-            } else if (Constants.JMS_MESSAGE_DELIVERY_ERROR.equalsIgnoreCase(deliveryStatus)) {
-                ctx.getConnectorFuture()
-                        .notifyFailure(new BallerinaConnectorException("Error when consuming the JMS message"));
+            if (Constants.JMS_MESSAGE_DELIVERY_ERROR.equalsIgnoreCase(deliveryStatus)) {
+                throw new BallerinaException("Error when consuming the JMS message");
             } else {
                 throw new BallerinaException(
                         "Second parameter for the jms:acknowledge function should be within the " + "set ["
@@ -84,6 +79,5 @@ public class Acknowledge extends AbstractNativeFunction {
         } else {
             log.warn("JMS Acknowledge function can only be used with JMS CLIENT ACKNOWLEDGEMENT Mode");
         }
-        return VOID_RETURN;
     }
 }

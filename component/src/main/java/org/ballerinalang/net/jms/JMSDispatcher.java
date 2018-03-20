@@ -18,11 +18,12 @@
 
 package org.ballerinalang.net.jms;
 
-import org.ballerinalang.connector.api.ConnectorUtils;
+import org.ballerinalang.connector.api.BLangConnectorSPIUtil;
 import org.ballerinalang.connector.api.ParamDetail;
 import org.ballerinalang.connector.api.Resource;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.model.values.BValue;
+import org.ballerinalang.util.codegen.ProgramFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,13 +37,21 @@ public class JMSDispatcher {
     private static final Logger log = LoggerFactory.getLogger(JMSDispatcher.class);
 
     public static BValue[] getSignatureParameters(Resource resource, Message jmsCarbonMessage) {
-        BStruct message = ConnectorUtils.createStruct(resource, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE);
+        ProgramFile programFile = resource.getResourceInfo().getServiceInfo().getPackageInfo().getProgramFile();
+        BStruct serviceEndpoint = BLangConnectorSPIUtil.createBStruct(programFile,
+                                                              Constants.PROTOCOL_PACKAGE_JMS,
+                                                              Constants.SERVICE_ENDPOINT);
+        BStruct message = BLangConnectorSPIUtil.createBStruct(programFile,
+                                                              Constants.PROTOCOL_PACKAGE_JMS,
+                                                              Constants.JMS_MESSAGE_STRUCT_NAME);
         message.addNativeData(Constants.JMS_API_MESSAGE, JMSUtils.buildBallerinaJMSMessage(jmsCarbonMessage));
         message.addNativeData(Constants.INBOUND_REQUEST, Boolean.TRUE);
 
         List<ParamDetail> paramDetails = resource.getParamDetails();
         BValue[] bValues = new BValue[paramDetails.size()];
-        bValues[0] = message;
+
+        bValues[0] = serviceEndpoint;
+        bValues[1] = message;
 
         return bValues;
     }

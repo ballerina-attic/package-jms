@@ -17,8 +17,8 @@
 */
 package org.ballerinalang.net.jms;
 
-import org.ballerinalang.bre.BallerinaTransactionContext;
 import org.ballerinalang.util.exceptions.BallerinaException;
+import org.ballerinalang.util.transactions.BallerinaTransactionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.transport.jms.contract.JMSClientConnector;
@@ -71,10 +71,6 @@ public class JMSTransactionContext implements BallerinaTransactionContext {
 
     @Override
     public void close() {
-    }
-
-    @Override
-    public void done() {
         if (sessionWrapper != null) {
             try {
                 clientConnector.releaseSession(sessionWrapper);
@@ -83,6 +79,10 @@ public class JMSTransactionContext implements BallerinaTransactionContext {
                 log.error("jms session release failed: " + e.getLocalizedMessage(), e);
             }
         }
+    }
+
+    @Override
+    public void done() {
     }
 
     @Override

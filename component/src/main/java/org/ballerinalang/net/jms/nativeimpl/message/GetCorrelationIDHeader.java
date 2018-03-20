@@ -17,14 +17,14 @@
 package org.ballerinalang.net.jms.nativeimpl.message;
 
 import org.ballerinalang.bre.Context;
+import org.ballerinalang.bre.bvm.CallableUnitCallback;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BStruct;
-import org.ballerinalang.model.values.BValue;
-import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
 import org.ballerinalang.natives.annotations.ReturnType;
+import org.ballerinalang.net.jms.AbstractBlockinAction;
 import org.ballerinalang.net.jms.JMSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,22 +38,23 @@ import javax.jms.Message;
 @BallerinaFunction(
         packageName = "ballerina.net.jms",
         functionName = "getCorrelationID",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),
         returnType = {@ReturnType(type = TypeKind.STRING)},
         isPublic = true
 )
-public class GetCorrelationIDHeader extends AbstractNativeFunction {
+public class GetCorrelationIDHeader extends AbstractBlockinAction {
 
     private static final Logger log = LoggerFactory.getLogger(GetCorrelationIDHeader.class);
 
-    public BValue[] execute(Context context) {
+    @Override
+    public void execute(Context context, CallableUnitCallback callableUnitCallback) {
 
-        BStruct messageStruct  = ((BStruct) this.getRefArgument(context, 0));
+        BStruct messageStruct  = ((BStruct) context.getRefArgument(0));
         Message jmsMessage = JMSUtils.getJMSMessage(messageStruct);
-        BValue[] headerValue = null;
+        BString headerValue = null;
         try {
-            headerValue = getBValues(new BString(jmsMessage.getJMSCorrelationID()));
+            headerValue = new BString(jmsMessage.getJMSCorrelationID());
         } catch (JMSException e) {
             log.error("Unable to retrieve CorrelationID from the JMS Message. " + e.getLocalizedMessage());
         }
@@ -62,6 +63,6 @@ public class GetCorrelationIDHeader extends AbstractNativeFunction {
             log.debug("Get CorrelationID from message");
         }
 
-        return headerValue;
+        context.setReturnValues(headerValue);
     }
 }

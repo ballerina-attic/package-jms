@@ -17,19 +17,20 @@
 */
 package org.ballerinalang.net.jms;
 
-import org.ballerinalang.connector.api.BallerinaConnectorException;
-import org.ballerinalang.connector.api.ConnectorFutureListener;
-import org.ballerinalang.model.values.BValue;
+import org.ballerinalang.bre.bvm.CallableUnitCallback;
+import org.ballerinalang.model.values.BStruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.transport.jms.callback.JMSCallback;
+
+import java.util.Objects;
 
 /**
  * {@code JMSConnectorFutureListener} is the responsible for acting on notifications received from Ballerina side.
  *
  * @since 0.94
  */
-public class JMSConnectorFutureListener implements ConnectorFutureListener {
+public class JMSConnectorFutureListener implements CallableUnitCallback {
     private static final Logger log = LoggerFactory.getLogger(JMSConnectorFutureListener.class);
     private JMSCallback jmsCallback;
     /** future will get notified by the jms native methods and from the Ballerina engine when the Resource invocation
@@ -49,19 +50,20 @@ public class JMSConnectorFutureListener implements ConnectorFutureListener {
     }
 
     @Override
-    public void notifyReply(BValue... response) {
-        // not used in jms
-    }
-
-    @Override
-    public void notifyFailure(BallerinaConnectorException ex) {
+    public void notifyFailure(BStruct bStruct) {
         informCallback(Boolean.FALSE);
     }
 
     private void informCallback(boolean status) {
         if (!isInformedCallback) {
             isInformedCallback = Boolean.TRUE;
-            jmsCallback.done(status);
+            if (Objects.nonNull(jmsCallback)) {
+                jmsCallback.done(status);
+            }
         }
+    }
+
+    public JMSCallback getCallback() {
+        return jmsCallback;
     }
 }

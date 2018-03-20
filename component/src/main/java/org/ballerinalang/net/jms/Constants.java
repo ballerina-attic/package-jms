@@ -34,16 +34,23 @@ public class Constants {
     private Constants() {
     }
 
+    public static final String SERVER_CONNECTOR = "serverConnector";
+
+    public static final String SERVICE_ENDPOINT = "ServiceEndpoint";
+
+    public static final String ENDPOINT_CONFIG_KEY = "config";
     /**
      * JMSSource annotation name which is used to define a JMS server connector.
      */
-    public static final String ANNOTATION_JMS_CONFIGURATION = "configuration";
+    public static final String ANNOTATION_JMS_CONFIGURATION = "serviceConfig";
 
     // jms protocol name
     public static final String PROTOCOL_JMS = "jms";
     public static final String PROTOCOL_PACKAGE_JMS = "ballerina.net.jms";
     public static final String JMS_SERVICE_ID = "JMS_SERVICE_ID";
     public static final String JMS_PACKAGE = "ballerina.net.jms";
+    public static final String CLIENT_CONNECTOR = "ClientConnector";
+    public static final String B_CLIENT_CONNECTOR = "BClientConnector";
 
     public static final String CONFIG_FILE_PATH = "configFilePath";
 
@@ -96,8 +103,6 @@ public class Constants {
 
     public static final Map<String, String> MAPPING_PARAMETERS = Collections.unmodifiableMap(mappingParameters);
 
-    public static final String JMS_MESSAGE = "JMSMessage";
-
     /* There are some operation that can be done only on inbound jms messages. eg: acknowledgement, rollback etc.
     * This property will identify whether the message is coming from the server connector or not. Please note that
     * When creating a new JMS message inside a native function/action, this property has be set to false
@@ -110,7 +115,7 @@ public class Constants {
     /* Constant to represent key of the cached JMS Client Connector */
     public static final String JMS_TRANSPORT_CLIENT_CONNECTOR = "JMS_TRANSPORT_CLIENT_CONNECTOR";
 
-    public static final String JMS_MESSAGE_STRUCT_NAME = "JMSMessage";
+    public static final String JMS_MESSAGE_STRUCT_NAME = "Message";
 
     public static final String CONNECTOR_NAME = "JmsClient";
 

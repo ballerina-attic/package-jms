@@ -17,14 +17,14 @@
 package org.ballerinalang.net.jms.actions;
 
 import org.ballerinalang.bre.Context;
-import org.ballerinalang.connector.api.ConnectorFuture;
-import org.ballerinalang.connector.api.ConnectorUtils;
+import org.ballerinalang.bre.bvm.BLangVMErrors;
+import org.ballerinalang.bre.bvm.CallableUnitCallback;
+import org.ballerinalang.connector.api.BLangConnectorSPIUtil;
 import org.ballerinalang.model.types.TypeKind;
-import org.ballerinalang.model.values.BConnector;
 import org.ballerinalang.model.values.BStruct;
-import org.ballerinalang.nativeimpl.actions.ClientConnectorFuture;
 import org.ballerinalang.natives.annotations.Argument;
-import org.ballerinalang.natives.annotations.BallerinaAction;
+import org.ballerinalang.natives.annotations.BallerinaFunction;
+import org.ballerinalang.natives.annotations.Receiver;
 import org.ballerinalang.natives.annotations.ReturnType;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.net.jms.JMSUtils;
@@ -43,42 +43,50 @@ import javax.jms.Message;
  *
  * @since 0.95.2
  */
-@BallerinaAction(packageName = "ballerina.net.jms",
-                 actionName = "poll",
-                 connectorName = Constants.CONNECTOR_NAME,
-                 args = {
-                         @Argument(name = "queueName",
-                                   type = TypeKind.STRING),
-                         @Argument(name = "timeout", type = TypeKind.INT)
-                 },
-                 returnType = {@ReturnType(type = TypeKind.STRUCT, elementType = TypeKind.STRUCT,
-                                           structPackage = "ballerina.net.jms", structType = "JMSMessage"),
-                               @ReturnType(type = TypeKind.STRUCT)})
+@BallerinaFunction(packageName = "ballerina.net.jms",
+                   functionName = "poll",
+                   receiver = @Receiver(type = TypeKind.STRUCT,
+                                        structType = "ClientConnector",
+                                        structPackage =
+                                                "ballerina.net.jms"),
+                   args = {
+                           @Argument(name = "client",
+                                     type = TypeKind.STRUCT),
+                           @Argument(name = "destinationName",
+                                     type = TypeKind.STRING),
+                           @Argument(name = "timeout",
+                                     type = TypeKind.INT)
+                   },
+                   returnType = {
+                           @ReturnType(type = TypeKind.STRUCT,
+                                       structPackage = "ballerina.net.jms",
+                                       structType = "Message")
+                   }
+)
 public class Poll extends AbstractJMSAction {
     private static final Logger log = LoggerFactory.getLogger(Poll.class);
 
     @Override
-    public ConnectorFuture execute(Context context) {
+    public void execute(Context context, CallableUnitCallback callableUnitCallback) {
         // pass selector as null, because this is invoked under non-selector poll
-        String messageSelector = null;
-        return executePollAction(context, messageSelector);
+        executePollAction(context, callableUnitCallback, null);
     }
 
-    protected ConnectorFuture executePollAction(Context context, String messageSelector) {
-        ClientConnectorFuture future = new ClientConnectorFuture();
-
+    protected void executePollAction(Context context,
+                                     CallableUnitCallback callableUnitCallback,
+                                     String messageSelector) {
         // Extract argument values
-        BConnector bConnector = (BConnector) getRefArgument(context, 0);
-        String destination = getStringArgument(context, 0);
-        int timeout = getIntArgument(context, 0);
+        BStruct bConnector = (BStruct) context.getRefArgument(0);
+        String destination = context.getStringArgument(0);
+        int timeout = Math.toIntExact(context.getIntArgument(0));
 
         // Get the map of properties.
-        BStruct  connectorConfig = ((BStruct) bConnector.getRefField(0));
+        BStruct connectorConfig = ((BStruct) bConnector.getRefField(0));
         String acknowledgementMode = connectorConfig.getStringField(Constants.CLIENT_CONFIG_ACK_FIELD_INDEX);
 
         // Retrieve transport client
         JMSClientConnector jmsClientConnector = (JMSClientConnector) bConnector
-                .getnativeData(Constants.JMS_TRANSPORT_CLIENT_CONNECTOR);
+                .getNativeData(Constants.JMS_TRANSPORT_CLIENT_CONNECTOR);
 
         // Get the connector key
         String connectorKey = bConnector.getStringField(0);
@@ -103,21 +111,21 @@ public class Poll extends AbstractJMSAction {
 
             // Return from here if no message received
             if (message == null) {
-                future.notifySuccess();
-                return future;
+                callableUnitCallback.notifySuccess();
+            } else {
+                // Inject the Message (if received) into a JMSMessage struct.
+                BStruct bStruct = BLangConnectorSPIUtil
+                        .createBStruct(context, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
+                bStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE,
+                                      JMSUtils.buildBallerinaJMSMessage(message));
+                bStruct.addNativeData(Constants.INBOUND_REQUEST, Boolean.FALSE);
+
+                context.setReturnValues(bStruct);
+                callableUnitCallback.notifySuccess();
             }
-
-            // Inject the Message (if received) into a JMSMessage struct.
-            BStruct bStruct = ConnectorUtils
-                    .createAndGetStruct(context, Constants.PROTOCOL_PACKAGE_JMS, Constants.JMS_MESSAGE_STRUCT_NAME);
-            bStruct.addNativeData(org.ballerinalang.net.jms.Constants.JMS_API_MESSAGE,
-                    JMSUtils.buildBallerinaJMSMessage(message));
-            bStruct.addNativeData(Constants.INBOUND_REQUEST, Boolean.FALSE);
-
-            future.notifyReply(bStruct);
         } catch (JMSConnectorException e) {
-            throw new BallerinaException("failed to poll message. " + e.getMessage(), e, context);
+            callableUnitCallback.notifyFailure(BLangVMErrors.createError(context,
+                                                                         "failed to poll message. " + e.getMessage()));
         }
-        return future;
     }
 }

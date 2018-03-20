@@ -25,9 +25,11 @@ import javax.jms.Session;
 /**
  * Acknowledgement Callback for testing service/resource invocations.
  */
-public class TestAcknowledgementCallback extends JMSCallback {
+public class TestAcknowledgementCallback extends JMSCallback implements FutureWaiter {
 
     private boolean acknowledged = false;
+
+    private boolean complete = false;
 
     private boolean reseted = false;
 
@@ -42,6 +44,7 @@ public class TestAcknowledgementCallback extends JMSCallback {
         } else {
             reseted = true;
         }
+        complete = true;
     }
 
     @Override
@@ -55,5 +58,9 @@ public class TestAcknowledgementCallback extends JMSCallback {
 
     public boolean isReseted() {
         return reseted;
+    }
+
+    public boolean isComplete() {
+        return complete;
     }
 }

@@ -2,82 +2,29 @@ package ballerina.net.jms;
 
 import ballerina.util;
 
-public struct JMSMessage {
+public struct Message {
 }
 
 @Description { value:"Message acknowledgement action implementation for jms connector when using jms client acknowledgement mode"}
 @Param { value:"message: message" }
 @Param { value:"deliveryStatus: Specify whether message delivery is SUCCESS or ERROR" }
-public native function <JMSMessage msg> acknowledge (string deliveryStatus);
+public native function <Message msg> acknowledge (string deliveryStatus);
 
 @Description { value:"Session rollback action implementation for jms connector when using jms session transaction mode"}
 @Param { value:"message: message" }
-public native function <JMSMessage msg> rollback ();
+public native function <Message msg> rollback ();
 
 @Description { value:"Session commit action implementation for jms connector when using jms session transaction mode"}
 @Param { value:"message: message" }
-public native function <JMSMessage msg> commit ();
+public native function <Message msg> commit ();
 
-@Description { value:"JMS Client connector properties to pass JMS client connector configurations"}
-@Field {value:"initialContextFactory: Initial context factory name, specific to the provider"}
-@Field {value:"providerUrl: Connection URL of the provider"}
-@Field {value:"connectionFactoryName: Name of the connection factory"}
-@Field {value:"connectionFactoryType: Type of the connection factory (queue/topic)"}
-@Field {value:"acknowledgementMode: Ack mode (auto-ack, client-ack, dups-ok-ack, transacted, xa)"}
-@Field {value:"clientCaching: Is client caching enabled (default: enabled)"}
-@Field {value:"connectionUsername: Connection factory username"}
-@Field {value:"connectionPassword: Connection factory password"}
-@Field {value:"configFilePath: Path to be used for locating jndi configuration"}
-@Field {value:"connectionCount: Number of pooled connections to be used in the transport level (default: 5)"}
-@Field {value:"sessionCount: Number of pooled sessions to be used per connection in the transport level (default: 10)"}
-@Field {value:"properties: Additional Properties"}
-public struct ClientProperties {
-    string initialContextFactory;
-    string providerUrl;
-    string connectionFactoryName;
-    string connectionFactoryType = "queue";
-    string acknowledgementMode = "AUTO_ACKNOWLEDGE";
-    boolean clientCaching = true;
-    string connectionUsername;
-    string connectionPassword;
-    string configFilePath;
-    int connectionCount = 5;
-    int sessionCount = 10;
-    map properties;
-}
-
-@Description { value:"JMS client connector to poll messages to the JMS provider."}
-@Param { value:"clientProperties: Pre-defind and additional properties for the connector"}
-public connector JmsClient (ClientProperties clientProperties) {
-
-    string connectorID = util:uuid();
-
-    @Description {value:"SEND action implementation of the JMS Connector"}
-    @Param {value:"destinationName: Destination Name"}
-    @Param {value:"message: Message"}
-    native action send (string destinationName, JMSMessage m);
-
-    @Description {value:"POLL action implementation of the JMS Connector"}
-    @Param {value:"destinationName: Destination Name"}
-    @Param {value:"time: Timeout that needs to blocked on"}
-    native action poll (string destinationName, int time) (JMSMessage);
-
-    @Description {value:"POLL action implementation with selector support of the JMS Connector"}
-    @Param {value:"destinationName: Destination Name"}
-    @Param {value:"time: Timeout that needs to blocked on"}
-    @Param {value:"selector: Selector to filter out messages"}
-    native action pollWithSelector (string destinationName, int time, string selector) (JMSMessage);
-
-}
-
-
-@Description { value:"Create JMS Text Message based on client connector"}
-@Param { value:"jmsClient: clientConnector" }
-public native function createTextMessage (ClientProperties jmsClient) (JMSMessage);
-
-@Description { value:"Create JMS Bytes Message based on client connector"}
-@Param { value:"jmsClient: clientConnector" }
-public native function createBytesMessage (ClientProperties jmsClient) (JMSMessage);
+//@Description { value:"Create JMS Text Message based on client connector"}
+//@Param { value:"jmsClient: clientConnector" }
+//public native function createTextMessage (ClientProperties jmsClient) (JMSMessage);
+//
+//@Description { value:"Create JMS Bytes Message based on client connector"}
+//@Param { value:"jmsClient: clientConnector" }
+//public native function createBytesMessage (ClientProperties jmsClient) (JMSMessage);
 
 @Description { value:"Value for persistent JMS message delivery mode"}
 public const int PERSISTENT_DELIVERY_MODE = 2;
@@ -115,121 +62,121 @@ public const string TYPE_TOPIC = "topic";
 @Description { value:"Sets a JMS transport string property from the message"}
 @Param { value:"key: The string property name" }
 @Param { value:"value: The string property value" }
-public native function <JMSMessage msg> setStringProperty (string key, string value);
+public native function <Message msg> setStringProperty (string key, string value);
 
 @Description { value:"Gets a JMS transport string property from the message"}
 @Param { value:"key: The string property name" }
 @Return { value:"string: The string property value" }
-public native function <JMSMessage msg> getStringProperty (string key) (string);
+public native function <Message msg> getStringProperty (string key) (string);
 
 @Description { value:"Sets a JMS transport integer property from the message"}
 @Param { value:"key: The integer property name" }
 @Param { value:"value: The integer property value" }
-public native function <JMSMessage msg> setIntProperty (string key, int value);
+public native function <Message msg> setIntProperty (string key, int value);
 
 @Description { value:"Gets a JMS transport integer property from the message"}
 @Param { value:"key: The integer property name" }
 @Return { value:"int: The integer property value" }
-public native function <JMSMessage msg> getIntProperty (string key) (int);
+public native function <Message msg> getIntProperty (string key) (int);
 
 @Description { value:"Sets a JMS transport boolean property from the message"}
 @Param { value:"key: The boolean property name" }
 @Param { value:"value: The boolean property value" }
-public native function <JMSMessage msg> setBooleanProperty (string key, boolean value);
+public native function <Message msg> setBooleanProperty (string key, boolean value);
 
 @Description { value:"Gets a JMS transport boolean property from the message"}
 @Param { value:"key: The boolean property name" }
 @Return { value:"boolean: The boolean property value" }
-public native function <JMSMessage msg> getBooleanProperty (string key) (boolean);
+public native function <Message msg> getBooleanProperty (string key) (boolean);
 
 @Description { value:"Sets a JMS transport float property from the message"}
 @Param { value:"key: The float property name" }
 @Param { value:"value: The float property value" }
-public native function <JMSMessage msg> setFloatProperty (string key, float value);
+public native function <Message msg> setFloatProperty (string key, float value);
 
 @Description { value:"Gets a JMS transport float property from the message"}
 @Param { value:"key: The float property name" }
 @Return { value:"float: The float property value" }
-public native function <JMSMessage msg> getFloatProperty (string key) (float);
+public native function <Message msg> getFloatProperty (string key) (float);
 
 @Description { value:"Sets text content for the JMS message"}
 @Param { value:"content: Text Message Content" }
-public native function <JMSMessage msg> setTextMessageContent (string content);
+public native function <Message msg> setTextMessageContent (string content);
 
 @Description { value:"Gets text content of the JMS message"}
 @Return { value:"string: Text Message Content" }
-public native function <JMSMessage msg> getTextMessageContent () (string);
+public native function <Message msg> getTextMessageContent () (string);
 
 @Description { value:"Sets bytes content for the JMS message"}
 @Param { value:"content: Bytes Message Content" }
-public native function <JMSMessage msg> setBytesMessageContent (blob content);
+public native function <Message msg> setBytesMessageContent (blob content);
 
 @Description { value:"Get bytes content of the JMS message"}
 @Return { value:"string: Bytes Message Content" }
-public native function <JMSMessage msg> getBytesMessageContent () (blob);
+public native function <Message msg> getBytesMessageContent () (blob);
 
 @Description { value:"Get JMS transport header MessageID from the message"}
 @Return { value:"string: The header value" }
-public native function <JMSMessage msg> getMessageID() (string);
+public native function <Message msg> getMessageID () (string);
 
 @Description { value:"Get JMS transport header Timestamp from the message"}
 @Return { value:"int: The header value" }
-public native function <JMSMessage msg> getTimestamp() (int);
+public native function <Message msg> getTimestamp () (int);
 
 @Description { value:"Sets DeliveryMode JMS transport header to the message"}
 @Param { value:"i: The header value" }
-public native function <JMSMessage msg> setDeliveryMode(int i);
+public native function <Message msg> setDeliveryMode (int i);
 
 @Description { value:"Get JMS transport header DeliveryMode from the message"}
 @Return { value:"int: The header value" }
-public native function <JMSMessage msg> getDeliveryMode() (int);
+public native function <Message msg> getDeliveryMode () (int);
 
 @Description { value:"Sets Expiration JMS transport header to the message"}
 @Param { value:"i: The header value" }
-public native function <JMSMessage msg> setExpiration(int i);
+public native function <Message msg> setExpiration (int i);
 
 @Description { value:"Get JMS transport header Expiration from the message"}
 @Return { value:"int: The header value" }
-public native function <JMSMessage msg> getExpiration() (int);
+public native function <Message msg> getExpiration () (int);
 
 @Description { value:"Sets Priority JMS transport header to the message"}
 @Param { value:"i: The header value" }
-public native function <JMSMessage msg> setPriority(int i);
+public native function <Message msg> setPriority (int i);
 
 @Description { value:"Get JMS transport header Priority from the message"}
 @Return { value:"int: The header value" }
-public native function <JMSMessage msg> getPriority() (int);
+public native function <Message msg> getPriority () (int);
 
 @Description { value:"Get JMS transport header Redelivered from the message"}
 @Return { value:"boolean: The header value" }
-public native function <JMSMessage msg> getRedelivered() (boolean);
+public native function <Message msg> getRedelivered () (boolean);
 
 @Description { value:"Sets CorrelationID JMS transport header to the message"}
 @Param { value:"s: The header value" }
-public native function <JMSMessage msg> setCorrelationID(string s);
+public native function <Message msg> setCorrelationID (string s);
 
 @Description { value:"Get JMS transport header CorrelationID from the message"}
 @Return { value:"string: The header value" }
-public native function <JMSMessage msg> getCorrelationID() (string);
+public native function <Message msg> getCorrelationID () (string);
 
 @Description { value:"Sets Type JMS transport header to the message"}
 @Param { value:"s: The header value" }
-public native function <JMSMessage msg> setType(string s);
+public native function <Message msg> setType (string s);
 
 @Description { value:"Get JMS transport header Type from the message"}
 @Return { value:"string: The header value" }
-public native function <JMSMessage msg> getType() (string);
+public native function <Message msg> getType () (string);
 
 @Description { value:"Sets ReplyTo JMS destinaiton name to the message"}
 @Param { value:"s: The header value" }
-public native function <JMSMessage msg> setReplyTo(string s);
+public native function <Message msg> setReplyTo (string s);
 
 @Description { value:"Get ReplyTo JMS destinaiton name from the message"}
 @Return { value:"string: The header value" }
-public native function <JMSMessage msg> getReplyTo() (string);
+public native function <Message msg> getReplyTo () (string);
 
 @Description { value:"Clear JMS properties of the message"}
-public native function <JMSMessage msg> clearProperties();
+public native function <Message msg> clearProperties ();
 
 @Description { value:"Clear body JMS of the message"}
-public native function <JMSMessage msg> clearBody();
+public native function <Message msg> clearBody ();

@@ -1,18 +1,19 @@
 package ballerina.net.jms;
 
-public annotation configuration attach service<> {
-    string initialContextFactory;
-    string providerUrl;
-    string connectionFactoryType;
-    string connectionFactoryName;
+
+@Description {value:"Configurations for a JMS service"}
+@Field {value:"destination: "}
+@Field {value:"acknowledgementMode: "}
+@Field {value:"subscriptionId: "}
+@Field {value:"clientId: "}
+@Field {value:"properties: "}
+public struct JmsServiceConfig {
     string destination;
-    string acknowledgementMode;
+    string acknowledgementMode = "AUTO_ACKNOWLEDGE";
     string subscriptionId;
     string clientId;
-    string configFilePath;
-    string connectionFactoryNature;
-    int concurrentConsumers;
-    string connectionUsername;
-    string connectionPassword;
     string[] properties;
 }
+
+@Description {value:"Configurations annotation for a JMS service"}
+public annotation <service> serviceConfig JmsServiceConfig;
