@@ -18,6 +18,7 @@
 
 package org.ballerinalang.net.jms.nativeimpl.message;
 
+import org.ballerinalang.launcher.util.CompileResult;
 import org.ballerinalang.model.values.BBoolean;
 import org.ballerinalang.model.values.BInteger;
 import org.ballerinalang.model.values.BString;
@@ -26,7 +27,6 @@ import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.net.jms.BallerinaJMSMessage;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.net.jms.nativeimpl.util.BTestUtils;
-import org.ballerinalang.net.jms.nativeimpl.util.CompileResult;
 import org.ballerinalang.net.jms.nativeimpl.util.MockJMSMessage;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -39,7 +39,7 @@ import javax.jms.Message;
  * Test cases for jms:JMSMessage get headers native functions.
  */
 public class GetHeadersFunctionsTestCase {
-    private CompileResult result;
+    private CompileResult compileResult;
     private BStruct messageStruct;
 
     private String jmsMessageID = "message-1234";
@@ -53,8 +53,7 @@ public class GetHeadersFunctionsTestCase {
 
     @BeforeClass
     public void setup() throws JMSException {
-        result = BTestUtils.compile("message/jmsheaders.bal");
-
+        compileResult = BTestUtils.compile("message/jmsheaders.bal");
         Message jmsMessage = new MockJMSMessage();
 
         jmsMessage.setJMSMessageID(jmsMessageID);
@@ -66,7 +65,7 @@ public class GetHeadersFunctionsTestCase {
         jmsMessage.setJMSExpiration(jmsExpiration);
         jmsMessage.setJMSType(jmsType);
 
-        messageStruct = BTestUtils.createAndGetStruct(result.getProgFile(), Constants.PROTOCOL_PACKAGE_JMS,
+        messageStruct = BTestUtils.createAndGetStruct(compileResult.getProgFile(), Constants.PROTOCOL_PACKAGE_JMS,
                 Constants.JMS_MESSAGE_STRUCT_NAME);
 
         messageStruct.addNativeData(Constants.JMS_API_MESSAGE, new BallerinaJMSMessage(jmsMessage));
@@ -77,7 +76,7 @@ public class GetHeadersFunctionsTestCase {
         int resultValue = 10;
 
         BValue[] inputBValues = { messageStruct };
-        BValue[] returnBValues = BTestUtils.invoke(result, "funcGetJMSDeliveryModeHeader", inputBValues);
+        BValue[] returnBValues = BTestUtils.invoke(compileResult, "funcGetJMSDeliveryModeHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BInteger) {
             resultValue = (int) ((BInteger) returnBValues[0]).intValue();
@@ -92,7 +91,7 @@ public class GetHeadersFunctionsTestCase {
         long resultValue = 0;
 
         BValue[] inputBValues = { messageStruct };
-        BValue[] returnBValues = BTestUtils.invoke(result, "funcGetJMSTimestampHeader", inputBValues);
+        BValue[] returnBValues = BTestUtils.invoke(compileResult, "funcGetJMSTimestampHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BInteger) {
             resultValue = ((BInteger) returnBValues[0]).intValue();
@@ -107,7 +106,7 @@ public class GetHeadersFunctionsTestCase {
         int resultValue = 0;
 
         BValue[] inputBValues = { messageStruct };
-        BValue[] returnBValues = BTestUtils.invoke(result, "funcGetJMSPriorityHeader", inputBValues);
+        BValue[] returnBValues = BTestUtils.invoke(compileResult, "funcGetJMSPriorityHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BInteger) {
             resultValue = (int) ((BInteger) returnBValues[0]).intValue();
@@ -122,7 +121,7 @@ public class GetHeadersFunctionsTestCase {
         String resultValue = "";
 
         BValue[] inputBValues = { messageStruct };
-        BValue[] returnBValues = BTestUtils.invoke(result, "funcGetJMSCorrelationIDHeader", inputBValues);
+        BValue[] returnBValues = BTestUtils.invoke(compileResult, "funcGetJMSCorrelationIDHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BString) {
             resultValue = returnBValues[0].stringValue();
@@ -137,7 +136,7 @@ public class GetHeadersFunctionsTestCase {
         String resultValue = "";
 
         BValue[] inputBValues = { messageStruct };
-        BValue[] returnBValues = BTestUtils.invoke(result, "funcGetJMSTypeHeader", inputBValues);
+        BValue[] returnBValues = BTestUtils.invoke(compileResult, "funcGetJMSTypeHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BString) {
             resultValue = returnBValues[0].stringValue();
@@ -151,7 +150,7 @@ public class GetHeadersFunctionsTestCase {
         String resultValue = "";
 
         BValue[] inputBValues = { messageStruct };
-        BValue[] returnBValues = BTestUtils.invoke(result, "funcGetJMSMessageIDHeader", inputBValues);
+        BValue[] returnBValues = BTestUtils.invoke(compileResult, "funcGetJMSMessageIDHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BString) {
             resultValue = returnBValues[0].stringValue();
@@ -166,7 +165,7 @@ public class GetHeadersFunctionsTestCase {
         long resultValue = 0;
 
         BValue[] inputBValues = { messageStruct };
-        BValue[] returnBValues = BTestUtils.invoke(result, "funcGetJMSExpirationHeader", inputBValues);
+        BValue[] returnBValues = BTestUtils.invoke(compileResult, "funcGetJMSExpirationHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BInteger) {
             resultValue = ((BInteger) returnBValues[0]).intValue();
@@ -181,7 +180,7 @@ public class GetHeadersFunctionsTestCase {
         boolean resultValue = false;
 
         BValue[] inputBValues = { messageStruct };
-        BValue[] returnBValues = BTestUtils.invoke(result, "funcGetJMSRedeliveredHeader", inputBValues);
+        BValue[] returnBValues = BTestUtils.invoke(compileResult, "funcGetJMSRedeliveredHeader", inputBValues);
 
         if (returnBValues != null && returnBValues.length == 1 && returnBValues[0] instanceof BBoolean) {
             resultValue = ((BBoolean) returnBValues[0]).booleanValue();

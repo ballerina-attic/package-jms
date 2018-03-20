@@ -29,7 +29,7 @@ public function <ServiceEndpoint ep> init (ServiceEndpointConfiguration config) 
 
 public native function<ServiceEndpoint  ep> initEndpoint () returns (error);
 
-public native function <ServiceEndpoint ep> register(type ServiceType);
+public native function <ServiceEndpoint ep> register(typedesc serviceType);
 
 public native function <ServiceEndpoint ep> start();
 

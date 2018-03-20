@@ -62,4 +62,8 @@ public class JMSConnectorFutureListener implements CallableUnitCallback {
             }
         }
     }
+
+    public JMSCallback getCallback() {
+        return jmsCallback;
+    }
 }
