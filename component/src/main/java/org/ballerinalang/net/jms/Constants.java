@@ -54,7 +54,7 @@ public class Constants {
 
     public static final String CONFIG_FILE_PATH = "configFilePath";
 
-    public static final String PROPERTIES_ARRAY = "properties";
+    public static final String PROPERTIES_MAP = "properties";
 
     /**
      * Parameters from the user.

@@ -12,7 +12,7 @@ public struct JmsServiceConfig {
     string acknowledgementMode = "AUTO_ACKNOWLEDGE";
     string subscriptionId;
     string clientId;
-    string[] properties;
+    map properties;
 }
 
 @Description {value:"Configurations annotation for a JMS service"}

@@ -16,9 +16,7 @@
 
 package org.ballerinalang.net.jms;
 
-import org.ballerinalang.connector.api.AnnAttrValue;
 import org.ballerinalang.connector.api.Annotation;
-import org.ballerinalang.connector.api.BallerinaConnectorException;
 import org.ballerinalang.connector.api.Resource;
 import org.ballerinalang.connector.api.Service;
 import org.ballerinalang.connector.api.Struct;
@@ -63,12 +61,17 @@ public class JMSUtils {
      */
     public static Map<String, String> preProcessServiceConfig(Annotation jmsConfig) {
         Map<String, String> configParams = new HashMap<>();
-        addStringParamIfPresent(Constants.ALIAS_DESTINATION, jmsConfig, configParams);
-        addStringParamIfPresent(Constants.ALIAS_CLIENT_ID, jmsConfig, configParams);
-        addStringParamIfPresent(Constants.ALIAS_DURABLE_SUBSCRIBER_ID, jmsConfig, configParams);
-        addStringParamIfPresent(Constants.ALIAS_ACK_MODE, jmsConfig, configParams);
+        Struct configStruct = jmsConfig.getValue();
+        if (Objects.isNull(configStruct)) {
+            return configParams;
+        }
 
-        processPropertiesArray(jmsConfig, configParams);
+        addStringParamIfPresent(Constants.ALIAS_DESTINATION, configStruct, configParams);
+        addStringParamIfPresent(Constants.ALIAS_CLIENT_ID, configStruct, configParams);
+        addStringParamIfPresent(Constants.ALIAS_DURABLE_SUBSCRIBER_ID, configStruct, configParams);
+        addStringParamIfPresent(Constants.ALIAS_ACK_MODE, configStruct, configParams);
+
+        preProcessMapField(configParams, configStruct.getMapField(Constants.PROPERTIES_MAP));
         updateMappedParameters(configParams);
         return configParams;
     }
@@ -93,25 +96,6 @@ public class JMSUtils {
         }
     }
 
-    private static void processPropertiesArray(Annotation jmsConfig, Map<String, String> configParams) {
-        AnnAttrValue attributeValue = jmsConfig.getAnnAttrValue(Constants.PROPERTIES_ARRAY);
-        if (attributeValue != null) {
-            AnnAttrValue[] attributeValueArray = attributeValue.getAnnAttrValueArray();
-            for (AnnAttrValue annAttributeValue : attributeValueArray) {
-                String stringValue = annAttributeValue.getStringValue();
-                int index = stringValue.indexOf("=");
-                if (index != -1) {
-                    String key = stringValue.substring(0, index).trim();
-                    String value = stringValue.substring(index + 1).trim();
-                    configParams.put(key, value);
-                } else {
-                    throw new BallerinaException("Invalid " + Constants.PROPERTIES_ARRAY + " provided. Key value"
-                            + " pair is not separated by an '='");
-                }
-            }
-        }
-    }
-
     private static void updateMappedParameters(Map<String, String> configParams) {
         Iterator<Map.Entry<String, String>> iterator = configParams.entrySet().iterator();
         Map<String, String> tempMap = new HashMap<>();
@@ -126,17 +110,11 @@ public class JMSUtils {
         configParams.putAll(tempMap);
     }
 
-    private static void addStringParamIfPresent(String paramName, Annotation jmsConfig, Map<String, String> paramsMap) {
-        AnnAttrValue value = jmsConfig.getAnnAttrValue(paramName);
-        if (value != null && value.getStringValue() != null) {
-            paramsMap.put(paramName, value.getStringValue());
-        }
-    }
-
-    private static void addIntParamIfPresent(String paramName, Annotation jmsConfig, Map<String, String> paramsMap) {
-        AnnAttrValue value = jmsConfig.getAnnAttrValue(paramName);
-        if (value != null) {
-            paramsMap.put(paramName, String.valueOf(value.getIntValue()));
+    private static void addStringParamIfPresent(String paramName, Struct configStruct, Map<String, String> paramsMap) {
+        String param;
+        param = configStruct.getStringField(paramName);
+        if (Objects.nonNull(param)) {
+            paramsMap.put(paramName, param);
         }
     }
 
@@ -178,9 +156,7 @@ public class JMSUtils {
         configParams.put(JMSConstants.PARAM_MAX_CONNECTIONS, String.valueOf(connectionCount));
         configParams.put(JMSConstants.PARAM_MAX_SESSIONS_ON_CONNECTION, String.valueOf(sessionCount));
 
-        if (endpointConfig.getMapField("properties") != null) {
-            preProcessJmsConfig(configParams, endpointConfig.getMapField("properties"));
-        }
+        preProcessMapField(configParams, endpointConfig.getMapField("properties"));
 
         preProcessIfWso2MB(configParams);
         updateMappedParameters(configParams);
@@ -197,16 +173,17 @@ public class JMSUtils {
      *
      * @param configParams Map instance that is getting filled.
      * @param properties   {@link Map} of properties.
-     * @return updated map for JMS connector.
      */
-    public static Map<String, String> preProcessJmsConfig(Map<String, String> configParams,
-                                                          Map<String, Value> properties) {
+    private static void preProcessMapField(Map<String, String> configParams,
+                                           Map<String, Value> properties) {
 
-        for (String key : properties.keySet()) {
-            configParams.put(key, properties.get(key).getStringValue());
+        if (Objects.isNull(properties)) {
+            return;
         }
 
-        return configParams;
+        for (Map.Entry<String, Value> entry : properties.entrySet()) {
+            configParams.put(entry.getKey(), entry.getValue().getStringValue());
+        }
     }
 
     /**
@@ -254,9 +231,8 @@ public class JMSUtils {
      *
      * @param service Service instance.
      * @return extracted resource.
-     * @throws BallerinaConnectorException if there is no Resource or more than one Resource inside the service.
      */
-    public static Resource extractJMSResource(Service service) throws BallerinaConnectorException {
+    public static Resource extractJMSResource(Service service) {
         Resource[] resources = service.getResources();
         if (resources.length == 0) {
             throw new BallerinaException("No resources found to handle the JMS message in " + service.getName());
