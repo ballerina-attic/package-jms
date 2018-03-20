@@ -36,7 +36,7 @@ import java.util.Map;
         functionName = "register",
         receiver = @Receiver(type = TypeKind.STRUCT, structType = "ServiceEndpoint",
                 structPackage = "ballerina.net.jms"),
-        args = {@Argument(name = "serviceType", type = TypeKind.TYPE)},
+        args = {@Argument(name = "serviceType", type = TypeKind.TYPEDESC)},
         isPublic = true
 )
 public class Register implements NativeCallableUnit {

@@ -51,7 +51,7 @@ public native function<ClientEndpoint ep> initEndpoint ();
 
 public native function<ClientEndpoint ep> createTextMessage () (JMSMessage);
 
-public function <ClientEndpoint ep> register (type serviceType) {
+public function <ClientEndpoint ep> register (typedesc serviceType) {
 
 }
 

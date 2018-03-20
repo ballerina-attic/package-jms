@@ -18,6 +18,7 @@
 
 package org.ballerinalang.net.jms.nativeimpl.message;
 
+import org.ballerinalang.launcher.util.CompileResult;
 import org.ballerinalang.model.values.BBoolean;
 import org.ballerinalang.model.values.BFloat;
 import org.ballerinalang.model.values.BInteger;
@@ -28,7 +29,6 @@ import org.ballerinalang.net.jms.BallerinaJMSMessage;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.net.jms.JMSUtils;
 import org.ballerinalang.net.jms.nativeimpl.util.BTestUtils;
-import org.ballerinalang.net.jms.nativeimpl.util.CompileResult;
 import org.ballerinalang.net.jms.nativeimpl.util.MockJMSMessage;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
