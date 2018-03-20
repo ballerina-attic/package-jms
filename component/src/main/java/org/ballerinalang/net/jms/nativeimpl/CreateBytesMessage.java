@@ -45,7 +45,7 @@ import javax.jms.Message;
 @BallerinaFunction(packageName = "ballerina.net.jms", functionName = "createBytesMessage", args = {
         @Argument(name = "clientConnector", type = TypeKind.STRUCT) },
                    returnType = {@ReturnType(type = TypeKind.STRUCT, structPackage = "ballerina.net.jms",
-                                             structType = "JMSMessage")},
+                                             structType = "Message")},
                    isPublic = true)
 public class CreateBytesMessage extends AbstractBlockinAction {
     private static final Logger log = LoggerFactory.getLogger(CreateBytesMessage.class);

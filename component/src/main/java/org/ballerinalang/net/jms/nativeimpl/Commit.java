@@ -40,7 +40,7 @@ import javax.jms.Session;
         packageName = "ballerina.net.jms",
         functionName = "commit",
         receiver = @Receiver(type = TypeKind.STRUCT,
-                             structType = "JMSMessage",
+                             structType = "Message",
                              structPackage = "ballerina.net.jms"),
         isPublic = true
 )

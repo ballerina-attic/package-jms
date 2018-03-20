@@ -49,7 +49,7 @@ public function <ClientEndpoint ep> init (ClientEndpointConfiguration config) {
 
 public native function<ClientEndpoint ep> initEndpoint ();
 
-public native function<ClientEndpoint ep> createTextMessage () (JMSMessage);
+public native function<ClientEndpoint ep> createTextMessage () (Message);
 
 public function <ClientEndpoint ep> register (typedesc serviceType) {
 
@@ -72,15 +72,15 @@ public function <ClientEndpoint ep> stop () {
 @Description {value:"SEND action implementation of the JMS Connector"}
 @Param {value:"destinationName: Destination Name"}
 @Param {value:"message: Message"}
-public native function<ClientConnector ep> send (string destinationName, JMSMessage m);
+public native function<ClientConnector ep> send (string destinationName, Message m);
 
 @Description {value:"POLL action implementation of the JMS Connector"}
 @Param {value:"destinationName: Destination Name"}
 @Param {value:"time: Timeout that needs to blocked on"}
-public native function<ClientConnector ep> poll (string destinationName, int time) (JMSMessage);
+public native function<ClientConnector ep> poll (string destinationName, int time) (Message);
 
 @Description {value:"POLL action implementation with selector support of the JMS Connector"}
 @Param {value:"destinationName: Destination Name"}
 @Param {value:"time: Timeout that needs to blocked on"}
 @Param {value:"selector: Selector to filter out messages"}
-public native function<ClientConnector ep> pollWithSelector (string destinationName, int time, string selector) (JMSMessage);
+public native function<ClientConnector ep> pollWithSelector (string destinationName, int time, string selector) (Message);

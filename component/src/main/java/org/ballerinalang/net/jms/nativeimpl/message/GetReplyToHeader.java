@@ -36,8 +36,7 @@ import org.slf4j.LoggerFactory;
  * @since 0.95.5
  */
 @BallerinaFunction(packageName = "ballerina.net.jms",
-                   receiver = @Receiver(type = TypeKind.STRUCT,
-                                        structType = "JMSMessage",
+                   receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                                         structPackage = "ballerina.net.jms"),
                    functionName = "getReplyTo",
                    returnType = { @ReturnType(type = TypeKind.STRING) },

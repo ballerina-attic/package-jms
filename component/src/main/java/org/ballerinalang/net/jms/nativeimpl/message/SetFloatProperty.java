@@ -40,7 +40,7 @@ import javax.jms.Message;
 @BallerinaFunction(
         packageName = "ballerina.net.jms",
         functionName = "setFloatProperty",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),
         args = {@Argument(name = "key", type = TypeKind.STRING),
                 @Argument(name = "value", type = TypeKind.FLOAT)},

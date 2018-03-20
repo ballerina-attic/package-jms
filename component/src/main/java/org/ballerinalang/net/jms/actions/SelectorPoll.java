@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
                    returnType = {
                            @ReturnType(type = TypeKind.STRUCT,
                                        structPackage = "ballerina.net.jms",
-                                       structType = "JMSMessage")
+                                       structType = "Message")
                    }
 )
 public class SelectorPoll extends Poll {

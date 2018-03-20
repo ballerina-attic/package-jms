@@ -103,8 +103,6 @@ public class Constants {
 
     public static final Map<String, String> MAPPING_PARAMETERS = Collections.unmodifiableMap(mappingParameters);
 
-    public static final String JMS_MESSAGE = "JMSMessage";
-
     /* There are some operation that can be done only on inbound jms messages. eg: acknowledgement, rollback etc.
     * This property will identify whether the message is coming from the server connector or not. Please note that
     * When creating a new JMS message inside a native function/action, this property has be set to false
@@ -117,7 +115,7 @@ public class Constants {
     /* Constant to represent key of the cached JMS Client Connector */
     public static final String JMS_TRANSPORT_CLIENT_CONNECTOR = "JMS_TRANSPORT_CLIENT_CONNECTOR";
 
-    public static final String JMS_MESSAGE_STRUCT_NAME = "JMSMessage";
+    public static final String JMS_MESSAGE_STRUCT_NAME = "Message";
 
     public static final String CONNECTOR_NAME = "JmsClient";
 

@@ -37,7 +37,7 @@ import javax.jms.Message;
  */
 @BallerinaFunction(
         packageName = "ballerina.net.jms",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),
         functionName = "getRedelivered",
         returnType = {@ReturnType(type = TypeKind.BOOLEAN)},

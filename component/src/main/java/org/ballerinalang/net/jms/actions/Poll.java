@@ -60,7 +60,7 @@ import javax.jms.Message;
                    returnType = {
                            @ReturnType(type = TypeKind.STRUCT,
                                        structPackage = "ballerina.net.jms",
-                                       structType = "JMSMessage")
+                                       structType = "Message")
                    }
 )
 public class Poll extends AbstractJMSAction {

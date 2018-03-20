@@ -43,7 +43,7 @@ public class JMSDispatcher {
                                                               Constants.SERVICE_ENDPOINT);
         BStruct message = BLangConnectorSPIUtil.createBStruct(programFile,
                                                               Constants.PROTOCOL_PACKAGE_JMS,
-                                                              Constants.JMS_MESSAGE);
+                                                              Constants.JMS_MESSAGE_STRUCT_NAME);
         message.addNativeData(Constants.JMS_API_MESSAGE, JMSUtils.buildBallerinaJMSMessage(jmsCarbonMessage));
         message.addNativeData(Constants.INBOUND_REQUEST, Boolean.TRUE);
 

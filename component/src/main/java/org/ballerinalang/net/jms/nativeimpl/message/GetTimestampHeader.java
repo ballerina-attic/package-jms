@@ -38,7 +38,7 @@ import javax.jms.Message;
 @BallerinaFunction(
         packageName = "ballerina.net.jms",
         functionName = "getTimestamp",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),
         returnType = {@ReturnType(type = TypeKind.INT)},
         isPublic = true

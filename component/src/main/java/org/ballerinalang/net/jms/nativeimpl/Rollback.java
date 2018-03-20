@@ -38,7 +38,7 @@ import javax.jms.Session;
 @BallerinaFunction(
         packageName = "ballerina.net.jms",
         functionName = "rollback",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),
         isPublic = true
 )

@@ -39,7 +39,7 @@ import javax.jms.TextMessage;
 @BallerinaFunction(
         packageName = "ballerina.net.jms",
         functionName = "setTextMessageContent",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),
         args = {@Argument(name = "content", type = TypeKind.STRING)},
         returnType = {@ReturnType(type = TypeKind.STRING)},

@@ -11,7 +11,7 @@ endpoint jms:ServiceEndpoint ep1 {
 }
 service<jms:Service> jmsService bind ep1 {
 
-    onMessgae (endpoint client, jms:JMSMessage message) {
+    onMessgae (endpoint client, jms:Message message) {
         io:println("test message");
         io:println(message.getTextMessageContent());
     }

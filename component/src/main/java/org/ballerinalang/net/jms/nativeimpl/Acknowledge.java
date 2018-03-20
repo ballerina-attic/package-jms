@@ -39,7 +39,7 @@ import javax.jms.Session;
 @BallerinaFunction(
         packageName = "ballerina.net.jms",
         functionName = "acknowledge",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "JMSMessage",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),
         args = {@Argument(name = "deliveryStatus", type = TypeKind.STRING)},
         isPublic = true
