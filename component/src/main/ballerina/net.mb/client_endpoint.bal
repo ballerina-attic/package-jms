@@ -95,20 +95,23 @@ public function<ClientConnector ep> send (string destinationName, jms:Message m)
     jmsClient->send(destinationName, m);
 }
 
-//
-//@Description {value:"POLL action implementation of the JMS Connector"}
-//@Param {value:"destinationName: Destination Name"}
-//@Param {value:"time: Timeout that needs to blocked on"}
-//public function<ClientConnector ep> poll (string destinationName, int time) returns (jms:Message | null) {
-//    return ep.jmsConnector.poll(destinationName, time);
-//}
-//
-//@Description {value:"POLL action implementation with selector support of the JMS Connector"}
-//@Param {value:"destinationName: Destination Name"}
-//@Param {value:"time: Timeout that needs to blocked on"}
-//@Param {value:"selector: Selector to filter out messages"}
-//public function<ClientConnector ep> pollWithSelector (string destinationName, int time, string selector)
-//                                                                                            returns (jms:Message |
-//                                                                                                     null) {
-//    return ep.jmsConnector.pollWithSelector(destinationName, time, selector);
-//}
+
+@Description {value:"POLL action implementation of the JMS Connector"}
+@Param {value:"destinationName: Destination Name"}
+@Param {value:"time: Timeout that needs to blocked on"}
+public function<ClientConnector ep> poll (string destinationName, int time) returns (jms:Message | null) {
+    endpoint jms:ClientEndpoint jmsClient = ep.clientEP.jmsClientEP;
+    var result = jmsClient->poll(destinationName, time);
+    return result;
+}
+
+@Description {value:"POLL action implementation with selector support of the JMS Connector"}
+@Param {value:"destinationName: Destination Name"}
+@Param {value:"time: Timeout that needs to blocked on"}
+@Param {value:"selector: Selector to filter out messages"}
+public function <ClientConnector ep> pollWithSelector (string destinationName, int time, string selector)
+                                                                                        returns (jms:Message| null) {
+    endpoint jms:ClientEndpoint jmsClient = ep.clientEP.jmsClientEP;
+    var result = jmsClient->pollWithSelector(destinationName, time, selector);
+    return result;
+}
