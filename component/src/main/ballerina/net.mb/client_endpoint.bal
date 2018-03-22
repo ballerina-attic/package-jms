@@ -50,7 +50,7 @@ public function <ClientEndpoint ep> init (ClientEndpointConfiguration config) {
     endpoint jms:ClientEndpoint jmsEP {
         initialContextFactory: "wso2mbInitialContextFactory",
         providerUrl: config.brokerUrl,
-        connectionFactoryName: "brokerCnnectionFactory",
+        connectionFactoryName: "brokerConnectionFactory",
         destinationType: config.destinationType,
         acknowledgementMode: config.acknowledgementMode,
         clientCaching: config.clientCaching,

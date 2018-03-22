@@ -1,5 +1,7 @@
 package ballerina.net.jms;
 
+import ballerina/io;
+
 public struct ConsumerEndpoint {
     Context context;
     ServiceEndpointConfiguration config;
@@ -29,13 +31,10 @@ public function <ServiceEndpointConfiguration config> ServiceEndpointConfigurati
 
 public function <ConsumerEndpoint ep> init (ServiceEndpointConfiguration config) {
     ep.config = config;
-    var err = ep.initEndpoint();
-    if (err != null ) {
-        throw err;
-    }
+    ep.initEndpoint();
 }
 
-public native function<ConsumerEndpoint ep> initEndpoint () returns (error);
+public native function<ConsumerEndpoint ep> initEndpoint ();
 
 public native function <ConsumerEndpoint ep> register (typedesc serviceType);
 
