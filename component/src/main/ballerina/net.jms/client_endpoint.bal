@@ -49,7 +49,7 @@ public function <ClientEndpoint ep> init (ClientEndpointConfiguration config) {
 
 public native function<ClientEndpoint ep> initEndpoint ();
 
-public native function<ClientEndpoint ep> createTextMessage () returns (Message);
+public native function<ClientEndpoint ep> createTextMessage (string content) returns (Message);
 
 public function <ClientEndpoint ep> register (typedesc serviceType) {
 

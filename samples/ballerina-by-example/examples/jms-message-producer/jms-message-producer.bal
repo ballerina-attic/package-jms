@@ -12,9 +12,7 @@ endpoint jms:ClientEndpoint jmsEP {
 
 function main (string[] args) {
     // Create an empty Ballerina message.
-    jms:Message queueMessage = jmsEP.createTextMessage();
-    // Set a string payload to the message.
-    queueMessage.setTextMessageContent("Hello from Ballerina!");
+    jms:Message queueMessage = jmsEP.createTextMessage("Hello from Ballerina!");
     // Send the Ballerina message to the JMS provider.
     jmsEP->send("MyQueue", queueMessage);
 }
