@@ -36,7 +36,7 @@ import javax.jms.Message;
  * Get Timestamp header from the JMS Message.
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         functionName = "getTimestamp",
         receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),

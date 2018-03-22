@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.ballerinalang</groupId>
         <artifactId>ballerina-jms-parent</artifactId>
-        <version>0.95.6-SNAPSHOT</version>
+        <version>0.970.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -82,7 +82,7 @@
             <!-- copy built-in ballerina sources to the jar -->
             <resource>
                 <directory>${generated.ballerina.source.directory}</directory>
-                <targetPath>META-INF/natives</targetPath>
+                <targetPath>META-INF/ballerina</targetPath>
             </resource>
     	</resources>
         <plugins>
@@ -262,6 +262,18 @@
                                     <groupId>commons-lang</groupId>
                                     <artifactId>commons-lang</artifactId>
                                     <version>${apache.commons.lang.version}</version>
+                                    <type>${project.packaging}</type>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.wso2.andes.wso2</groupId>
+                                    <artifactId>andes-client</artifactId>
+                                    <version>${andes.client.version}</version>
+                                    <type>${project.packaging}</type>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.wso2.securevault</groupId>
+                                    <artifactId>org.wso2.securevault</artifactId>
+                                    <version>${securevault.version}</version>
                                     <type>${project.packaging}</type>
                                 </artifactItem>
                             </artifactItems>

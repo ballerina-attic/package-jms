@@ -37,7 +37,7 @@ import javax.jms.Session;
  * Acknowledge the jms message.
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         functionName = "acknowledge",
         receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),

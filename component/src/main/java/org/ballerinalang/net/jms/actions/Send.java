@@ -38,7 +38,7 @@ import javax.jms.Message;
 /**
  * {@code Send} is the send action implementation of the JMS Connector.
  */
-@BallerinaFunction(packageName = "ballerina.net.jms",
+@BallerinaFunction(orgName = "ballerina", packageName = "net.jms",
                    functionName = "send",
                    receiver = @Receiver(type = TypeKind.STRUCT,
                                         structType = "ClientConnector",

@@ -44,7 +44,7 @@ import java.util.UUID;
  *
  * @since 0.9
  */
-@BallerinaFunction(packageName = "ballerina.net.jms",
+@BallerinaFunction(orgName = "ballerina", packageName = "net.jms",
                    functionName = "initEndpoint",
                    receiver = @Receiver(type = TypeKind.STRUCT,
                                         structType = "ClientEndpoint",
@@ -76,6 +76,8 @@ public class InitEndpoint extends AbstractJMSAction {
         // When performing an action this native object can be retrieved
         //        BStruct connectorConfig = ((BStruct) bConnector.getRefField(0));
         Map<String, String> propertyMap = JMSUtils.preProcessEndpointConfig(clientEndpointConfig);
+        JMSUtils.preProcessIfWso2MB(propertyMap);
+        JMSUtils.updateMappedParameters(propertyMap);
 
         JMSClientConnector jmsClientConnector;
         try {

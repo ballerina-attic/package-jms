@@ -26,15 +26,24 @@ public struct ClientEndpointConfiguration {
     string initialContextFactory;
     string providerUrl;
     string connectionFactoryName;
-    string connectionFactoryType = "queue";
-    string acknowledgementMode = "AUTO_ACKNOWLEDGE";
+    string destinationType;
+    string acknowledgementMode;
     boolean clientCaching = true;
     string connectionUsername;
     string connectionPassword;
     string configFilePath;
-    int connectionCount = 5;
-    int sessionCount = 10;
+    int connectionCount;
+    int sessionCount;
     map properties;
+}
+
+public function <ClientEndpointConfiguration config> ClientEndpointConfiguration() {
+    config.connectionFactoryName = "QueueConnectionFactory";
+    config.destinationType = "queue";
+    config.acknowledgementMode = "AUTO_ACKNOWLEDGE";
+    config.clientCaching = true;
+    config.connectionCount = 5;
+    config.sessionCount = 10;
 }
 
 public struct ClientConnector {
@@ -49,7 +58,7 @@ public function <ClientEndpoint ep> init (ClientEndpointConfiguration config) {
 
 public native function<ClientEndpoint ep> initEndpoint ();
 
-public native function<ClientEndpoint ep> createTextMessage () (Message);
+public native function<ClientEndpoint ep> createTextMessage (string content) returns (Message);
 
 public function <ClientEndpoint ep> register (typedesc serviceType) {
 
@@ -61,7 +70,7 @@ public function <ClientEndpoint ep> start () {
 
 @Description { value:"Returns the connector that client code uses"}
 @Return { value:"The connector that client code uses" }
-public native function <ClientEndpoint ep> getClient () (ClientConnector);
+public native function <ClientEndpoint ep> getClient () returns (ClientConnector);
 
 @Description { value:"Stops the registered service"}
 @Return { value:"Error occured during registration" }
@@ -77,10 +86,11 @@ public native function<ClientConnector ep> send (string destinationName, Message
 @Description {value:"POLL action implementation of the JMS Connector"}
 @Param {value:"destinationName: Destination Name"}
 @Param {value:"time: Timeout that needs to blocked on"}
-public native function<ClientConnector ep> poll (string destinationName, int time) (Message);
+public native function<ClientConnector ep> receive (string destinationName, int time) returns (Message | null);
 
 @Description {value:"POLL action implementation with selector support of the JMS Connector"}
 @Param {value:"destinationName: Destination Name"}
 @Param {value:"time: Timeout that needs to blocked on"}
 @Param {value:"selector: Selector to filter out messages"}
-public native function<ClientConnector ep> pollWithSelector (string destinationName, int time, string selector) (Message);
+public native function<ClientConnector ep> receiveWithSelector (string destinationName, int time, string selector)
+                                                                                            returns (Message | null);

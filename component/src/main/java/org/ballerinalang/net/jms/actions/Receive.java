@@ -39,12 +39,12 @@ import org.wso2.transport.jms.utils.JMSConstants;
 import javax.jms.Message;
 
 /**
- * {@code Poll} is the poll action implementation of the JMS Client Connector.
+ * {@code Receive} is the poll action implementation of the JMS Client Connector.
  *
  * @since 0.95.2
  */
-@BallerinaFunction(packageName = "ballerina.net.jms",
-                   functionName = "poll",
+@BallerinaFunction(orgName = "ballerina", packageName = "net.jms",
+                   functionName = "receive",
                    receiver = @Receiver(type = TypeKind.STRUCT,
                                         structType = "ClientConnector",
                                         structPackage =
@@ -63,8 +63,8 @@ import javax.jms.Message;
                                        structType = "Message")
                    }
 )
-public class Poll extends AbstractJMSAction {
-    private static final Logger log = LoggerFactory.getLogger(Poll.class);
+public class Receive extends AbstractJMSAction {
+    private static final Logger log = LoggerFactory.getLogger(Receive.class);
 
     @Override
     public void execute(Context context, CallableUnitCallback callableUnitCallback) {

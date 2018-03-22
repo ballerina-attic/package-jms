@@ -4,7 +4,6 @@ import org.ballerinalang.bre.Context;
 import org.ballerinalang.bre.bvm.CallableUnitCallback;
 import org.ballerinalang.connector.api.Annotation;
 import org.ballerinalang.connector.api.BLangConnectorSPIUtil;
-import org.ballerinalang.connector.api.BallerinaConnectorException;
 import org.ballerinalang.connector.api.Resource;
 import org.ballerinalang.connector.api.Service;
 import org.ballerinalang.connector.api.Struct;
@@ -24,6 +23,7 @@ import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Get the ID of the connection.
@@ -32,9 +32,9 @@ import java.util.Map;
  */
 
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         functionName = "register",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "ServiceEndpoint",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "ConsumerEndpoint",
                 structPackage = "ballerina.net.jms"),
         args = {@Argument(name = "serviceType", type = TypeKind.TYPEDESC)},
         isPublic = true
@@ -43,41 +43,36 @@ public class Register implements NativeCallableUnit {
     @Override
     public void execute(Context context, CallableUnitCallback callableUnitCallback) {
         Service service = BLangConnectorSPIUtil.getServiceRegistered(context);
-        Struct serviceEndpoint = BLangConnectorSPIUtil.getConnectorEndpointStruct(context);
+        Struct consumerEndpoint = BLangConnectorSPIUtil.getConnectorEndpointStruct(context);
 
-        Map<String, String> endpointConfigs =
-                JMSUtils.preProcessEndpointConfig(serviceEndpoint.getStructField(Constants.ENDPOINT_CONFIG_KEY));
+        Map<String, String> connectorParams =
+                JMSUtils.preProcessEndpointConfig(consumerEndpoint.getStructField(Constants.ENDPOINT_CONFIG_KEY));
         List<Annotation> annotationList = service.getAnnotationList(Constants.JMS_PACKAGE,
                                                                     Constants.ANNOTATION_JMS_CONFIGURATION);
 
-        String serviceKey = getServiceKey(service);
-        if (annotationList == null) {
-            throw new BallerinaConnectorException("Unable to find the associated configuration " +
-                                                          "annotation for given service: " + serviceKey);
-        }
-        if (annotationList.size() > 1) {
-            throw new BallerinaException(
-                    "multiple service configuration annotations found in service: " + service.getName());
-        }
-        Annotation jmsConfig = annotationList.get(0);
-        if (jmsConfig == null) {
-            throw new BallerinaException("Error jms 'configuration' annotation missing in " + service.getName());
-        }
+        if (Objects.nonNull(annotationList) && !annotationList.isEmpty()) {
 
-        Map<String, String> configParams = JMSUtils.preProcessServiceConfig(jmsConfig);
-        configParams.putAll(endpointConfigs);
+            Annotation serviceConfig = annotationList.get(0);
+            if (Objects.isNull(serviceConfig)) {
+                throw new BallerinaException("Error jms 'configuration' annotation missing in " + service.getName());
+            }
+            Map<String, String> serviceConfigs = JMSUtils.preProcessServiceConfig(serviceConfig);
+            connectorParams.putAll(serviceConfigs);
+        }
         String serviceId = service.getName();
-        configParams.putIfAbsent(JMSConstants.PARAM_DESTINATION_NAME, serviceId);
+        connectorParams.putIfAbsent(JMSConstants.PARAM_DESTINATION_NAME, serviceId);
+
+        JMSUtils.preProcessIfWso2MB(connectorParams);
+        JMSUtils.updateMappedParameters(connectorParams);
 
         try {
             // Create a new JMS Listener for this this JMS Service and include it in a new JMS Server Connector
             Resource resource = JMSUtils.extractJMSResource(service);
             JMSListener jmsListener = new JMSListenerImpl(resource);
             org.wso2.transport.jms.contract.JMSServerConnector serverConnector =
-                    new JMSConnectorFactoryImpl().createServerConnector(serviceId, configParams, jmsListener);
+                    new JMSConnectorFactoryImpl().createServerConnector(serviceId, connectorParams, jmsListener);
 
-            serviceEndpoint.addNativeData(Constants.SERVER_CONNECTOR, serverConnector);
-            serverConnector.start();
+            consumerEndpoint.addNativeData(Constants.SERVER_CONNECTOR, serverConnector);
         } catch (JMSConnectorException e) {
             throw new BallerinaException(
                     "Error when starting to listen to the queue/topic while " + serviceId + " deployment", e);

@@ -37,7 +37,7 @@ import javax.jms.Message;
  * Get bytes content of the JMS Message.
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         functionName = "getBytesMessageContent",
         receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),

@@ -24,6 +24,7 @@ import org.ballerinalang.connector.api.BLangConnectorSPIUtil;
 import org.ballerinalang.connector.api.Struct;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BStruct;
+import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
 import org.ballerinalang.natives.annotations.ReturnType;
@@ -37,16 +38,22 @@ import org.wso2.transport.jms.contract.JMSClientConnector;
 import org.wso2.transport.jms.exception.JMSConnectorException;
 import org.wso2.transport.jms.utils.JMSConstants;
 
+import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.TextMessage;
 
 /**
  * Create Text JMS Message.
  */
-@BallerinaFunction(packageName = "ballerina.net.jms",
+@BallerinaFunction(orgName = "ballerina", packageName = "net.jms",
                    functionName = "createTextMessage",
                    receiver = @Receiver(type = TypeKind.STRUCT,
                                         structType = "ClientEndpoint",
                                         structPackage = "ballerina.net.jms"),
+                   args = {
+                           @Argument(name = "content",
+                                     type = TypeKind.STRING)
+                   },
                    returnType = {
                            @ReturnType(type = TypeKind.STRUCT,
                                        structPackage = "ballerina.net.jms",
@@ -61,6 +68,8 @@ public class CreateTextMessage extends AbstractBlockinAction {
 
         log.info("create text message got called");
         Struct clientEndpoint = BLangConnectorSPIUtil.getConnectorEndpointStruct(context);
+        String content = context.getStringArgument(0);
+
 
         JMSClientConnector jmsClientConnector
                 = (JMSClientConnector) clientEndpoint.getNativeData(Constants.JMS_TRANSPORT_CLIENT_CONNECTOR);
@@ -69,7 +78,8 @@ public class CreateTextMessage extends AbstractBlockinAction {
 
         try {
             jmsMessage = jmsClientConnector.createMessage(JMSConstants.TEXT_MESSAGE_TYPE);
-        } catch (JMSConnectorException e) {
+            ((TextMessage) jmsMessage).setText(content);
+        } catch (JMSConnectorException | JMSException e) {
             throw new BallerinaException("Failed to create message. " + e.getMessage(), e, context);
         }
 

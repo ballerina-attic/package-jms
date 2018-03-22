@@ -1,6 +1,6 @@
 package ballerina.net.jms;
 
-import ballerina.util;
+import ballerina/util;
 
 public struct Message {
 }
@@ -67,7 +67,7 @@ public native function <Message msg> setStringProperty (string key, string value
 @Description { value:"Gets a JMS transport string property from the message"}
 @Param { value:"key: The string property name" }
 @Return { value:"string: The string property value" }
-public native function <Message msg> getStringProperty (string key) (string);
+public native function <Message msg> getStringProperty (string key) returns (string);
 
 @Description { value:"Sets a JMS transport integer property from the message"}
 @Param { value:"key: The integer property name" }
@@ -77,7 +77,7 @@ public native function <Message msg> setIntProperty (string key, int value);
 @Description { value:"Gets a JMS transport integer property from the message"}
 @Param { value:"key: The integer property name" }
 @Return { value:"int: The integer property value" }
-public native function <Message msg> getIntProperty (string key) (int);
+public native function <Message msg> getIntProperty (string key) returns (int);
 
 @Description { value:"Sets a JMS transport boolean property from the message"}
 @Param { value:"key: The boolean property name" }
@@ -87,7 +87,7 @@ public native function <Message msg> setBooleanProperty (string key, boolean val
 @Description { value:"Gets a JMS transport boolean property from the message"}
 @Param { value:"key: The boolean property name" }
 @Return { value:"boolean: The boolean property value" }
-public native function <Message msg> getBooleanProperty (string key) (boolean);
+public native function <Message msg> getBooleanProperty (string key) returns (boolean);
 
 @Description { value:"Sets a JMS transport float property from the message"}
 @Param { value:"key: The float property name" }
@@ -97,7 +97,7 @@ public native function <Message msg> setFloatProperty (string key, float value);
 @Description { value:"Gets a JMS transport float property from the message"}
 @Param { value:"key: The float property name" }
 @Return { value:"float: The float property value" }
-public native function <Message msg> getFloatProperty (string key) (float);
+public native function <Message msg> getFloatProperty (string key) returns (float);
 
 @Description { value:"Sets text content for the JMS message"}
 @Param { value:"content: Text Message Content" }
@@ -105,7 +105,7 @@ public native function <Message msg> setTextMessageContent (string content);
 
 @Description { value:"Gets text content of the JMS message"}
 @Return { value:"string: Text Message Content" }
-public native function <Message msg> getTextMessageContent () (string);
+public native function <Message msg> getTextMessageContent () returns (string);
 
 @Description { value:"Sets bytes content for the JMS message"}
 @Param { value:"content: Bytes Message Content" }
@@ -113,15 +113,15 @@ public native function <Message msg> setBytesMessageContent (blob content);
 
 @Description { value:"Get bytes content of the JMS message"}
 @Return { value:"string: Bytes Message Content" }
-public native function <Message msg> getBytesMessageContent () (blob);
+public native function <Message msg> getBytesMessageContent () returns (blob);
 
 @Description { value:"Get JMS transport header MessageID from the message"}
 @Return { value:"string: The header value" }
-public native function <Message msg> getMessageID () (string);
+public native function <Message msg> getMessageID () returns (string);
 
 @Description { value:"Get JMS transport header Timestamp from the message"}
 @Return { value:"int: The header value" }
-public native function <Message msg> getTimestamp () (int);
+public native function <Message msg> getTimestamp () returns (int);
 
 @Description { value:"Sets DeliveryMode JMS transport header to the message"}
 @Param { value:"i: The header value" }
@@ -129,7 +129,7 @@ public native function <Message msg> setDeliveryMode (int i);
 
 @Description { value:"Get JMS transport header DeliveryMode from the message"}
 @Return { value:"int: The header value" }
-public native function <Message msg> getDeliveryMode () (int);
+public native function <Message msg> getDeliveryMode () returns (int);
 
 @Description { value:"Sets Expiration JMS transport header to the message"}
 @Param { value:"i: The header value" }
@@ -137,7 +137,7 @@ public native function <Message msg> setExpiration (int i);
 
 @Description { value:"Get JMS transport header Expiration from the message"}
 @Return { value:"int: The header value" }
-public native function <Message msg> getExpiration () (int);
+public native function <Message msg> getExpiration () returns (int);
 
 @Description { value:"Sets Priority JMS transport header to the message"}
 @Param { value:"i: The header value" }
@@ -145,11 +145,11 @@ public native function <Message msg> setPriority (int i);
 
 @Description { value:"Get JMS transport header Priority from the message"}
 @Return { value:"int: The header value" }
-public native function <Message msg> getPriority () (int);
+public native function <Message msg> getPriority () returns (int);
 
 @Description { value:"Get JMS transport header Redelivered from the message"}
 @Return { value:"boolean: The header value" }
-public native function <Message msg> getRedelivered () (boolean);
+public native function <Message msg> getRedelivered () returns (boolean);
 
 @Description { value:"Sets CorrelationID JMS transport header to the message"}
 @Param { value:"s: The header value" }
@@ -157,7 +157,7 @@ public native function <Message msg> setCorrelationID (string s);
 
 @Description { value:"Get JMS transport header CorrelationID from the message"}
 @Return { value:"string: The header value" }
-public native function <Message msg> getCorrelationID () (string);
+public native function <Message msg> getCorrelationID () returns (string);
 
 @Description { value:"Sets Type JMS transport header to the message"}
 @Param { value:"s: The header value" }
@@ -165,7 +165,7 @@ public native function <Message msg> setType (string s);
 
 @Description { value:"Get JMS transport header Type from the message"}
 @Return { value:"string: The header value" }
-public native function <Message msg> getType () (string);
+public native function <Message msg> getType () returns (string);
 
 @Description { value:"Sets ReplyTo JMS destinaiton name to the message"}
 @Param { value:"s: The header value" }
@@ -173,7 +173,7 @@ public native function <Message msg> setReplyTo (string s);
 
 @Description { value:"Get ReplyTo JMS destinaiton name from the message"}
 @Return { value:"string: The header value" }
-public native function <Message msg> getReplyTo () (string);
+public native function <Message msg> getReplyTo () returns (string);
 
 @Description { value:"Clear JMS properties of the message"}
 public native function <Message msg> clearProperties ();

@@ -18,23 +18,21 @@
 package org.ballerinalang.net.jms;
 
 import org.ballerinalang.annotation.JavaSPIService;
-import org.ballerinalang.repository.PackageRepository;
-import org.ballerinalang.repository.fs.ClasspathPackageRepository;
-import org.ballerinalang.spi.ExtensionPackageRepositoryProvider;
+import org.ballerinalang.spi.SystemPackageRepositoryProvider;
+import org.wso2.ballerinalang.compiler.packaging.repo.JarRepo;
+import org.wso2.ballerinalang.compiler.packaging.repo.Repo;
 
 /**
  * This represents the standard Ballerina built-in extension package repository provider.
  * 
  * @since 0.94
  */
-@JavaSPIService("org.ballerinalang.spi.ExtensionPackageRepositoryProvider")
-public class StandardExtensionPackageRepositoryProvider implements ExtensionPackageRepositoryProvider {
-
-    private static final String JAR_SYSTEM_LIB_LOCATION = "natives";
+@JavaSPIService("org.ballerinalang.spi.SystemPackageRepositoryProvider")
+public class JMSSystemPackageRepositoryProvider implements SystemPackageRepositoryProvider {
 
     @Override
-    public PackageRepository loadRepository() {
-        return new ClasspathPackageRepository(this.getClass(), JAR_SYSTEM_LIB_LOCATION);
+    public Repo loadRepository() {
+        return new JarRepo(SystemPackageRepositoryProvider.getClassUri(this));
     }
 
 }

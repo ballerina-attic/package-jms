@@ -34,7 +34,7 @@ import javax.jms.Message;
  * Clear body of the JMS Message.
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         functionName = "clearBody",
         receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),

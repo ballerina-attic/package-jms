@@ -36,7 +36,7 @@ import javax.jms.Message;
  * Set byte content of the JMS Byte Message.
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         functionName = "setBytesMessageContent",
         receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),

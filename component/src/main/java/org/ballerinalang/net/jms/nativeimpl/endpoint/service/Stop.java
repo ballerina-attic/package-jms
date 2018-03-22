@@ -21,27 +21,27 @@ import java.util.Objects;
  * @since 0.966
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         functionName = "stop",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "ServiceEndpoint",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "ConsumerEndpoint",
                 structPackage = "ballerina.net.jms"),
         isPublic = true
 )
 public class Stop implements NativeCallableUnit {
     @Override
     public void execute(Context context, CallableUnitCallback callableUnitCallback) {
-        Struct serviceEndpoint = BLangConnectorSPIUtil.getConnectorEndpointStruct(context);
-        Object connectorObject = serviceEndpoint.getNativeData(Constants.SERVER_CONNECTOR);
+        Struct consumerEndpoint = BLangConnectorSPIUtil.getConnectorEndpointStruct(context);
+        Object connectorObject = consumerEndpoint.getNativeData(Constants.SERVER_CONNECTOR);
         try {
             if (Objects.nonNull(connectorObject) && connectorObject instanceof JMSServerConnector) {
                 ((JMSServerConnector) connectorObject).stop();
             } else {
                 throw new BallerinaException("Cannot stop service. Connection to service endpoint "
-                                                     + serviceEndpoint.getName() + " not properly registered.");
+                                                     + consumerEndpoint.getName() + " not properly registered.");
             }
         } catch (JMSConnectorException e) {
             throw new BallerinaException(
-                    "Error when closing queue/topic listener with service endpoint " + serviceEndpoint.getName(), e);
+                    "Error when closing queue/topic listener with service endpoint " + consumerEndpoint.getName(), e);
 
         }
 

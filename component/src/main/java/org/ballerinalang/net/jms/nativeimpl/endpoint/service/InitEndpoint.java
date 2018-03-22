@@ -13,9 +13,9 @@ import org.ballerinalang.natives.annotations.Receiver;
  * @since 0.966
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         functionName = "initEndpoint",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "ServiceEndpoint",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "ConsumerEndpoint",
                              structPackage = "ballerina.net.jms"),
         isPublic = true
 )

@@ -1,6 +1,6 @@
-import ballerina.net.jms;
-import ballerina.net.http;
-import ballerina.util;
+import ballerina/net.jms;
+import ballerina/net.http;
+import ballerina/util;
 
 @http:configuration {
     basePath:"/hello"
