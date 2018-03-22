@@ -67,16 +67,17 @@ public class JMSUtils {
         }
 
         addStringParamIfPresent(Constants.ALIAS_DESTINATION, configStruct, configParams);
+        addStringParamIfPresent(Constants.ALIAS_CONNECTION_FACTORY_NAME, configStruct, configParams);
+        addStringParamIfPresent(Constants.ALIAS_CONNECTION_FACTORY_TYPE, configStruct, configParams);
         addStringParamIfPresent(Constants.ALIAS_CLIENT_ID, configStruct, configParams);
         addStringParamIfPresent(Constants.ALIAS_DURABLE_SUBSCRIBER_ID, configStruct, configParams);
         addStringParamIfPresent(Constants.ALIAS_ACK_MODE, configStruct, configParams);
 
         preProcessMapField(configParams, configStruct.getMapField(Constants.PROPERTIES_MAP));
-        updateMappedParameters(configParams);
         return configParams;
     }
 
-    private static void preProcessIfWso2MB(Map<String, String> configParams) {
+    public static void preProcessIfWso2MB(Map<String, String> configParams) {
         if (Constants.MB_ICF_ALIAS.equalsIgnoreCase(configParams.get(Constants.ALIAS_INITIAL_CONTEXT_FACTORY))) {
 
             configParams.put(Constants.ALIAS_INITIAL_CONTEXT_FACTORY, Constants.MB_ICF_NAME);
@@ -96,7 +97,7 @@ public class JMSUtils {
         }
     }
 
-    private static void updateMappedParameters(Map<String, String> configParams) {
+    public static void updateMappedParameters(Map<String, String> configParams) {
         Iterator<Map.Entry<String, String>> iterator = configParams.entrySet().iterator();
         Map<String, String> tempMap = new HashMap<>();
         while (iterator.hasNext()) {
@@ -157,9 +158,6 @@ public class JMSUtils {
         configParams.put(JMSConstants.PARAM_MAX_SESSIONS_ON_CONNECTION, String.valueOf(sessionCount));
 
         preProcessMapField(configParams, endpointConfig.getMapField("properties"));
-
-        preProcessIfWso2MB(configParams);
-        updateMappedParameters(configParams);
 
         return configParams;
     }
