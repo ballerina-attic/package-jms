@@ -73,7 +73,6 @@ public class Register implements NativeCallableUnit {
                     new JMSConnectorFactoryImpl().createServerConnector(serviceId, connectorParams, jmsListener);
 
             consumerEndpoint.addNativeData(Constants.SERVER_CONNECTOR, serverConnector);
-            serverConnector.start();
         } catch (JMSConnectorException e) {
             throw new BallerinaException(
                     "Error when starting to listen to the queue/topic while " + serviceId + " deployment", e);
