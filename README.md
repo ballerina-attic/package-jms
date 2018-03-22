@@ -9,25 +9,22 @@ Steps to configure,
 Ballerina as a JMS Consumer
 
 ```ballerina
-import ballerina.net.jms;
+import ballerina/net.jms;
+import ballerina/io;
 
-@Description{value : "Service level annotation to provide connection details. Connection factory type can be either queue or topic depending on the requirement. "}
-@jms:configuration {
-    initialContextFactory:"wso2mbInitialContextFactory",
-    providerUrl:
-    "amqp://admin:admin@carbon/carbon?brokerlist='tcp://localhost:5672'",
-    connectionFactoryName:"QueueConnectionFactory",
-    concurrentConsumers:300,
-    destination:"MyQueue"
+endpoint jms:ConsumerEndpoint ep1 {
+    initialContextFactory: "wso2mbInitialContextFactory",
+    providerUrl: "amqp://admin:admin@carbon/carbon?brokerlist='tcp://localhost:5672'"
+};
+
+@jms:serviceConfig {
+    destination: "testQueue"
 }
-service<jms> jmsService {
-    resource onMessage (jms:JMSMessage m) {
+service<jms:Service> jmsService bind ep1 {
 
-        // Retrieve the string payload using native function.
-        string stringPayload = m.getTextMessageContent();
-
-        // Print the retrieved payload.
-        println("Payload: " + stringPayload);
+    onMessage (endpoint client, jms:Message message) {
+        string messageText = message.getTextMessageContent();
+        io:println("Message: " + messageText);
     }
 }
 ````
