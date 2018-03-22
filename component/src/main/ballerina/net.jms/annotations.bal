@@ -18,4 +18,4 @@ public struct JmsServiceConfig {
 }
 
 @Description {value:"Configurations annotation for a JMS service"}
-public annotation <service> serviceConfig JmsServiceConfig;
+public annotation <service> ServiceConfig JmsServiceConfig;
