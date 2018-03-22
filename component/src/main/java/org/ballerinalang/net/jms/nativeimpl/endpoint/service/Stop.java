@@ -21,7 +21,7 @@ import java.util.Objects;
  * @since 0.966
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         functionName = "stop",
         receiver = @Receiver(type = TypeKind.STRUCT, structType = "ServiceEndpoint",
                 structPackage = "ballerina.net.jms"),

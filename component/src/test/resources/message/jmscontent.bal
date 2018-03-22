@@ -1,4 +1,4 @@
-import ballerina.net.jms;
+import ballerina/net.jms;
 
 function funcSetJMSTextContent(jms:Message msg, string content) (jms:Message) {
     msg.setTextMessageContent(content);

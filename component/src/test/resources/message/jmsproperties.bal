@@ -1,4 +1,4 @@
-import ballerina.net.jms;
+import ballerina/net.jms;
 
 function funcSetStringProperty (jms:Message msg, string name, string value) (jms:Message) {
     msg.setStringProperty(name, value);

@@ -1,4 +1,4 @@
-import ballerina.net.jms;
+import ballerina/net.jms;
 
 @jms:configuration {
     initialContextFactory:"wso2mbInitialContextFactory",
