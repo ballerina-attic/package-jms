@@ -1,6 +1,6 @@
 package ballerina.net.jms;
 
-import ballerina.util;
+import ballerina/util;
 
 public struct Message {
 }

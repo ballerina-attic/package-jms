@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  *
  * @since 0.95.5
  */
-@BallerinaFunction(packageName = "ballerina.net.jms",
+@BallerinaFunction(orgName = "ballerina", packageName = "net.jms",
                    functionName = "pollWithSelector",
                    receiver = @Receiver(type = TypeKind.STRUCT,
                                         structType = "ClientConnector",

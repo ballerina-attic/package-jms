@@ -32,7 +32,7 @@ import java.util.Map;
  */
 
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         functionName = "register",
         receiver = @Receiver(type = TypeKind.STRUCT, structType = "ServiceEndpoint",
                 structPackage = "ballerina.net.jms"),

@@ -42,7 +42,7 @@ import javax.jms.Message;
 /**
  * Create Text JMS Message.
  */
-@BallerinaFunction(packageName = "ballerina.net.jms", functionName = "createBytesMessage", args = {
+@BallerinaFunction(orgName = "ballerina", packageName = "net.jms", functionName = "createBytesMessage", args = {
         @Argument(name = "clientConnector", type = TypeKind.STRUCT) },
                    returnType = {@ReturnType(type = TypeKind.STRUCT, structPackage = "ballerina.net.jms",
                                              structType = "Message")},

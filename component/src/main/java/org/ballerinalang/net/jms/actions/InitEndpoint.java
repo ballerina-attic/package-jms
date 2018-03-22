@@ -44,7 +44,7 @@ import java.util.UUID;
  *
  * @since 0.9
  */
-@BallerinaFunction(packageName = "ballerina.net.jms",
+@BallerinaFunction(orgName = "ballerina", packageName = "net.jms",
                    functionName = "initEndpoint",
                    receiver = @Receiver(type = TypeKind.STRUCT,
                                         structType = "ClientEndpoint",

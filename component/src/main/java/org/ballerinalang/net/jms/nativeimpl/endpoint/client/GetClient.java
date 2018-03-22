@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * Get Type header from the JMS Message.
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         functionName = "getClient",
         receiver = @Receiver(type = TypeKind.STRUCT, structType = "ClientEndpoint",
                              structPackage = "ballerina.net.jms"),

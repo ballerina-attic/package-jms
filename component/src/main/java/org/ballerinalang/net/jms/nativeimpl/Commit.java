@@ -37,7 +37,7 @@ import javax.jms.Session;
  * To commit the jms transacted sessions.
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         functionName = "commit",
         receiver = @Receiver(type = TypeKind.STRUCT,
                              structType = "Message",

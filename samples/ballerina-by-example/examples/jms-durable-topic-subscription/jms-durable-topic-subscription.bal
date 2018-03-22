@@ -1,4 +1,4 @@
-import ballerina.net.jms;
+import ballerina/net.jms;
 
 @Description{value : "Add the subscriptionId when connecting to a topic to create a durable topic subscription.
 clientId should be set if you are using any other broker. If you susbcribe without a subscription ID it will

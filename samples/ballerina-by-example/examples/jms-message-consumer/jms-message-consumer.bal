@@ -1,5 +1,5 @@
-import ballerina.net.jms;
-import ballerina.io;
+import ballerina/net.jms;
+import ballerina/io;
 
 endpoint jms:ServiceEndpoint ep1 {
     initialContextFactory: "wso2mbInitialContextFactory",

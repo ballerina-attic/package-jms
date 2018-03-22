@@ -43,7 +43,7 @@ import javax.jms.Message;
  *
  * @since 0.95.2
  */
-@BallerinaFunction(packageName = "ballerina.net.jms",
+@BallerinaFunction(orgName = "ballerina", packageName = "net.jms",
                    functionName = "poll",
                    receiver = @Receiver(type = TypeKind.STRUCT,
                                         structType = "ClientConnector",

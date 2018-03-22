@@ -1,4 +1,4 @@
-import ballerina.net.jms;
+import ballerina/net.jms;
 
 function funcSetJMSCorrelationIDHeader (jms:Message msg, string value) (jms:Message) {
     msg.setCorrelationID(value);

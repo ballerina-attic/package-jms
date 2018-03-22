@@ -37,7 +37,7 @@ import javax.jms.Message;
  * Get Integer Property from the JMS Message.
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.jms",
+        orgName = "ballerina", packageName = "net.jms",
         receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
                              structPackage = "ballerina.net.jms"),
         functionName = "getIntProperty",
