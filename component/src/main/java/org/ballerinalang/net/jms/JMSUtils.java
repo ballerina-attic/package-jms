@@ -68,7 +68,7 @@ public class JMSUtils {
 
         addStringParamIfPresent(Constants.ALIAS_DESTINATION, configStruct, configParams);
         addStringParamIfPresent(Constants.ALIAS_CONNECTION_FACTORY_NAME, configStruct, configParams);
-        addStringParamIfPresent(Constants.ALIAS_CONNECTION_FACTORY_TYPE, configStruct, configParams);
+        addStringParamIfPresent(Constants.ALIAS_DESTINATION_TYPE, configStruct, configParams);
         addStringParamIfPresent(Constants.ALIAS_CLIENT_ID, configStruct, configParams);
         addStringParamIfPresent(Constants.ALIAS_DURABLE_SUBSCRIBER_ID, configStruct, configParams);
         addStringParamIfPresent(Constants.ALIAS_ACK_MODE, configStruct, configParams);
@@ -142,7 +142,7 @@ public class JMSUtils {
         // Add to the map
         configParams.put(Constants.ALIAS_INITIAL_CONTEXT_FACTORY, initialContextFactory);
         configParams.put(Constants.ALIAS_CONNECTION_FACTORY_NAME, connectionFactoryName);
-        configParams.put(Constants.ALIAS_CONNECTION_FACTORY_TYPE, destinationType);
+        configParams.put(Constants.ALIAS_DESTINATION_TYPE, destinationType);
         configParams.put(JMSConstants.PARAM_JMS_CACHING, String.valueOf(clientCaching));
         if (isBlank(providerUrl)) {
             configParams.put(Constants.ALIAS_PROVIDER_URL, providerUrl);

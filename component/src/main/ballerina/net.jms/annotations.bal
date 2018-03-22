@@ -10,7 +10,7 @@ package ballerina.net.jms;
 public struct JmsServiceConfig {
     string destination;
     string connectionFactoryName = "ConnectionFactory";
-    string connectionFactoryType = "queue";
+    string destinationType = "queue";
     string acknowledgementMode = "AUTO_ACKNOWLEDGE";
     string subscriptionId;
     string clientId;

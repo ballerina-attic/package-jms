@@ -63,7 +63,7 @@ public class Constants {
     /**
      * Type of the connection factory. Whether queue or topic connection factory.
      */
-    public static final String ALIAS_CONNECTION_FACTORY_TYPE = "connectionFactoryType";
+    public static final String ALIAS_DESTINATION_TYPE = "destinationType";
     /**
      * jms destination.
      */
@@ -93,7 +93,7 @@ public class Constants {
         mappingParameters = new HashMap<>();
         mappingParameters.put(ALIAS_INITIAL_CONTEXT_FACTORY, JMSConstants.PARAM_NAMING_FACTORY_INITIAL);
         mappingParameters.put(ALIAS_CONNECTION_FACTORY_NAME, JMSConstants.PARAM_CONNECTION_FACTORY_JNDI_NAME);
-        mappingParameters.put(ALIAS_CONNECTION_FACTORY_TYPE, JMSConstants.PARAM_CONNECTION_FACTORY_TYPE);
+        mappingParameters.put(ALIAS_DESTINATION_TYPE, JMSConstants.PARAM_CONNECTION_FACTORY_TYPE);
         mappingParameters.put(ALIAS_PROVIDER_URL, JMSConstants.PARAM_PROVIDER_URL);
         mappingParameters.put(ALIAS_DESTINATION, JMSConstants.PARAM_DESTINATION_NAME);
         mappingParameters.put(ALIAS_ACK_MODE, JMSConstants.PARAM_ACK_MODE);
