@@ -6,7 +6,7 @@ endpoint jms:ConsumerEndpoint ep1 {
     providerUrl: "amqp://admin:admin@carbon/carbon?brokerlist='tcp://localhost:5672'"
 };
 
-@jms:serviceConfig {
+@jms:ServiceConfig {
     destination: "testQueue"
 }
 service<jms:Service> jmsService bind ep1 {
