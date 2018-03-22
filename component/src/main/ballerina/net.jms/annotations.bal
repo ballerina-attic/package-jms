@@ -9,6 +9,8 @@ package ballerina.net.jms;
 @Field {value:"properties: "}
 public struct JmsServiceConfig {
     string destination;
+    string connectionFactoryName = "ConnectionFactory";
+    string connectionFactoryType = "queue";
     string acknowledgementMode = "AUTO_ACKNOWLEDGE";
     string subscriptionId;
     string clientId;

@@ -8,15 +8,23 @@ public struct ConsumerEndpoint {
 public struct ServiceEndpointConfiguration {
     string initialContextFactory;
     string providerUrl;
-    string connectionFactoryName = "QueueConnectionFactory";
-    string connectionFactoryType = "queue";
-    boolean clientCaching = true;
+    string connectionFactoryName;
+    string connectionFactoryType;
+    boolean clientCaching;
     string connectionUsername;
     string connectionPassword;
     string configFilePath;
-    int connectionCount = 5;
-    int sessionCount = 10;
+    int connectionCount;
+    int sessionCount;
     map properties;
+}
+
+public function <ServiceEndpointConfiguration config> ServiceEndpointConfiguration() {
+    config.connectionFactoryName = "ConnectionFactory";
+    config.connectionFactoryType = "queue";
+    config.clientCaching = true;
+    config.connectionCount = 5;
+    config.sessionCount = 10;
 }
 
 public function <ConsumerEndpoint ep> init (ServiceEndpointConfiguration config) {
