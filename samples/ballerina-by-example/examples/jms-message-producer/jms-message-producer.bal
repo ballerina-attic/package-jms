@@ -2,14 +2,17 @@ import ballerina/net.jms;
 
 endpoint jms:ClientEndpoint jmsEP {
     initialContextFactory:"wso2mbInitialContextFactory",
-    configFilePath:"../../../resources/jndi.properties",
+    providerUrl: "amqp://admin:admin@carbon/carbon?brokerlist='tcp://localhost:5672'",
     connectionFactoryName: "QueueConnectionFactory",
-    connectionFactoryType : "queue"
+    connectionFactoryType: "queue",
+    connectionCount : 1,
+    sessionCount : 1,
+    clientCaching: true
 };
 
 function main (string[] args) {
     // Create an empty Ballerina message.
-    jms:JMSMessage queueMessage = jmsEP.createTextMessage();
+    jms:Message queueMessage = jmsEP.createTextMessage();
     // Set a string payload to the message.
     queueMessage.setTextMessageContent("Hello from Ballerina!");
     // Send the Ballerina message to the JMS provider.
