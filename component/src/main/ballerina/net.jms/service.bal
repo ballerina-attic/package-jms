@@ -4,5 +4,6 @@ public struct Service {
 }
 
 function <Service s> getEndpoint () returns (ServiceEndpoint) {
-    return null;
+    ServiceEndpoint ep = {};
+    return ep;
 }
