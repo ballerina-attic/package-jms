@@ -9,7 +9,7 @@ public struct ServiceEndpointConfiguration {
     string initialContextFactory;
     string providerUrl;
     string connectionFactoryName;
-    string connectionFactoryType;
+    string destinationType;
     boolean clientCaching;
     string connectionUsername;
     string connectionPassword;
@@ -21,7 +21,7 @@ public struct ServiceEndpointConfiguration {
 
 public function <ServiceEndpointConfiguration config> ServiceEndpointConfiguration() {
     config.connectionFactoryName = "ConnectionFactory";
-    config.connectionFactoryType = "queue";
+    config.destinationType = "queue";
     config.clientCaching = true;
     config.connectionCount = 5;
     config.sessionCount = 10;

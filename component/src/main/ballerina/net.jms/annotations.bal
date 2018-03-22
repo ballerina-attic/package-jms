@@ -10,7 +10,7 @@ package ballerina.net.jms;
 public struct JmsServiceConfig {
     string destination;
     string connectionFactoryName = "ConnectionFactory";
-    string connectionFactoryType = "queue";
+    string destinationType = "queue";
     string acknowledgementMode = "AUTO_ACKNOWLEDGE";
     string subscriptionId;
     string clientId;
@@ -18,4 +18,4 @@ public struct JmsServiceConfig {
 }
 
 @Description {value:"Configurations annotation for a JMS service"}
-public annotation <service> serviceConfig JmsServiceConfig;
+public annotation <service> ServiceConfig JmsServiceConfig;
