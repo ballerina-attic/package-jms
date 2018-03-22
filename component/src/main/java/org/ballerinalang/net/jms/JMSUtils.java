@@ -113,7 +113,7 @@ public class JMSUtils {
     private static void addStringParamIfPresent(String paramName, Struct configStruct, Map<String, String> paramsMap) {
         String param;
         param = configStruct.getStringField(paramName);
-        if (Objects.nonNull(param)) {
+        if (Objects.nonNull(param) && !param.isEmpty()) {
             paramsMap.put(paramName, param);
         }
     }
