@@ -34,7 +34,7 @@ import java.util.Map;
 @BallerinaFunction(
         orgName = "ballerina", packageName = "net.jms",
         functionName = "register",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "ServiceEndpoint",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "ConsumerEndpoint",
                 structPackage = "ballerina.net.jms"),
         args = {@Argument(name = "serviceType", type = TypeKind.TYPEDESC)},
         isPublic = true
@@ -43,10 +43,10 @@ public class Register implements NativeCallableUnit {
     @Override
     public void execute(Context context, CallableUnitCallback callableUnitCallback) {
         Service service = BLangConnectorSPIUtil.getServiceRegistered(context);
-        Struct serviceEndpoint = BLangConnectorSPIUtil.getConnectorEndpointStruct(context);
+        Struct consumerEndpoint = BLangConnectorSPIUtil.getConnectorEndpointStruct(context);
 
         Map<String, String> endpointConfigs =
-                JMSUtils.preProcessEndpointConfig(serviceEndpoint.getStructField(Constants.ENDPOINT_CONFIG_KEY));
+                JMSUtils.preProcessEndpointConfig(consumerEndpoint.getStructField(Constants.ENDPOINT_CONFIG_KEY));
         List<Annotation> annotationList = service.getAnnotationList(Constants.JMS_PACKAGE,
                                                                     Constants.ANNOTATION_JMS_CONFIGURATION);
 
@@ -76,7 +76,7 @@ public class Register implements NativeCallableUnit {
             org.wso2.transport.jms.contract.JMSServerConnector serverConnector =
                     new JMSConnectorFactoryImpl().createServerConnector(serviceId, configParams, jmsListener);
 
-            serviceEndpoint.addNativeData(Constants.SERVER_CONNECTOR, serverConnector);
+            consumerEndpoint.addNativeData(Constants.SERVER_CONNECTOR, serverConnector);
             serverConnector.start();
         } catch (JMSConnectorException e) {
             throw new BallerinaException(

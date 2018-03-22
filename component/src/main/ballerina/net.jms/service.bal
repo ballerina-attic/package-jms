@@ -3,7 +3,7 @@ package ballerina.net.jms;
 public struct Service {
 }
 
-function <Service s> getEndpoint () returns (ServiceEndpoint) {
-    ServiceEndpoint ep = {};
+function <Service s> getEndpoint () returns (ConsumerEndpoint) {
+    ConsumerEndpoint ep = {};
     return ep;
 }

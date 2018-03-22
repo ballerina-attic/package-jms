@@ -38,7 +38,7 @@ public class JMSDispatcher {
 
     public static BValue[] getSignatureParameters(Resource resource, Message jmsCarbonMessage) {
         ProgramFile programFile = resource.getResourceInfo().getServiceInfo().getPackageInfo().getProgramFile();
-        BStruct serviceEndpoint = BLangConnectorSPIUtil.createBStruct(programFile,
+        BStruct consumerEndpoint = BLangConnectorSPIUtil.createBStruct(programFile,
                                                               Constants.PROTOCOL_PACKAGE_JMS,
                                                               Constants.SERVICE_ENDPOINT);
         BStruct message = BLangConnectorSPIUtil.createBStruct(programFile,
@@ -50,7 +50,7 @@ public class JMSDispatcher {
         List<ParamDetail> paramDetails = resource.getParamDetails();
         BValue[] bValues = new BValue[paramDetails.size()];
 
-        bValues[0] = serviceEndpoint;
+        bValues[0] = consumerEndpoint;
         bValues[1] = message;
 
         return bValues;

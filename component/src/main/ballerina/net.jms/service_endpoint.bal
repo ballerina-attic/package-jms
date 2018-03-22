@@ -1,6 +1,6 @@
 package ballerina.net.jms;
 
-public struct ServiceEndpoint {
+public struct ConsumerEndpoint {
     Context context;
     ServiceEndpointConfiguration config;
 }
@@ -19,7 +19,7 @@ public struct ServiceEndpointConfiguration {
     map properties;
 }
 
-public function <ServiceEndpoint ep> init (ServiceEndpointConfiguration config) {
+public function <ConsumerEndpoint ep> init (ServiceEndpointConfiguration config) {
     ep.config = config;
     var err = ep.initEndpoint();
     if (err != null ) {
@@ -27,12 +27,12 @@ public function <ServiceEndpoint ep> init (ServiceEndpointConfiguration config) 
     }
 }
 
-public native function<ServiceEndpoint  ep> initEndpoint () returns (error);
+public native function<ConsumerEndpoint ep> initEndpoint () returns (error);
 
-public native function <ServiceEndpoint ep> register(typedesc serviceType);
+public native function <ConsumerEndpoint ep> register (typedesc serviceType);
 
-public native function <ServiceEndpoint ep> start();
+public native function <ConsumerEndpoint ep> start ();
 
-public native function <ServiceEndpoint ep> getClient () returns (Context);
+public native function <ConsumerEndpoint ep> getClient () returns (Context);
 
-public native function <ServiceEndpoint ep> stop();
+public native function <ConsumerEndpoint ep> stop ();

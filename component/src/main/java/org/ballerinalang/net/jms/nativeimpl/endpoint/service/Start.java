@@ -23,7 +23,7 @@ import java.util.Objects;
 @BallerinaFunction(
         orgName = "ballerina", packageName = "net.jms",
         functionName = "start",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "ServiceEndpoint",
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "ConsumerEndpoint",
                 structPackage = "ballerina.net.jms"),
         isPublic = true
 )
@@ -31,19 +31,19 @@ public class Start implements NativeCallableUnit {
 
     @Override
     public void execute(Context context, CallableUnitCallback callableUnitCallback) {
-        Struct serviceEndpoint = BLangConnectorSPIUtil.getConnectorEndpointStruct(context);
-        Object connectorObject = serviceEndpoint.getNativeData(Constants.SERVER_CONNECTOR);
+        Struct consumerEndpoint = BLangConnectorSPIUtil.getConnectorEndpointStruct(context);
+        Object connectorObject = consumerEndpoint.getNativeData(Constants.SERVER_CONNECTOR);
         try {
             if (Objects.nonNull(connectorObject) && connectorObject instanceof JMSServerConnector) {
                 ((JMSServerConnector) connectorObject).start();
             } else {
                 throw new BallerinaException("Cannot start service. Connection to service endpoint "
-                                                     + serviceEndpoint.getName() + " not properly registered");
+                                                     + consumerEndpoint.getName() + " not properly registered");
             }
         } catch (JMSConnectorException e) {
             throw new BallerinaException(
                     "Error when starting to listen to the queue/topic with service endpoint "
-                            + serviceEndpoint.getName(), e);
+                            + consumerEndpoint.getName(), e);
 
         }
     }

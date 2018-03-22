@@ -36,7 +36,7 @@ public class Constants {
 
     public static final String SERVER_CONNECTOR = "serverConnector";
 
-    public static final String SERVICE_ENDPOINT = "ServiceEndpoint";
+    public static final String SERVICE_ENDPOINT = "ConsumerEndpoint";
 
     public static final String ENDPOINT_CONFIG_KEY = "config";
     /**
