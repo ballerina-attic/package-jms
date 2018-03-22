@@ -5,7 +5,7 @@ endpoint jms:ClientEndpoint jmsEP {
     initialContextFactory:"wso2mbInitialContextFactory",
     providerUrl: "amqp://admin:admin@carbon/carbon?brokerlist='tcp://localhost:5672'",
     connectionFactoryName: "QueueConnectionFactory",
-    connectionFactoryType: "queue",
+    destinationType: "queue",
     connectionCount : 1,
     sessionCount : 1,
     clientCaching: true

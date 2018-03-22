@@ -130,7 +130,7 @@ public class JMSUtils {
         String initialContextFactory = endpointConfig.getStringField("initialContextFactory");
         String providerUrl = endpointConfig.getStringField("providerUrl");
         String connectionFactoryName = endpointConfig.getStringField("connectionFactoryName");
-        String connectionFactoryType = endpointConfig.getStringField("connectionFactoryType");
+        String destinationType = endpointConfig.getStringField("destinationType");
         boolean clientCaching = endpointConfig.getBooleanField("clientCaching");
         String connectionUsername = endpointConfig.getStringField("connectionUsername");
         String connectionPassword = endpointConfig.getStringField("connectionPassword");
@@ -141,7 +141,7 @@ public class JMSUtils {
         // Add to the map
         configParams.put(Constants.ALIAS_INITIAL_CONTEXT_FACTORY, initialContextFactory);
         configParams.put(Constants.ALIAS_CONNECTION_FACTORY_NAME, connectionFactoryName);
-        configParams.put(Constants.ALIAS_CONNECTION_FACTORY_TYPE, connectionFactoryType);
+        configParams.put(Constants.ALIAS_CONNECTION_FACTORY_TYPE, destinationType);
         configParams.put(JMSConstants.PARAM_JMS_CACHING, String.valueOf(clientCaching));
         if (isBlank(providerUrl)) {
             configParams.put(Constants.ALIAS_PROVIDER_URL, providerUrl);

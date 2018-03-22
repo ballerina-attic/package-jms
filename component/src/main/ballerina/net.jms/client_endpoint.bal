@@ -26,7 +26,7 @@ public struct ClientEndpointConfiguration {
     string initialContextFactory;
     string providerUrl;
     string connectionFactoryName;
-    string connectionFactoryType;
+    string destinationType;
     string acknowledgementMode;
     boolean clientCaching = true;
     string connectionUsername;
@@ -39,7 +39,7 @@ public struct ClientEndpointConfiguration {
 
 public function <ClientEndpointConfiguration config> ClientEndpointConfiguration() {
     config.connectionFactoryName = "QueueConnectionFactory";
-    config.connectionFactoryType = "queue";
+    config.destinationType = "queue";
     config.acknowledgementMode = "AUTO_ACKNOWLEDGE";
     config.clientCaching = true;
     config.connectionCount = 5;
