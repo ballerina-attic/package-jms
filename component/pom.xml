@@ -264,6 +264,18 @@
                                     <version>${apache.commons.lang.version}</version>
                                     <type>${project.packaging}</type>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.wso2.andes.wso2</groupId>
+                                    <artifactId>andes-client</artifactId>
+                                    <version>${andes.client.version}</version>
+                                    <type>${project.packaging}</type>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.wso2.securevault</groupId>
+                                    <artifactId>org.wso2.securevault</artifactId>
+                                    <version>${securevault.version}</version>
+                                    <type>${project.packaging}</type>
+                                </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/distribution</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>

@@ -3,18 +3,24 @@ import ballerina/net.jms;
 
 endpoint jms:ClientEndpoint jmsEP {
     initialContextFactory:"wso2mbInitialContextFactory",
-    configFilePath:"../../../resources/jndi.properties",
+    providerUrl: "amqp://admin:admin@carbon/carbon?brokerlist='tcp://localhost:5672'",
     connectionFactoryName: "QueueConnectionFactory",
-    connectionFactoryType : "queue"
+    connectionFactoryType: "queue",
+    connectionCount : 1,
+    sessionCount : 1,
+    clientCaching: true
 };
 
 function main (string[] args) {
     // Poll message from message broker
-    jms:JMSMessage message = jmsEP->poll("MyQueue", 1000);
+    var result = jmsEP->poll("MyQueue", 1000);
 
-    if (message != null) {
-        io:println(message.getTextMessageContent());
-    } else {
-        io:println("No message recieved");
+    match result {
+        jms:Message message => {
+            io:println(message.getTextMessageContent());
+        }
+        any | null => {
+            io:println("No message recieved");
+        }
     }
 }

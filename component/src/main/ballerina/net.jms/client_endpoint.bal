@@ -26,15 +26,24 @@ public struct ClientEndpointConfiguration {
     string initialContextFactory;
     string providerUrl;
     string connectionFactoryName;
-    string connectionFactoryType = "queue";
-    string acknowledgementMode = "AUTO_ACKNOWLEDGE";
+    string connectionFactoryType;
+    string acknowledgementMode;
     boolean clientCaching = true;
     string connectionUsername;
     string connectionPassword;
     string configFilePath;
-    int connectionCount = 5;
-    int sessionCount = 10;
+    int connectionCount;
+    int sessionCount;
     map properties;
+}
+
+public function <ClientEndpointConfiguration config> ClientEndpointConfiguration() {
+    config.connectionFactoryName = "QueueConnectionFactory";
+    config.connectionFactoryType = "queue";
+    config.acknowledgementMode = "AUTO_ACKNOWLEDGE";
+    config.clientCaching = true;
+    config.connectionCount = 5;
+    config.sessionCount = 10;
 }
 
 public struct ClientConnector {
@@ -77,10 +86,11 @@ public native function<ClientConnector ep> send (string destinationName, Message
 @Description {value:"POLL action implementation of the JMS Connector"}
 @Param {value:"destinationName: Destination Name"}
 @Param {value:"time: Timeout that needs to blocked on"}
-public native function<ClientConnector ep> poll (string destinationName, int time) returns (Message);
+public native function<ClientConnector ep> poll (string destinationName, int time) returns (Message | null);
 
 @Description {value:"POLL action implementation with selector support of the JMS Connector"}
 @Param {value:"destinationName: Destination Name"}
 @Param {value:"time: Timeout that needs to blocked on"}
 @Param {value:"selector: Selector to filter out messages"}
-public native function<ClientConnector ep> pollWithSelector (string destinationName, int time, string selector) returns (Message);
+public native function<ClientConnector ep> pollWithSelector (string destinationName, int time, string selector)
+                                                                                            returns (Message | null);
