@@ -99,9 +99,9 @@ public function<ClientConnector ep> send (string destinationName, jms:Message m)
 @Description {value:"POLL action implementation of the JMS Connector"}
 @Param {value:"destinationName: Destination Name"}
 @Param {value:"time: Timeout that needs to blocked on"}
-public function<ClientConnector ep> poll (string destinationName, int time) returns (jms:Message | null) {
+public function<ClientConnector ep> receive (string destinationName, int time) returns (jms:Message | null) {
     endpoint jms:ClientEndpoint jmsClient = ep.clientEP.jmsClientEP;
-    var result = jmsClient->poll(destinationName, time);
+    var result = jmsClient->receive(destinationName, time);
     return result;
 }
 
@@ -109,9 +109,9 @@ public function<ClientConnector ep> poll (string destinationName, int time) retu
 @Param {value:"destinationName: Destination Name"}
 @Param {value:"time: Timeout that needs to blocked on"}
 @Param {value:"selector: Selector to filter out messages"}
-public function <ClientConnector ep> pollWithSelector (string destinationName, int time, string selector)
+public function <ClientConnector ep> receiveWithSelector (string destinationName, int time, string selector)
                                                                                         returns (jms:Message| null) {
     endpoint jms:ClientEndpoint jmsClient = ep.clientEP.jmsClientEP;
-    var result = jmsClient->pollWithSelector(destinationName, time, selector);
+    var result = jmsClient->receiveWithSelector(destinationName, time, selector);
     return result;
 }

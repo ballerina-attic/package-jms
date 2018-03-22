@@ -27,12 +27,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * {@code Poll} is the poll action implementation of the JMS Client Connector.
+ * {@code Receive} is the poll action implementation of the JMS Client Connector.
  *
  * @since 0.95.5
  */
 @BallerinaFunction(orgName = "ballerina", packageName = "net.jms",
-                   functionName = "pollWithSelector",
+                   functionName = "receiveWithSelector",
                    receiver = @Receiver(type = TypeKind.STRUCT,
                                         structType = "ClientConnector",
                                         structPackage =
@@ -53,8 +53,8 @@ import org.slf4j.LoggerFactory;
                                        structType = "Message")
                    }
 )
-public class SelectorPoll extends Poll {
-    private static final Logger log = LoggerFactory.getLogger(SelectorPoll.class);
+public class SelectorReceive extends Receive {
+    private static final Logger log = LoggerFactory.getLogger(SelectorReceive.class);
 
     @Override
     public void execute(Context context, CallableUnitCallback callableUnitCallback) {

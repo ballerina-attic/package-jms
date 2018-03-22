@@ -8,7 +8,7 @@ endpoint mb:ClientEndpoint mbEP {
 
 function main (string[] args) {
     // Poll message from message broker
-    var result = mbEP->poll("MyQueue", 1000);
+    var result = mbEP->receive("MyQueue", 1000);
 
     match result {
         jms:Message message => {

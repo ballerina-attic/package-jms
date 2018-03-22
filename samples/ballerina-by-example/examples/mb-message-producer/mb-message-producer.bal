@@ -6,7 +6,7 @@ endpoint mb:ClientEndpoint mbEP {
 };
 
 function main (string[] args) {
-    // Create an empty Ballerina message.
+    // Create a Text message.
     jms:Message queueMessage = mbEP.createTextMessage("Hello from Ballerina!");
     // Send the Ballerina message to the JMS provider.
     mbEP->send("MyQueue", queueMessage);

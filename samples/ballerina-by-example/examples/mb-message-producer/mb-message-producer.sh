@@ -1,3 +1,3 @@
-# To run the program, put the code in `jms-message-producer.bal`
+# To run the program, put the code in `mb-message-producer.bal`
 # and use `$BALLERINA_HOME/bin/ballerina`.
-$ ballerina run jms-message-producer.bal
+$ ballerina run mb-message-producer.bal
