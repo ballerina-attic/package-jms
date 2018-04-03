@@ -21,7 +21,6 @@ public struct QueueSenderEndpointConfiguration {
 }
 
 public function <QueueSender ep> init(QueueSenderEndpointConfiguration config) {
-    log:printInfo("Queue consumer init called");
     ep.config = config;
     SessionConnector sessionConnector = config.session.getClient();
     ep.initQueueSender(sessionConnector);
@@ -30,11 +29,9 @@ public function <QueueSender ep> init(QueueSenderEndpointConfiguration config) {
 public native function <QueueSender ep> initQueueSender(SessionConnector connector);
 
 public function <QueueSender ep> register (typedesc serviceType) {
-    log:printInfo("Queue consumer register called");
 }
 
 public function <QueueSender ep> start () {
-    log:printInfo("Queue consumer start called");
 }
 
 public function <QueueSender ep> getClient () returns (QueueSenderConnector) {
@@ -42,7 +39,7 @@ public function <QueueSender ep> getClient () returns (QueueSenderConnector) {
 }
 
 public function <QueueSender ep> stop () {
-    log:printInfo("Queue consumer stop called");
 }
 
+public native function <QueueSenderConnector connector> send (Message m);
 

@@ -68,7 +68,7 @@ public class CreateTextMessage extends AbstractBlockinAction {
 
         Object sessionNativeData = sessionConnector.getNativeData(Constants.JMS_SESSION);
         if (!(sessionNativeData instanceof Session)) {
-            throw new BallerinaException("JMS Session  is not properly established.");
+            throw new BallerinaException("JMS Session is not properly established.", context);
         }
 
         String content = context.getStringArgument(0);
