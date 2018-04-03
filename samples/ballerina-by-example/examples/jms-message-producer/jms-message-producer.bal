@@ -17,7 +17,7 @@ endpoint jms:QueueSender queueSender {
 };
 
 public function main (string[] args) {
-    //jms:Message m = jmsSession.createTextMessage("Test Text");
+    jms:Message m = jmsSession.createTextMessage("Test Text");
     log:printInfo("Main called");
  //   queueSender -> send(m);
 }

@@ -65,7 +65,7 @@ public class InitQueueSender implements NativeCallableUnit {
         BStruct sessionConnector = (BStruct) context.getRefArgument(1);
         Object nativeData = sessionConnector.getNativeData(Constants.JMS_SESSION);
         if (!(nativeData instanceof Session)) {
-            throw new BallerinaException("JMS Session  is not properly established.");
+            throw new BallerinaException("JMS Session  is not properly established.", context);
         }
 
         Session session = (Session) nativeData;
@@ -76,7 +76,7 @@ public class InitQueueSender implements NativeCallableUnit {
             Struct queueSenderConnector = queueSenderEndpoint.getStructField(Constants.QUEUE_SENDER_FIELD_CONNECTOR);
             queueSenderConnector.addNativeData(Constants.JMS_QUEUE_SENDER_OBJECT, producer);
         } catch (JMSException e) {
-            throw new BallerinaException("Error creating Queue sender", e);
+            throw new BallerinaException("Error creating Queue sender", e, context);
         }
     }
 

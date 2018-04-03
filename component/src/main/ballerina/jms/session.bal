@@ -41,3 +41,5 @@ public function <Session session> getClient () returns (SessionConnector) {
 
 public function <Session session> stop () {
 }
+
+public native function<Session session> createTextMessage (string content) returns (Message);

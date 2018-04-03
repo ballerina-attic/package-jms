@@ -41,7 +41,7 @@ public class InitEndpoint implements NativeCallableUnit {
         Object nativeData = connectionConnector.getNativeData(Constants.JMS_CONNECTION);
         if (nativeData instanceof Connection) {
             Session session = JMSUtils.createSession((Connection) nativeData, sessionConfig);
-            Struct sessionConnector = sessionEndpoint.getStructField(Constants.SESSION_CONNECTOR);
+            Struct sessionConnector = sessionEndpoint.getStructField(Constants.SESSION_FIELD_CONNECTOR);
             sessionConnector.addNativeData(Constants.JMS_SESSION, session);
         } else {
             throw new BallerinaException("JMS Connection is not properly established.");
