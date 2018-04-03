@@ -49,7 +49,8 @@ public class JMSListenerImpl implements JMSListener {
             properties.put(Constants.JMS_SESSION_ACKNOWLEDGEMENT_MODE, jmsCallback.getAcknowledgementMode());
         }
         CallableUnitCallback callback = new JMSConnectorFutureListener(jmsCallback);
-        Executor.submit(resource, callback, properties, JMSDispatcher.getSignatureParameters(resource, jmsMessage));
+        Executor.submit(resource, callback, properties, null, JMSDispatcher.getSignatureParameters(resource,
+                                                                                                  jmsMessage));
     }
 
     @Override
