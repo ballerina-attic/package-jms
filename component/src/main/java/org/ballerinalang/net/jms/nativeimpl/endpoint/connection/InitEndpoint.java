@@ -11,8 +11,10 @@ import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.net.jms.JMSUtils;
+import org.ballerinalang.util.exceptions.BallerinaException;
 
 import javax.jms.Connection;
+import javax.jms.JMSException;
 
 /**
  * Connection init function for JMS connection endpoint.
@@ -36,6 +38,11 @@ public class InitEndpoint implements NativeCallableUnit {
         Struct connectionConfig = connectionEndpoint.getStructField(Constants.CONNECTION_CONFIG);
 
         Connection connection = JMSUtils.createConnection(connectionConfig);
+        try {
+            connection.start();
+        } catch (JMSException e) {
+            throw new BallerinaException("Error occurred while starting connection", e);
+        }
         Struct connector = connectionEndpoint.getStructField(Constants.CONNECTION_CONNECTOR);
         connector.addNativeData(Constants.JMS_CONNECTION, connection);
     }
