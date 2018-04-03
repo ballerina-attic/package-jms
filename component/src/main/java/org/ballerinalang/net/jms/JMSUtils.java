@@ -34,18 +34,23 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.jms.Topic;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  * Utility class for JMS related common operations.
  */
 public class JMSUtils {
 
-    private static final Logger log = LoggerFactory.getLogger(JMSUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JMSUtils.class);
 
     /**
      * Utility class cannot be instantiated.
@@ -75,6 +80,39 @@ public class JMSUtils {
 
         preProcessMapField(configParams, configStruct.getMapField(Constants.PROPERTIES_MAP));
         return configParams;
+    }
+
+    public static Connection createConnection(Struct connectionConfig) {
+        Map<String, String> configParams = new HashMap<>();
+
+        String initialContextFactory = connectionConfig.getStringField(Constants.ALIAS_INITIAL_CONTEXT_FACTORY);
+        configParams.put(Constants.ALIAS_INITIAL_CONTEXT_FACTORY, initialContextFactory);
+
+        String providerUrl = connectionConfig.getStringField(Constants.ALIAS_PROVIDER_URL);
+        configParams.put(Constants.ALIAS_PROVIDER_URL, providerUrl);
+
+        String factoryName = connectionConfig.getStringField(Constants.ALIAS_CONNECTION_FACTORY_NAME);
+        configParams.put(Constants.ALIAS_CONNECTION_FACTORY_NAME, factoryName);
+
+        preProcessIfWso2MB(configParams);
+        updateMappedParameters(configParams);
+
+        Properties properties = new Properties();
+        configParams.forEach(properties::put);
+
+        try {
+            InitialContext initialContext = new InitialContext(properties);
+            ConnectionFactory connectionFactory =
+                    (ConnectionFactory) initialContext.lookup(factoryName);
+            return connectionFactory.createConnection();
+        } catch (NamingException e) {
+            LOGGER.info("Error occurred while creating connection", e);
+            throw new BallerinaException("Error occurred while creating connection", e);
+        } catch (JMSException e) {
+            throw new BallerinaException("Error creating connection", e);
+        }
+
+
     }
 
     public static void preProcessIfWso2MB(Map<String, String> configParams) {
@@ -215,7 +253,7 @@ public class JMSUtils {
                 } else if (message.getJMSReplyTo() instanceof Topic) {
                     ballerinaJMSMessage.setReplyDestinationName(((Topic) message.getJMSReplyTo()).getTopicName());
                 } else {
-                    log.warn("ignore unexpected jms destination type received as ReplyTo header.");
+                    LOGGER.warn("ignore unexpected jms destination type received as ReplyTo header.");
                 }
             }
         } catch (JMSException e) {

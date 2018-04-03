@@ -23,6 +23,7 @@ import org.wso2.transport.jms.utils.JMSConstants;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import javax.naming.Context;
 
 /**
  * Constants for jms.
@@ -33,6 +34,10 @@ public class Constants {
 
     private Constants() {
     }
+
+    public static final String CONNECTION_CONFIG = "config";
+    public static final String CONNECTION_CONNECTOR = "connector";
+    public static final String JMS_CONNECTION = "jms_connection_object";
 
     public static final String SERVER_CONNECTOR = "serverConnector";
 
@@ -91,7 +96,7 @@ public class Constants {
 
     static {
         mappingParameters = new HashMap<>();
-        mappingParameters.put(ALIAS_INITIAL_CONTEXT_FACTORY, JMSConstants.PARAM_NAMING_FACTORY_INITIAL);
+        mappingParameters.put(ALIAS_INITIAL_CONTEXT_FACTORY, Context.INITIAL_CONTEXT_FACTORY);
         mappingParameters.put(ALIAS_CONNECTION_FACTORY_NAME, JMSConstants.PARAM_CONNECTION_FACTORY_JNDI_NAME);
         mappingParameters.put(ALIAS_DESTINATION_TYPE, JMSConstants.PARAM_CONNECTION_FACTORY_TYPE);
         mappingParameters.put(ALIAS_PROVIDER_URL, JMSConstants.PARAM_PROVIDER_URL);

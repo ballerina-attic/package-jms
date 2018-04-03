@@ -64,7 +64,7 @@ public class InitEndpoint extends AbstractJMSAction {
 
     @Override
     public void execute(Context context, CallableUnitCallback callableUnitCallback) {
-        log.info("Init got called");
+        log.info("InitEndpoint got called");
         Struct clientEndpoint = BLangConnectorSPIUtil.getConnectorEndpointStruct(context);
         Struct clientEndpointConfig = clientEndpoint.getStructField("config");
 
