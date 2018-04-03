@@ -39,6 +39,10 @@ public class Constants {
     public static final String CONNECTION_CONNECTOR = "connector";
     public static final String JMS_CONNECTION = "jms_connection_object";
 
+    public static final String SESSION_CONFIG = "config";
+    public static final String SESSION_CONNECTOR = "connector";
+    public static final String JMS_SESSION = "jms_session_object";
+
     public static final String SERVER_CONNECTOR = "serverConnector";
 
     public static final String SERVICE_ENDPOINT = "ConsumerEndpoint";
@@ -136,4 +140,14 @@ public class Constants {
     public static final String EMPTY_STRING = "";
 
     public static final int CLIENT_CONFIG_ACK_FIELD_INDEX = 4;
+
+    /**
+     * Acknowledge Modes.
+     */
+    public static final String AUTO_ACKNOWLEDGE_MODE = "AUTO_ACKNOWLEDGE";
+    public static final String CLIENT_ACKNOWLEDGE_MODE = "CLIENT_ACKNOWLEDGE";
+    public static final String DUPS_OK_ACKNOWLEDGE_MODE = "DUPS_OK_ACKNOWLEDGE";
+    public static final String SESSION_TRANSACTED_MODE = "SESSION_TRANSACTED";
+
+
 }

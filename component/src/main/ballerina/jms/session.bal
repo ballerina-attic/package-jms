@@ -1,30 +1,43 @@
 package ballerina.jms;
 
 public struct Session {
-    Connection jmsConnection;
+    SessionConnector connector;
     SessionConfiguration config;
 }
 
 public struct SessionConfiguration {
+    Connection connection;
     string acknowledgementMode;
 }
-
 
 public struct SessionConnector {
 }
 
-public function <Session ep> init(SessionConfiguration config) {
+public function <Session session> Session() {
+    session.connector = {};
 }
 
-public function <Session ep> register (typedesc serviceType) {
+public function <SessionConfiguration config> SessionConfiguration() {
+    config.acknowledgementMode = "AUTO_ACKNOWLEDGE";
 }
 
-public function <Session ep> start () {
+public function <Session session> init(SessionConfiguration config) {
+    session.config = config;
+    ConnectionConnector connectionConnector = config.connection.getClient();
+    session.initEndpoint(connectionConnector);
 }
 
-public function <Session ep> getClient () returns (SessionConnector) {
-    return {};
+native function <Session session> initEndpoint(SessionConnector connector);
+
+public function <Session session> register (typedesc serviceType) {
 }
 
-public function <Session ep> stop () {
+public function <Session session> start () {
+}
+
+public function <Session session> getClient () returns (SessionConnector) {
+    return session.connector;
+}
+
+public function <Session session> stop () {
 }

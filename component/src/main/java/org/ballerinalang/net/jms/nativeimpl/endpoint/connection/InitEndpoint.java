@@ -11,8 +11,6 @@ import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
 import org.ballerinalang.net.jms.Constants;
 import org.ballerinalang.net.jms.JMSUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.jms.Connection;
 

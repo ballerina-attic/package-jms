@@ -41,6 +41,7 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;
+import javax.jms.Session;
 import javax.jms.Topic;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -111,8 +112,38 @@ public class JMSUtils {
         } catch (JMSException e) {
             throw new BallerinaException("Error creating connection", e);
         }
+    }
 
+    public static Session createSession(Connection connection, Struct sessionConfig) {
 
+        int sessionAckMode;
+        boolean transactedSession = false;
+
+        String ackModeString = sessionConfig.getStringField(Constants.ALIAS_ACK_MODE);
+
+        switch (ackModeString) {
+            case Constants.CLIENT_ACKNOWLEDGE_MODE:
+                sessionAckMode = Session.CLIENT_ACKNOWLEDGE;
+                break;
+            case Constants.SESSION_TRANSACTED_MODE:
+                sessionAckMode = Session.SESSION_TRANSACTED;
+                transactedSession = true;
+                break;
+            case Constants.DUPS_OK_ACKNOWLEDGE_MODE:
+                sessionAckMode = Session.DUPS_OK_ACKNOWLEDGE;
+                break;
+            case Constants.AUTO_ACKNOWLEDGE_MODE:
+                sessionAckMode = Session.AUTO_ACKNOWLEDGE;
+                break;
+            default:
+                throw new BallerinaException("Unknown acknowledgment mode: " + ackModeString);
+        }
+
+        try {
+            return connection.createSession(transactedSession, sessionAckMode);
+        } catch (JMSException e) {
+            throw new BallerinaException("Error creating channel", e);
+        }
     }
 
     public static void preProcessIfWso2MB(Map<String, String> configParams) {

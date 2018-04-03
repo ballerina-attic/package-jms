@@ -1,6 +1,5 @@
 package ballerina.jms;
 
-
 public struct Connection {
     ConnectionConnector connector;
     ConnectionConfiguration config;
