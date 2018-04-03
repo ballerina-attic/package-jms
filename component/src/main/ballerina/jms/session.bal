@@ -27,7 +27,7 @@ public function <Session session> init(SessionConfiguration config) {
     session.initEndpoint(connectionConnector);
 }
 
-native function <Session session> initEndpoint(SessionConnector connector);
+native function <Session session> initEndpoint(ConnectionConnector connector);
 
 public function <Session session> register (typedesc serviceType) {
 }

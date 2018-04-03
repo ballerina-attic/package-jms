@@ -35,13 +35,21 @@ public class Constants {
     private Constants() {
     }
 
+    // Queue Sender fields
+    public static final String QUEUE_SENDER_FIELD_CONFIG = "config";
+    public static final String QUEUE_SENDER_FIELD_QUEUE_NAME = "queueName";
+    public static final String QUEUE_SENDER_FIELD_CONNECTOR = "connector";
+
+    // Native objects
+    public static final String JMS_CONNECTION = "jms_connection_object";
+    public static final String JMS_SESSION = "jms_session_object";
+    public static final String JMS_QUEUE_SENDER_OBJECT = "jms_queue_sender_object";
+
     public static final String CONNECTION_CONFIG = "config";
     public static final String CONNECTION_CONNECTOR = "connector";
-    public static final String JMS_CONNECTION = "jms_connection_object";
 
     public static final String SESSION_CONFIG = "config";
     public static final String SESSION_CONNECTOR = "connector";
-    public static final String JMS_SESSION = "jms_session_object";
 
     public static final String SERVER_CONNECTOR = "serverConnector";
 
