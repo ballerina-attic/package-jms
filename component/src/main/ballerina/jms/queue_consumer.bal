@@ -6,10 +6,26 @@ public struct QueueConsumer {
 }
 
 public struct QueueConsumerEndpointConfiguration {
-    string queueName
-    string identifier
+    string queueName;
+    string identifier;
 }
 
-public native function <QueueConsumer ep> init(QueueConsumerEndpointConfiguration config);
+public struct QueueConsumerConnector {
+}
 
+public function <QueueConsumer ep> init(QueueConsumerEndpointConfiguration config) {
+}
+
+public function <QueueConsumer ep> register (typedesc serviceType) {
+}
+
+public function <QueueConsumer ep> start () {
+}
+
+public function <QueueConsumer ep> getClient () returns (QueueConsumerConnector) {
+    return {};
+}
+
+public function <QueueConsumer ep> stop () {
+}
 

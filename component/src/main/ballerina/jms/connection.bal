@@ -13,4 +13,21 @@ public struct ConnectionConfiguration {
 
 }
 
-public native function init(ConnectionConfiguration config);
+public struct ConnectionConnector {
+}
+
+public function <Connection ep> init(ConnectionConfiguration config) {
+}
+
+public function <Connection ep> register (typedesc serviceType) {
+}
+
+public function <Connection ep> start () {
+}
+
+public function <Connection ep> getClient () returns (ConnectionConnector) {
+    return {};
+}
+
+public function <Connection ep> stop () {
+}
