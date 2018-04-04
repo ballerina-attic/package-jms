@@ -260,10 +260,9 @@ public class JMSUtils {
      * @return {@link Message} instance located in struct.
      */
     public static Message getJMSMessage(BStruct messageStruct) {
-        if (messageStruct.getNativeData(Constants.JMS_API_MESSAGE) != null) {
-            BallerinaJMSMessage ballerinaJMSMessage = (BallerinaJMSMessage) messageStruct
-                    .getNativeData(Constants.JMS_API_MESSAGE);
-            return ballerinaJMSMessage.getJmsMessage();
+        Object nativeData = messageStruct.getNativeData(Constants.JMS_MESSAGE_OBJECT);
+        if (nativeData instanceof Message) {
+            return (Message) nativeData;
         } else {
             throw new BallerinaException("JMS message has not been created.");
         }
