@@ -103,9 +103,9 @@ public native function <Message msg> getFloatProperty (string key) returns (floa
 @Param { value:"content: Text Message Content" }
 public native function <Message msg> setTextMessageContent (string content);
 
-@Description { value:"Gets text content of the JMS message"}
-@Return { value:"string: Text Message Content" }
-public native function <Message msg> getTextMessageContent () returns (string);
+//@Description { value:"Gets text content of the JMS message"}
+//@Return { value:"string: Text Message Content" }
+//public native function <Message msg> getTextMessageContent () returns (string);
 
 @Description { value:"Sets bytes content for the JMS message"}
 @Param { value:"content: Bytes Message Content" }

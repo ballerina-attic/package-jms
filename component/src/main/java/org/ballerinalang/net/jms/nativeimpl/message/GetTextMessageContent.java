@@ -37,10 +37,9 @@ import javax.jms.TextMessage;
  * Get text content of the JMS Message.
  */
 @BallerinaFunction(
-        orgName = "ballerina", packageName = "net.jms",
+        orgName = "ballerina", packageName = "jms",
         functionName = "getTextMessageContent",
-        receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message",
-                             structPackage = "ballerina.net.jms"),
+        receiver = @Receiver(type = TypeKind.STRUCT, structType = "Message", structPackage = "ballerina.jms"),
         returnType = {@ReturnType(type = TypeKind.STRING)},
         isPublic = true
 )

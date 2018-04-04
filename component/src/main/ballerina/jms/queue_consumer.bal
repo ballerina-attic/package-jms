@@ -1,11 +1,14 @@
 package ballerina.jms;
 
+import ballerina/io;
+
 public struct QueueConsumer {
-    Session jmsSession;
+    QueueConsumerConnector connector;
     QueueConsumerEndpointConfiguration config;
 }
 
 public struct QueueConsumerEndpointConfiguration {
+    Session session;
     string queueName;
     string identifier;
 }
@@ -13,19 +16,30 @@ public struct QueueConsumerEndpointConfiguration {
 public struct QueueConsumerConnector {
 }
 
-public function <QueueConsumer ep> init(QueueConsumerEndpointConfiguration config) {
+public function <QueueConsumer consumer> init(QueueConsumerEndpointConfiguration config) {
+
+    consumer.config = config;
+    SessionConnector sessionConnector = config.session.getClient();
+    consumer.createConsumer(sessionConnector);
+    io:println("Consumer created for queue " + config.queueName);
 }
 
-public function <QueueConsumer ep> register (typedesc serviceType) {
+public function <QueueConsumer consumer> register (typedesc serviceType) {
+    QueueConsumerConnector connector = consumer.connector;
+    consumer.registerListener(serviceType, connector);
 }
 
-public function <QueueConsumer ep> start () {
+native function <QueueConsumer consumer> registerListener(typedesc serviceType, QueueConsumerConnector connector);
+
+native function <QueueConsumer consumer> createConsumer (SessionConnector connector);
+
+public function <QueueConsumer consumer> start () {
 }
 
-public function <QueueConsumer ep> getClient () returns (QueueConsumerConnector) {
-    return {};
+public function <QueueConsumer consumer> getClient () returns (QueueConsumerConnector) {
+    return consumer.connector;
 }
 
-public function <QueueConsumer ep> stop () {
+public function <QueueConsumer consumer> stop () {
 }
 
