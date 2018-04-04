@@ -21,7 +21,6 @@ package org.ballerinalang.net.jms.nativeimpl.endpoint.queue.sender.action;
 
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.bre.bvm.CallableUnitCallback;
-import org.ballerinalang.connector.api.BLangConnectorSPIUtil;
 import org.ballerinalang.connector.api.Struct;
 import org.ballerinalang.model.types.TypeKind;
 import org.ballerinalang.model.values.BStruct;
@@ -30,6 +29,7 @@ import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.Receiver;
 import org.ballerinalang.net.jms.AbstractBlockinAction;
 import org.ballerinalang.net.jms.Constants;
+import org.ballerinalang.net.jms.utils.BallerinaAdapter;
 import org.ballerinalang.util.exceptions.BallerinaException;
 
 import javax.jms.JMSException;
@@ -57,20 +57,21 @@ public class Send extends AbstractBlockinAction {
     @Override
     public void execute(Context context, CallableUnitCallback callableUnitCallback) {
 
-        Struct queueSenderConnector = BLangConnectorSPIUtil.getConnectorEndpointStruct(context);
-        Object queueSenderNativeData = queueSenderConnector.getNativeData(Constants.JMS_QUEUE_SENDER_OBJECT);
-        if (!(queueSenderNativeData instanceof MessageProducer)) {
-            throw new BallerinaException("JMS Queue Sender is not properly established.", context);
-        }
+        Struct queueSenderBObject = BallerinaAdapter.getReceiverStruct(context);
+        MessageProducer messageProducer = BallerinaAdapter.getNativeObject(queueSenderBObject,
+                                                                           Constants.JMS_QUEUE_SENDER_OBJECT,
+                                                                           MessageProducer.class,
+                                                                           context
+        );
 
-        BStruct messageStruct = ((BStruct) context.getRefArgument(1));
-        Object messageNativeData = messageStruct.getNativeData(Constants.JMS_MESSAGE_OBJECT);
-        if (!(messageNativeData instanceof Message)) {
-            throw new BallerinaException("JMS Message is not properly created.", context);
-        }
+        BStruct messageBObject = ((BStruct) context.getRefArgument(1));
+        Message message = BallerinaAdapter.getNativeObject(messageBObject,
+                                                           Constants.JMS_MESSAGE_OBJECT,
+                                                           Message.class,
+                                                           context);
 
         try {
-            ((MessageProducer) queueSenderNativeData).send((Message) messageNativeData);
+            messageProducer.send(message);
         } catch (JMSException e) {
             throw new BallerinaException("Message sending failed", e, context);
         }
